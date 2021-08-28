@@ -1,6 +1,8 @@
+/*
 Default account number: 1234
 Default PIN: 0000
 Default balance: 1000€
+*/
 
 #include <stdio.h>
 #include <stdbool.h>
