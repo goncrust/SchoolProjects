@@ -14,7 +14,7 @@ def junta_ordenados(digs1, digs2):
             res += (digs2[i_2],)
             i_2 += 1
         else:
-            res += (digs1[i_1])
+            res += (digs1[i_1],)
             i_1 += 1
             i_2 += 1
 
