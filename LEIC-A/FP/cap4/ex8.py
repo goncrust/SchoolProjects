@@ -20,7 +20,7 @@ def junta_ordenados(digs1, digs2):
 
     if i_1 < len(digs1):
         res += digs1[i_1:] 
-    elif e_2 < len(digs2):
+    elif i_2 < len(digs2):
         res += digs2[i_2:]
 
     return res
