@@ -15,10 +15,10 @@ def multiplica_mat(m1, m2):
             m2_colunas[c].append(l[c])
 
     m_res = []
-    for l in range(len(m2_colunas)):
+    for l in range(len(m1)):
         m_res.append([])
-        for c in m1:
-            m_res[l].append(produto_vetorial(m2_colunas[l], c))
+        for c in m2_colunas:
+            m_res[l].append(produto_vetorial(m1[l], c))
 
 
     return m_res
