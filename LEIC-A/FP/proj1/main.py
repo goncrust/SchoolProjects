@@ -53,10 +53,7 @@ def eh_anagrama(palavra1, palavra2):
 
         return palavra
 
-    if len(palavra1) != len(palavra2):
-        return False
-
-    if palavra1 == palavra2:
+    if len(palavra1) != len(palavra2) or palavra1 == palavra2:
         return False
 
     palavra1 = palavra1.lower()
