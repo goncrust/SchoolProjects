@@ -3,13 +3,13 @@
 
 """
 
-# 1 - Correcao da documentacao
+# 1 - Correção da documentação
 
 def corrigir_palavra(palavra):
     """Corrige surto de letras
 
-    Recebe uma string e retorna uma string com o surto de letras corrigido.
-    (cad. carateres -> cad. carateres)
+    Recebe uma string e devolve uma string com o surto de letras corrigido.
+    (cad. carateres --> cad. carateres)
     """
 
     caso_encontrado = True
@@ -31,9 +31,9 @@ def corrigir_palavra(palavra):
 def eh_anagrama(palavra1, palavra2):
     """Deteta se palavra é anagrama da outra
 
-    Recebe duas strings e retorna True se sao constituidas pelas mesmas letras,
+    Recebe duas strings e devolve True se sao constituidas pelas mesmas letras,
     ignorando diferenças entre maiusculas e minusculas.
-    (cad. carateres x cad.carateres -> booleano)
+    (cad. carateres x cad.carateres --> booleano)
     """
 
 
@@ -41,10 +41,10 @@ def eh_anagrama(palavra1, palavra2):
         """Remove a primeira ocorrencia de um carater numa string
 
         Recebe uma string e uma string apenas com um carater e, 
-        utilizando o algoritmo de procura sequencial, retorna uma
+        utilizando o algoritmo de procura sequencial, devolve uma
         string com a primeira ocorrencia do carater eliminada, caso ele exista.
-        No caso de nao existir, é retornada a string original.
-        (cad. carateres x cad. carateres -> cad. carateres)
+        No caso de nao existir, é devolvida a string original.
+        (cad. carateres x cad. carateres --> cad. carateres)
         """
 
         for i in range(len(palavra)):
@@ -75,7 +75,7 @@ def corrigir_doc(texto):
     Recebe o texto da documentacao da BDB com erros (string), 
     corrige as palavras com surto de letras e remove palavras sem sentido 
     que sao anagramas das palavras anteriores. Retorna o texto corrigido (string).
-    (cad. carateres -> cad. cateres)
+    (cad. carateres --> cad. cateres)
     """
 
     if not isinstance(texto, str):
@@ -128,7 +128,7 @@ def obter_posicao(direcao, posicao):
     Recebe uma string apenas com um carater, que é a direcao,
     e um inteiro, que é a posicao atual. Retorna um inteiro que corresponde 
     à nova posicao.
-    (cad. carateres x inteiro -> inteiro)
+    (cad. carateres x inteiro --> inteiro)
     """
 
     # Matriz 3x3 que corrosponde aos digitos do painel 
@@ -169,7 +169,7 @@ def obter_digito(direcoes, posicao):
 
     Recebe uma string, que contem as direcoes, e um inteiro, que é a posicao atual. 
     Retorna um inteiro que corresponde à nova posicao.
-    (cad. carateres x inteiro -> inteiro)
+    (cad. carateres x inteiro --> inteiro)
     """
 
     for d in direcoes:
@@ -180,9 +180,9 @@ def obter_digito(direcoes, posicao):
 def obter_pin(movimentos):
     """Calcula o PIN codificado de acordo com os movimentos
 
-    Recebe um tuplo que contem 4 a 10 sequencias de movimentos e retorna
+    Recebe um tuplo que contem 4 a 10 sequencias de movimentos e devolve
     o tuplo de inteiros que contem o PIN codificado de acordo com os movimentos.
-    (tuplo -> tuplo)
+    (tuplo --> tuplo)
     """
 
     if not isinstance(movimentos, tuple) or not 4 <= len(movimentos) <= 10:
@@ -207,4 +207,200 @@ def obter_pin(movimentos):
 
     return res
 
+# 3 - Verificação de dados
 
+def eh_entrada(argumento):
+    """Verifica se argumento é entrada da BDB
+
+    Recebe um argumento de qualquer tipo e devolve True se este corresponde
+    ao formato de uma entrada da BDB, caso contrário devolve False.
+    (universal --> booleano)
+    """
+
+    def eh_alpha_lower(s):
+        """Verifica se todos os carateres da string pertencem ao alfabeto e sao minusculos
+
+        Recebe uma string devolve True se todos os seus carateres sao letras do alfabeto,
+        e minusculas. Caso contrário, devolve False.
+        (cad. carateres --> booleano)
+        """
+
+        if not s.isalpha() or not s.islower():
+            return False
+
+        return True
+
+
+    def eh_cifra(cifra):
+        """Verifica se o argumento corresponde a uma cifra de uma entrada da BDB
+
+        Recebe um argumento de qualquer tipo e devolve True se o mesmo corresponde ao formato
+        de uma cifra de uma possivel entrada da BDB. 
+        Caso contrário, devolve False.
+        (universal --> booleano)
+        """
+
+        if isinstance(cifra, str):
+
+            cifra = cifra.split('-')
+            sucesso = True
+
+            for s in cifra:
+                sucesso = eh_alpha_lower(s) 
+
+            return sucesso
+
+        return False
+
+    def eh_sequencia_controlo(sc):
+        """Verifica se o argumento corresponde a uma sequencia de controlo de uma entrada da BDB
+
+        Recebe um argumento de qualquer tipo e devolve True se o mesmo corresponde ao formato
+        de uma sequencia de controlo de uma possivel entrada da BDB. 
+        Caso contrário, devolve False.
+        (universal --> booleano)
+        """
+
+        if isinstance(sc, str) and len(sc) == 7:
+            if sc[0] == '[' and sc[6] == ']':
+                return eh_alpha_lower(sc[1:6])
+
+        return False
+
+    def eh_sequencia_seguranca(ss):
+        """Verifica se o argumento corresponde a uma sequencia de seguranca de uma entrada da BDB
+
+        Recebe um argumento de qualquer tipo e devolve True se o mesmo corresponde ao formato
+        de uma sequencia de seguranca de uma possivel entrada da BDB. 
+        Caso contrário, devolve False.
+        (universal --> booleano)
+        """
+
+        if isinstance(ss, tuple) and len(ss) >= 2:
+            for n in ss:
+                if not isinstance(n, int) or n < 0:
+                    return False
+
+            return True
+
+        return False
+
+
+    # Tipo/tamanho do argumento
+    if isinstance(argumento, tuple) and len(argumento) == 3:
+
+        if eh_cifra(argumento[0]):
+            if eh_sequencia_controlo(argumento[1]):
+                return eh_sequencia_seguranca(argumento[2])
+
+    return False
+
+def validar_cifra(cifra, sc):
+    """Verifica se a sequencia de controlo é coerente com a cifra
+
+    Recebe uma cifra (string) e uma sequencia de controlo (string) e devolve True
+    se e só se a sequencia de controlo é coerente com a cifra, caso contrario devolve False.
+    Para a sequencia de controlo ser coerente com a cifra, a mesma deve ser formada pelas
+    cinco letras mais comuns na cifra, por ordem inversa de ocorrencias, com empates decididos
+    por ordem alfabética.
+    (cad. carateres x cad. carateres --> booleano)
+    """
+
+    def primeiro_no_alfabeto(c1, c2):
+        """Verifica se c1 aparece primeiro no alfabeto em relacao a c2
+
+        Devolve True se c1 (string com apenas um carater) aparece primeiro no alfabeto 
+        em relacao a c2 (string com apenas um carater). Devolve False caso contrário.
+        (cad. carateres x cad. carateres --> booleano)
+        """
+
+        alfabeto = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+                'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
+        for l in alfabeto:
+            if l == c1:
+                return True
+            elif l == c2:
+                return False
+
+
+    def sort_ocorrencias(lista):
+        """Ordena a lista de ocorrencias de letras
+
+        Ordena a lista (argumento) que contem listas que represetam a ocorrencia de letras 
+        (i.e. [['a', 2], ['b', 3]]) por ordem inversa de ocorrencias de cada letra. 
+        Caso duas letras tenham o mesmo numero de ocorrencias, o empate é decidido por
+        ordem alfabética.
+        (lista --> {})
+        """
+
+        alteracao = True
+        
+        for i in range(len(lista) - 1, 0, -1):
+
+            alteracao = False
+
+            for j in range(1, i + 1):
+                if lista[j][1] > lista[j - 1][1]:
+                    lista[j], lista[j - 1] = lista[j - 1], lista[j]
+
+                    alteracao = True
+                elif lista[j][1] == lista[j - 1][1]:
+                    # Se lista[j][0] primeiro no alfabeto em relacao a lista[j-1][0], entao troca
+                    if primeiro_no_alfabeto(lista[j][0], lista[j - 1][0]):
+                        lista[j], lista[j - 1] = lista[j - 1], lista[j]
+
+                        alteracao = True
+
+            if not alteracao:
+                break
+
+
+    # Contar ocorrencias
+    ocorrencias = {}
+
+    for c in cifra:
+        if c == '-':
+            continue
+
+        if c not in ocorrencias:
+            ocorrencias[c] = 0
+
+        ocorrencias[c] += 1
+
+    # Colocar por ordem
+    ocorrencias = list(ocorrencias.items())
+    sort_ocorrencias(ocorrencias)
+
+    # Comparar com sequencia de controlo
+    string_ocorrencias = "["
+    for i in range(5):
+        string_ocorrencias += ocorrencias[i][0]
+
+    string_ocorrencias += "]"
+
+    return string_ocorrencias == sc
+
+def filtrar_bdb(lista):
+    """Determina as entradas da BDB em que a sequencia de controlo não é coerente com a cifra
+
+    Recebe uma lista com uma ou mais entradas da BDB e devolve uma lista que contém as entradas
+    em que a sequencia de controlo não é coerente com a cifra, na mesma ordem da lista original.
+    (lista --> lista)
+    """
+
+    if not isinstance(lista, list) or len(lista) < 1:
+        raise ValueError('filtrar_bdb: argumento invalido')
+
+    lista_incoerentes = []
+    for i in range(len(lista)):
+
+        if not eh_entrada(lista[i]):
+            raise ValueError('filtrar_bdb: argumento invalido')
+
+        if not validar_cifra(lista[i][0], lista[i][1]):
+            lista_incoerentes.append(lista[i])
+
+    return lista_incoerentes
+
+# 4 - Desencriptação de dados
