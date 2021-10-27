@@ -3,6 +3,38 @@
 
 """
 
+# Funções adicionais (que são usadas em mais do que uma função)
+
+def eh_alpha_lower(s):
+    """Verifica se todos os carateres da string pertencem ao alfabeto e sao minusculos
+
+    Recebe uma string e devolve True se todos os seus carateres são letras do alfabeto,
+    e minusculas. Caso contrário, devolve False.
+    (cad. carateres --> booleano)
+    """
+
+    if not s.isalpha() or not s.islower():
+        return False
+
+    return True
+
+def primeiro_no_alfabeto(c1, c2):
+    """Verifica se c1 aparece primeiro no alfabeto em relação a c2
+
+    Devolve True se c1 (string com apenas um carater) aparece primeiro no alfabeto 
+    em relação a c2 (string com apenas um carater). Devolve False caso contrário.
+    (cad. carateres x cad. carateres --> booleano)
+    """
+
+    alfabeto = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+            'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
+
+    for l in alfabeto:
+        if l == c1:
+            return True
+        elif l == c2:
+            return False
+
 # 1 - Correção da documentação
 
 def corrigir_palavra(palavra):
@@ -31,7 +63,7 @@ def corrigir_palavra(palavra):
 def eh_anagrama(palavra1, palavra2):
     """Deteta se palavra é anagrama da outra
 
-    Recebe duas strings e devolve True se sao constituidas pelas mesmas letras,
+    Recebe duas strings e devolve True se são constituidas pelas mesmas letras,
     ignorando diferenças entre maiusculas e minusculas.
     (cad. carateres x cad.carateres --> booleano)
     """
@@ -43,7 +75,7 @@ def eh_anagrama(palavra1, palavra2):
         Recebe uma string e uma string apenas com um carater e, 
         utilizando o algoritmo de procura sequencial, devolve uma
         string com a primeira ocorrencia do carater eliminada, caso ele exista.
-        No caso de nao existir, é devolvida a string original.
+        No caso de não existir, é devolvida a string original.
         (cad. carateres x cad. carateres --> cad. carateres)
         """
 
@@ -70,11 +102,11 @@ def eh_anagrama(palavra1, palavra2):
     return True
 
 def corrigir_doc(texto):
-    """Corrige texto com erros da documentacao da BDB
+    """Corrige texto com erros da documentação da BDB
 
-    Recebe o texto da documentacao da BDB com erros (string), 
+    Recebe o texto da documentação da BDB com erros (string), 
     corrige as palavras com surto de letras e remove palavras sem sentido 
-    que sao anagramas das palavras anteriores. Retorna o texto corrigido (string).
+    que são anagramas das palavras anteriores. Retorna o texto corrigido (string).
     (cad. carateres --> cad. cateres)
     """
 
@@ -123,11 +155,11 @@ def corrigir_doc(texto):
 # 2 - Descoberta do PIN
 
 def obter_posicao(direcao, posicao):
-    """Calcula o inteiro que corresponde à nova posicao, apos um movimento
+    """Calcula o inteiro que corresponde à nova posição, após um movimento
 
-    Recebe uma string apenas com um carater, que é a direcao,
+    Recebe uma string apenas com um carater, que é a direção,
     e um inteiro, que é a posicao atual. Retorna um inteiro que corresponde 
-    à nova posicao.
+    à nova posição.
     (cad. carateres x inteiro --> inteiro)
     """
 
@@ -165,10 +197,10 @@ def obter_posicao(direcao, posicao):
     return painel[linha][coluna]
 
 def obter_digito(direcoes, posicao):
-    """Calcula o inteiro que corresponde à nova posicao, apos um ou mais movimentos
+    """Calcula o inteiro que corresponde à nova posição, após um ou mais movimentos
 
-    Recebe uma string, que contem as direcoes, e um inteiro, que é a posicao atual. 
-    Retorna um inteiro que corresponde à nova posicao.
+    Recebe uma string, que contem as direções, e um inteiro, que é a posição atual. 
+    Retorna um inteiro que corresponde à nova posição.
     (cad. carateres x inteiro --> inteiro)
     """
 
@@ -217,20 +249,6 @@ def eh_entrada(argumento):
     (universal --> booleano)
     """
 
-    def eh_alpha_lower(s):
-        """Verifica se todos os carateres da string pertencem ao alfabeto e sao minusculos
-
-        Recebe uma string devolve True se todos os seus carateres sao letras do alfabeto,
-        e minusculas. Caso contrário, devolve False.
-        (cad. carateres --> booleano)
-        """
-
-        if not s.isalpha() or not s.islower():
-            return False
-
-        return True
-
-
     def eh_cifra(cifra):
         """Verifica se o argumento corresponde a uma cifra de uma entrada da BDB
 
@@ -263,15 +281,16 @@ def eh_entrada(argumento):
 
         if isinstance(sc, str) and len(sc) == 7:
             if sc[0] == '[' and sc[6] == ']':
-                return eh_alpha_lower(sc[1:6])
+                res = eh_alpha_lower(sc[1:6])
+                return res
 
         return False
 
     def eh_sequencia_seguranca(ss):
-        """Verifica se o argumento corresponde a uma sequencia de seguranca de uma entrada da BDB
+        """Verifica se o argumento corresponde a uma sequencia de segurança de uma entrada da BDB
 
         Recebe um argumento de qualquer tipo e devolve True se o mesmo corresponde ao formato
-        de uma sequencia de seguranca de uma possivel entrada da BDB. 
+        de uma sequencia de segurança de uma possivel entrada da BDB. 
         Caso contrário, devolve False.
         (universal --> booleano)
         """
@@ -291,7 +310,8 @@ def eh_entrada(argumento):
 
         if eh_cifra(argumento[0]):
             if eh_sequencia_controlo(argumento[1]):
-                return eh_sequencia_seguranca(argumento[2])
+                res = eh_sequencia_seguranca(argumento[2])
+                return res
 
     return False
 
@@ -305,23 +325,6 @@ def validar_cifra(cifra, sc):
     por ordem alfabética.
     (cad. carateres x cad. carateres --> booleano)
     """
-
-    def primeiro_no_alfabeto(c1, c2):
-        """Verifica se c1 aparece primeiro no alfabeto em relacao a c2
-
-        Devolve True se c1 (string com apenas um carater) aparece primeiro no alfabeto 
-        em relacao a c2 (string com apenas um carater). Devolve False caso contrário.
-        (cad. carateres x cad. carateres --> booleano)
-        """
-
-        alfabeto = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-                'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
-
-        for l in alfabeto:
-            if l == c1:
-                return True
-            elif l == c2:
-                return False
 
 
     def sort_ocorrencias(lista):
@@ -380,7 +383,8 @@ def validar_cifra(cifra, sc):
 
     string_ocorrencias += "]"
 
-    return string_ocorrencias == sc
+    res = string_ocorrencias == sc
+    return res
 
 def filtrar_bdb(entradas):
     """Determina as entradas da BDB em que a sequencia de controlo não é coerente com a cifra
@@ -436,7 +440,7 @@ def decifrar_texto(cifra, ns):
     def avancar_alfabeto(letra, avanco):
         """Avança a letra x posições no alfabeto
 
-        Recebe uma letra (string apenas com um carater) e o numero de posicoes
+        Recebe uma letra (string apenas com um carater) e o número de posicoes
         a avançar (inteiro) e devolve a letra (string) do alfabeto que corresponde a esse avanço.
         (cad. carateres x inteiro --> cad. carateres)
         """
@@ -487,6 +491,228 @@ def decifrar_bdb(entradas):
 
     return entradas_decifradas
 
-# Depuração de senhas
+# 5 - Depuração de senhas
 
+def eh_utilizador(argumento):
+    """Verifica se o argumento corresponde à informação de um utilizador da BDB
+
+    Recebe um argumento de qualquer tipo e devolve True se o mesmo corresponde a um dicionário
+    que contem a informação de utilizador relevante da BDB (nome, senha e regra individual).
+    Caso contrário, devolve False.
+    (universal --> booleano)
+    """
+
+    def eh_name_pass(valor):
+        """Verifica se o valor de 'name' e 'pass' estão no formato correto
+
+        Recebe um argumento de qualquer tipo e devolve True se o mesmo corresponder a um nome
+        ou senha no formáto válido. Isto é, são strings com pelo menos 1 carater. 
+        Caso contrário, devolve False.
+        (universal --> booleano)
+        """
+
+        res = isinstance(valor, str) and len(valor) > 0
+        return res
+
+    def eh_vals(valor):
+        """Verifica se o valor de 'vals' está no formato correto
+
+        Recebe um argumento de qualquer tipo e devolve True se o mesmo corresponder ao formato
+        adequado do valor corresponde à chave 'vals', que pertence à regra individual. Isto é,
+        um tuplo, com dois inteiros positivos, em que o primeiro é menor ou igual ao segundo.
+        Caso contrário, devolve False.
+        (universal --> booleano)
+        """
+
+        if isinstance(valor, tuple) and len(valor) == 2:
+            if isinstance(valor[0], int) and isinstance(valor[1], int):
+                if valor[0] <= valor[1]:
+                    res = valor[0] > 0 and valor[1] > 0
+                    return res
+
+        return False
+
+    def eh_rule(valor):
+        """Verifica se o valor de 'rule' está no formato correto
+
+        Recebe um argumento de qualquer tipo e devolve True se o mesmo corresponder ao formato
+        adequado correspondente à regra individual, isto é, um dicionário, que contém dois valores,
+        um associado à chave 'vals' e outro associado à chave 'char', sendo este último uma string
+        com apenas uma letra do alfabeto minuscula. Caso contrário, devolve False.
+        (universal --> booleano)
+        """
+
+        if isinstance(valor, dict) and len(valor) == 2:
+            if 'vals' in valor and 'char' in valor:
+
+                if eh_vals(valor['vals']):
+
+                    # Verifica char
+                    char = valor['char']
+                    if isinstance(char, str) and len(char) == 1:
+                        res = eh_alpha_lower(char)
+                        return res
+
+        return False
+
+
+    if isinstance(argumento, dict) and len(argumento) == 3:
+
+        if 'name' in argumento and 'pass' in argumento and 'rule' in argumento:
+
+            if eh_name_pass(argumento['name']):
+                if eh_name_pass(argumento['pass']):
+                    res = eh_rule(argumento['rule'])
+                    return res
+
+    return False
+
+def eh_senha_valida(senha, rule):
+    """Verifica se a senha é válida de acordo com as regras
+
+    Recebe uma senha (string) e as regras individuais (dict) correspondentes a essa senha
+    de um utilizador da BDB e devolve True se a senha estiver de acordo tanto com essas regras,
+    como com as regras gerais. Isto é, tem pelo menos 3 vogais minusculas e contem pelo menos um 
+    carater que aparece duas vezes consecutivas (regras gerais) e tem entre rule['vals'][0] e
+    rule['vals'][1] número de ocorrencias do carater rule['char'] (regra individual).
+    (cad. carateres x dicionário --> booleano)
+    """
+
+    # Regra Individual
+    char_rule = rule['char']
+    char_rule_count = 0
+
+    vogais = ('a', 'e', 'i', 'o', 'u')
+
+    # Regrais Gerais
+    vogais_min = 0
+    consecutivos = 0
+
+    ultimo_char = ''
+    for c in senha:
+
+        # Regra Individual
+        if c == char_rule:
+            char_rule_count += 1
+
+        # Regras Gerais
+        if c in vogais:
+            vogais_min += 1
+
+        if ultimo_char == c:
+            consecutivos += 1
+
+        ultimo_char = c
+
+
+    # Regra Individual
+    char_rule_min = rule['vals'][0]
+    char_rule_max = rule['vals'][1]
+    res_individual = char_rule_min <= char_rule_count <= char_rule_max
+
+    # Regras Gerais
+    res_gerais = vogais_min >= 3 and consecutivos > 0
+
+    res = res_individual and res_gerais
+    return res
+
+def filtrar_senhas(entradas):
+    """Determina as entradas da BDB com senhas erradas
+    
+    Recebe uma lista com uma ou mais entradas da BDB e devolve uma lista ordenada alfabeticamente
+    com os nomes dos utilizadores cujas senhas estão erradas.
+    (lista --> lista)
+    """
+
+    def ordenar_alfabeticamente(lista):
+        """Ordena uma lista de nomes
+
+        Esta função baseia-se no algoritmo bubble sort e ordena uma lista de nomes por ordem alfabética. 
+        A cada comparação, primeiro verifica se as duas palavras são iguais. Neste caso as suas posições não
+        são alteradas.
+        Se não forem iguais, compara carater a carater e determina assim o primeiro indice em que
+        as palavras a ser comparadas sao diferentes. No caso de não se detetar um ponto de
+        inequalidade, é considerada como primeira em ordem alfabética a de menor tamanho.
+        (lista --> {})
+        """
+
+        alteracao = True
+        
+        for i in range(len(lista) - 1, 0, -1):
+
+            alteracao = False
+
+            for j in range(1, i + 1):
+
+                # Selecionar indices das letras a comparar
+
+                atual = lista[j]
+                anterior = lista[j - 1]
+
+                # Se duas entradas tiverem o mesmo nome
+                if atual == anterior:
+                    continue
+
+                # Se a atual é menor do que a anterior
+                tamanho_atual = len(atual)
+                tamanho_anterior = len(anterior)
+                found = False
+                indice = 0
+                if tamanho_atual < tamanho_anterior:
+
+                    for k in range(tamanho_atual):
+                        # Verificação se ambas não são letras
+                        if not atual[k].isalpha() and not anterior[k].isalpha():
+                            continue
+
+                        if(atual[k] != anterior[k]):
+                            indice = k       
+                            found = True
+                            break
+
+                    if not found:
+                        lista[j], lista[j - 1] = lista[j - 1], lista[j]
+                        alteracao = True
+                        continue
+
+                # Se a anterior é menor do que a atual
+                else:
+                    
+                    for k in range(tamanho_anterior):
+                        # Verificação se ambas não são letras
+                        if not atual[k].isalpha() and not anterior[k].isalpha():
+                            continue
+
+                        if (atual[k] != anterior[k]):
+                            indice = k
+                            found = True
+                            break
+
+                    if not found:
+                        continue
+
+                if primeiro_no_alfabeto(atual[indice], anterior[indice]):
+                    lista[j], lista[j - 1] = lista[j - 1], lista[j]
+
+                    alteracao = True
+
+            if not alteracao:
+                break
+
+         
+    if not isinstance(entradas, list) or len(entradas) < 1:
+        raise ValueError('filtrar_senhas: argumento invalido')
+
+    senhas_erradas = []
+    for e in entradas:
+
+        if not eh_utilizador(e):
+            raise ValueError('filtrar_senhas: argumento invalido')
+
+        if not eh_senha_valida(e['pass'], e['rule']):
+            senhas_erradas.append(e['name'])
+
+    ordenar_alfabeticamente(senhas_erradas)
+
+    return senhas_erradas
 
