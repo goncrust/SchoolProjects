@@ -331,6 +331,7 @@ def validar_cifra(cifra, sc):
         (i.e. [['a', 2], ['b', 3]]) por ordem inversa de ocorrencias de cada letra. 
         Caso duas letras tenham o mesmo numero de ocorrencias, o empate é decidido por
         ordem alfabética.
+        Esta função baseia-se no algoritmo bubble sort.
         (lista --> {})
         """
 
@@ -381,7 +382,7 @@ def validar_cifra(cifra, sc):
 
     return string_ocorrencias == sc
 
-def filtrar_bdb(lista):
+def filtrar_bdb(entradas):
     """Determina as entradas da BDB em que a sequencia de controlo não é coerente com a cifra
 
     Recebe uma lista com uma ou mais entradas da BDB e devolve uma lista que contém as entradas
@@ -389,18 +390,103 @@ def filtrar_bdb(lista):
     (lista --> lista)
     """
 
-    if not isinstance(lista, list) or len(lista) < 1:
+    if not isinstance(entradas, list) or len(entradas) < 1:
         raise ValueError('filtrar_bdb: argumento invalido')
 
     lista_incoerentes = []
-    for i in range(len(lista)):
+    for i in range(len(entradas)):
 
-        if not eh_entrada(lista[i]):
+        if not eh_entrada(entradas[i]):
             raise ValueError('filtrar_bdb: argumento invalido')
 
-        if not validar_cifra(lista[i][0], lista[i][1]):
-            lista_incoerentes.append(lista[i])
+        if not validar_cifra(entradas[i][0], entradas[i][1]):
+            lista_incoerentes.append(entradas[i])
 
     return lista_incoerentes
 
 # 4 - Desencriptação de dados
+
+def obter_num_seguranca(tuplo):
+    """Calcula o número de segunrança, através da sequência de segurança
+
+    Recebe um tuplo correspondente à sequência de segurança e devolve um inteiro
+    correspondente ao número de segurança. Este corresponde à menor diferença positiva
+    entre qualquer par de números (da sequência de segurança).
+    (tuplo --> inteiro)
+    """
+
+    ns = abs(tuplo[0] - tuplo[1])
+    for i in range(len(tuplo)):
+        for n in tuplo[i+1:]:
+
+            dif = abs(tuplo[i] - n)
+            if ns > dif:
+                ns = dif
+
+    return ns
+
+def decifrar_texto(cifra, ns):
+    """Decifra o texto incriptado através do número de segurança
+
+    Recebe a cifra (string) e um número de segurança (int) e devolve
+    o texto decifrado (string).
+    (cad. carateres x inteiro --> cad. carateres)
+    """
+
+    def avancar_alfabeto(letra, avanco):
+        """Avança a letra x posições no alfabeto
+
+        Recebe uma letra (string apenas com um carater) e o numero de posicoes
+        a avançar (inteiro) e devolve a letra (string) do alfabeto que corresponde a esse avanço.
+        (cad. carateres x inteiro --> cad. carateres)
+        """
+
+        res = chr(ord('a') + (ord(letra) - ord('a') + avanco) % 26)
+        return res
+
+    cifra_lista = list(cifra)
+
+    for i in range(len(cifra_lista)):
+        c = cifra_lista[i]
+        if c == '-':
+            cifra_lista[i] = ' '
+            continue
+
+        if i % 2 == 0:
+            cifra_lista[i] = avancar_alfabeto(c, ns + 1)
+        else:
+            cifra_lista[i] = avancar_alfabeto(c, ns - 1)
+
+    texto_decifrado = ''
+    for c in cifra_lista:
+        texto_decifrado += c
+
+    return texto_decifrado
+
+def decifrar_bdb(entradas):
+    """Decifra as entradas da BDB
+
+    Recebe uma lista de entradas da BDB e devolve, pela mesma ordem, uma lista com
+    o seu texto decifrado.
+    (lista --> lista)
+    """
+
+    if not isinstance(entradas, list) or len(entradas) < 1:
+        raise ValueError('decifrar_bdb: argumento invalido')
+
+    entradas_decifradas = []
+    for i in range(len(entradas)):
+        
+        if not eh_entrada(entradas[i]):
+            raise ValueError('decifrar_bdb: argumento invalido')
+        
+        ns = obter_num_seguranca(entradas[i][2])
+        decifrada = decifrar_texto(entradas[i][0], ns)
+
+        entradas_decifradas.append(decifrada)
+
+    return entradas_decifradas
+
+# Depuração de senhas
+
+
