@@ -426,7 +426,7 @@ def obter_num_seguranca(tuplo):
     return ns
 
 def decifrar_texto(cifra, ns):
-    """Decifra o texto incriptado através do número de segurança
+    """Decifra o texto encriptado através do número de segurança
 
     Recebe a cifra (string) e um número de segurança (int) e devolve
     o texto decifrado (string).
