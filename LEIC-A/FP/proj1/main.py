@@ -5,6 +5,7 @@
 
 # Funções adicionais (que são usadas em mais do que uma função)
 
+
 def eh_alpha_lower(s):
     """Verifica se todos os carateres da string pertencem ao alfabeto e sao minusculos
 
@@ -17,6 +18,7 @@ def eh_alpha_lower(s):
         return False
 
     return True
+
 
 def primeiro_no_alfabeto(c1, c2):
     """Verifica se c1 aparece primeiro no alfabeto em relação a c2
@@ -36,6 +38,7 @@ def primeiro_no_alfabeto(c1, c2):
             return False
 
 # 1 - Correção da documentação
+
 
 def corrigir_palavra(palavra):
     """Corrige surto de letras
@@ -60,6 +63,7 @@ def corrigir_palavra(palavra):
                 
     return palavra
 
+
 def eh_anagrama(palavra1, palavra2):
     """Deteta se palavra é anagrama da outra
 
@@ -67,7 +71,6 @@ def eh_anagrama(palavra1, palavra2):
     ignorando diferenças entre maiusculas e minusculas.
     (cad. carateres x cad.carateres --> booleano)
     """
-
 
     def procurar_e_destruir(palavra, carater):
         """Remove a primeira ocorrencia de um carater numa string
@@ -100,6 +103,7 @@ def eh_anagrama(palavra1, palavra2):
             return False
 
     return True
+
 
 def corrigir_doc(texto):
     """Corrige texto com erros da documentação da BDB
@@ -154,6 +158,7 @@ def corrigir_doc(texto):
 
 # 2 - Descoberta do PIN
 
+
 def obter_posicao(direcao, posicao):
     """Calcula o inteiro que corresponde à nova posição, após um movimento
 
@@ -196,6 +201,7 @@ def obter_posicao(direcao, posicao):
 
     return painel[linha][coluna]
 
+
 def obter_digito(direcoes, posicao):
     """Calcula o inteiro que corresponde à nova posição, após um ou mais movimentos
 
@@ -208,6 +214,7 @@ def obter_digito(direcoes, posicao):
         posicao = obter_posicao(d, posicao)
 
     return posicao
+
 
 def obter_pin(movimentos):
     """Calcula o PIN codificado de acordo com os movimentos
@@ -240,6 +247,7 @@ def obter_pin(movimentos):
     return res
 
 # 3 - Verificação de dados
+
 
 def eh_entrada(argumento):
     """Verifica se argumento é entrada da BDB
@@ -281,8 +289,7 @@ def eh_entrada(argumento):
 
         if isinstance(sc, str) and len(sc) == 7:
             if sc[0] == '[' and sc[6] == ']':
-                res = eh_alpha_lower(sc[1:6])
-                return res
+                return eh_alpha_lower(sc[1:6])
 
         return False
 
@@ -304,16 +311,15 @@ def eh_entrada(argumento):
 
         return False
 
-
     # Tipo/tamanho do argumento
     if isinstance(argumento, tuple) and len(argumento) == 3:
 
         if eh_cifra(argumento[0]):
             if eh_sequencia_controlo(argumento[1]):
-                res = eh_sequencia_seguranca(argumento[2])
-                return res
+                return eh_sequencia_seguranca(argumento[2])
 
     return False
+
 
 def validar_cifra(cifra, sc):
     """Verifica se a sequencia de controlo é coerente com a cifra
@@ -325,7 +331,6 @@ def validar_cifra(cifra, sc):
     por ordem alfabética.
     (cad. carateres x cad. carateres --> booleano)
     """
-
 
     def sort_ocorrencias(lista):
         """Ordena a lista de ocorrencias de letras
@@ -359,7 +364,6 @@ def validar_cifra(cifra, sc):
             if not alteracao:
                 break
 
-
     # Contar ocorrencias
     ocorrencias = {}
 
@@ -383,8 +387,8 @@ def validar_cifra(cifra, sc):
 
     string_ocorrencias += "]"
 
-    res = string_ocorrencias == sc
-    return res
+    return string_ocorrencias == sc
+
 
 def filtrar_bdb(entradas):
     """Determina as entradas da BDB em que a sequencia de controlo não é coerente com a cifra
@@ -410,6 +414,7 @@ def filtrar_bdb(entradas):
 
 # 4 - Desencriptação de dados
 
+
 def obter_num_seguranca(tuplo):
     """Calcula o número de segunrança, através da sequência de segurança
 
@@ -428,6 +433,7 @@ def obter_num_seguranca(tuplo):
                 ns = dif
 
     return ns
+
 
 def decifrar_texto(cifra, ns):
     """Decifra o texto encriptado através do número de segurança
@@ -467,6 +473,7 @@ def decifrar_texto(cifra, ns):
 
     return texto_decifrado
 
+
 def decifrar_bdb(entradas):
     """Decifra as entradas da BDB
 
@@ -492,6 +499,7 @@ def decifrar_bdb(entradas):
     return entradas_decifradas
 
 # 5 - Depuração de senhas
+
 
 def eh_utilizador(argumento):
     """Verifica se o argumento corresponde à informação de um utilizador da BDB
@@ -550,11 +558,9 @@ def eh_utilizador(argumento):
                     # Verifica char
                     char = valor['char']
                     if isinstance(char, str) and len(char) == 1:
-                        res = eh_alpha_lower(char)
-                        return res
+                        return eh_alpha_lower(char)
 
         return False
-
 
     if isinstance(argumento, dict) and len(argumento) == 3:
 
@@ -562,10 +568,10 @@ def eh_utilizador(argumento):
 
             if eh_name_pass(argumento['name']):
                 if eh_name_pass(argumento['pass']):
-                    res = eh_rule(argumento['rule'])
-                    return res
+                    return eh_rule(argumento['rule'])
 
     return False
+
 
 def eh_senha_valida(senha, rule):
     """Verifica se a senha é válida de acordo com as regras
@@ -615,6 +621,7 @@ def eh_senha_valida(senha, rule):
 
     res = res_individual and res_gerais
     return res
+
 
 def filtrar_senhas(entradas):
     """Determina as entradas da BDB com senhas erradas
@@ -698,7 +705,6 @@ def filtrar_senhas(entradas):
 
             if not alteracao:
                 break
-
          
     if not isinstance(entradas, list) or len(entradas) < 1:
         raise ValueError('filtrar_senhas: argumento invalido')
