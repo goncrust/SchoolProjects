@@ -1,6 +1,14 @@
 """FP - Primeiro Projeto (Buggy Data Base)
 
-
+Este projeto consiste em desenvolver um conjunto de funções que permitem resolver
+cinco tarefas independentes para identificar e corrigir os problemas de uma base
+de dados corrompida (Buggy Data Base, BDB).
+As tarefas são:
+    1 Correção da documentação
+    2 Descoberta do PIN da base de dados
+    3 Verificação da coerência dos dados
+    4 Desencriptação do conteúdo
+    5 Depuração de senhas
 """
 
 # Funções adicionais (que são usadas em mais do que uma função)
