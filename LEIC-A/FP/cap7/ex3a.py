@@ -2,8 +2,8 @@
 def numero_digitos(n):
 
     def aux(n):
-        if n == 0:
-            return 0
+        if n < 10:
+            return 1
         else:
             return 1 + aux(n//10)
 

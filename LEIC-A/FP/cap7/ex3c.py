@@ -1,8 +1,8 @@
 
 def numero_digitos(n):
 
-    res = 0
-    while n != 0:
+    res = 1 
+    while n > 9:
         res += 1
         n //= 10
 
