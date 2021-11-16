@@ -57,10 +57,10 @@ def eh_posicao(arg):
     (universal --> booleano)
     """
             # Propriedades do tuplo
-    return isinstance(arg, tuple) and len(arg) == 2 and \
             # Tipo dos elementos
-            isinstance(arg[0], int) and isinstance(arg[1], int) \
             # Propriedades dos elementos
+    return isinstance(arg, tuple) and len(arg) == 2 and \
+            isinstance(arg[0], int) and isinstance(arg[1], int) \
             and arg[0] >= 0 and arg[1] >= 0
 
 
@@ -116,40 +116,11 @@ def ordenar_posicoes(t):
     """Ordena um conjunto de posições de acordo com a ordem de leitura do prado
 
     Recebe um tuplo com um conjunto de TADs posicao e devolve um tuplo com as posições
-    recebidas ordenadas de acordo com a ordem de leitura do prado. Esta função é baseada
-    no algoritmo Bubble Sort.
+    recebidas ordenadas de acordo com a ordem de leitura do prado.
     (tuplo --> tuplo)
     """
 
-    def primeiro_no_prado(p1, p2):
-        """Verifica se a posicao esta primeiro na ordem de leitura do prado
-
-        Recebe dois TADs posicao e devolve True se a primeira está em primeiro lugar
-        na ordem de leitura do prado, em relação à segunda. Caso a segunda esteja primeiro,
-        devolve False
-        """
-
-        if posicoes_iguais(p1, p2):
-            return False
-
-        if obter_pos_y(p1) == obter_pos_y(p2):
-            return obter_pos_x(p1) < obter_pos_x(p2)
-        return obter_pos_y(p1) < obter_pos_y(p2)
-
-    # Mais eficiente transformar o tuplo em lista
-    l = list(t)
-    alteracao = True
-    for i in range(len(l)-1, 0, -1):
-        alteracao = False
-        for j in range(1, i+1):
-            if primeiro_no_prado(l[j], l[j-1]):
-                l[j], l[j-1] = l[j-1], l[j]
-                alteracao = True
-
-        if not alteracao:
-            break
-
-    return tuple(l)
+    return sorted(t, lambda x: (x[1], x[0]))
 
 # TAD animal - Operações Básicas
 
@@ -290,15 +261,19 @@ def eh_animal(arg):
     (universal --> booleano)
     """
             # Propriedades do dicionário
-    return isinstance(arg, dict) and len(arg) == 5 and \
             # Chaves do dicionário
+
+            # Tipo dos valores
+
+
+            # Propriedades dos valores
+
+    return isinstance(arg, dict) and len(arg) == 5 and \
             'especie' in arg and 'freq_reproducao' in arg and 'freq_alimentacao' in arg and \
             'idade' in arg and 'fome' in arg and \
-            # Tipo dos valores
             isinstance(arg['especie'], str) and isinstance(arg['freq_reproducao'], int) and \
             isinstance(arg['freq_alimentacao'], int) and isinstance(arg['idade'], int) and \
             isinstance(arg['fome'], int) and \
-            # Propriedades dos valores
             arg['freq_reproducao'] >= 0 and  arg['freq_alimentacao'] >= 0 and \
             arg['idade'] >= 0 and arg['fome'] >= 0
 
@@ -421,11 +396,14 @@ def cria_prado(d, r, a, p):
     """
 
     # Será preciso verificar que os rochedos no r não pertencem aos limites exteriores do prado?
+    # E que os animais não estão em cima de rochedos?
+    # E que os animais não estão em cima de outros animais?
+    # Será preciso fazer isto no eh_prado?
 
     if not eh_posicao(d) or not isinstance(r, tuple) or not isinstance(a, tuple) or \
             not isinstance(p, tuple) or len(a) < 1 or len(a) != len(p) or \
-            len([x for x in r if eh_posicao(x)]) != len(r) or \
-            len([i for i in range(a) if eh_animal(a[i]) and eh_posicao(p[i])]) != len(a):
+            not all(map(lambda x: eh_posicao(x), r)) or \
+            not all(map(lambda x, y: eh_animal(x) and eh_posicao(y), a, p)):
 
         raise ValueError('cria_prado: argumentos invalidos')
 
@@ -458,7 +436,7 @@ def obter_posicao_animais(m):
 
 # Função auxiliar
 def obter_indice_pos_tuplo(t, p):
-    for i in range(t):
+    for i in range(len(t)):
         if posicoes_iguais(t[i], p):
             return i
 
@@ -504,18 +482,19 @@ def inserir_animal(m, a, p):
 
 def eh_prado(arg):
             # Propriedades do dicionário
-    return isinstance(arg, dict) and len(arg) == 4 and \
             # Chaves do dicionário
-            'ult_pos' in arg and 'rochedos' in arg and 'animais' in arg and 'pos_animais' in arg \
             # Tipo dos valores
-            eh_posicao(arg['ult_pos']) and isinstance(arg['rochedos'], tuple) and \
-            isinstance(arg['animais'], tuple) and isinstance(arg['pos_animais'], tuple) and \
+
             # Tamanho dos valores que são tuplos
-            len(arg['animais']) > 0 and len(arg['animais']) == len(arg['pos_animais']) and \
             # Tipo dos elementos dos valores que são tuplos
-            len([x for x in arg['rochedos'] if eh_posicao(x)]) == len(arg['rochedos']) and \
-            len([i for i in range(arg['animais'] if eh_animal(arg['animais'][i]) and
-                eh_posicao(arg['pos_animais'][i]))]) == len(arg['animais'])
+
+    return isinstance(arg, dict) and len(arg) == 4 and \
+            'ult_pos' in arg and 'rochedos' in arg and 'animais' in arg and 'pos_animais' in arg \
+            and eh_posicao(arg['ult_pos']) and isinstance(arg['rochedos'], tuple) and \
+            isinstance(arg['animais'], tuple) and isinstance(arg['pos_animais'], tuple) and \
+            len(arg['animais']) > 0 and len(arg['animais']) == len(arg['pos_animais']) and \
+            all(map(lambda x: eh_posicao(x), arg['rochedos'])) and \
+            all(map(lambda x,y: eh_animal(x) and eh_posicao(y), arg['animais'], arg['pos_animais']))
 
 
 def eh_posicao_animal(m, p):
@@ -523,6 +502,7 @@ def eh_posicao_animal(m, p):
 
 
 def eh_posicao_obstaculo(m, p):
+    # VERIFICAR SE PERTENCE AO EXTERIOR?
     return obter_indice_pos_tuplo(m['rochedos'], p) != -1
 
 
@@ -532,8 +512,73 @@ def eh_posicao_livre(m, p):
 
 # CHECK
 def prados_iguais(p1, p2):
-    return eh_prado(p1) and eh_prado(p2) and p1 == p2
+    # O prado é constituido pelos TADs posicao e animal, pelo que não pode ser simplesmente
+    # comparado com ==
+            # Posições dos rochedos
+
+            # Animais e posições dos animais
+
+
+    return eh_prado(p1) and eh_prado(p2) and \
+            len(p1['rochedos']) == len(p2['rochedos']) and \
+            all(map(lambda x, y: posicoes_iguais(x, y), p1['rochedos'], p2['rochedos'])) and \
+            len(p1['animal']) == len(p2['animal']) and \
+            all(map(lambda x, y: animais_iguais(x, y), p1['animais'], p2['animais'])) and \
+            all(map(lambda x, y: posicoes_iguais(x, y), p1['pos_animais'], p2['pos_animais']))
 
 
 def prado_para_str(m):
-    pass 
+    tamanho_x = obter_tamanho_x(m)
+
+    # topo
+    res = '+' + '-'*(tamanho_x - 2) + '+\n'
+
+    # linha por linha
+    for y in range(1, obter_tamanho_y(m) - 1):
+        res += '|'
+        # coluna por coluna
+        for x in range(1, tamanho_x - 1):
+            pos = cria_posicao(x, y)
+            
+            # caso de haver rochedo
+            if eh_posicao_obstaculo(m, pos):
+                res += '@'
+            else:
+                # caso de ser um animal
+                pos_animal = obter_indice_pos_tuplo(m['pos_animais'], pos)
+                if pos_animal != -1:
+                    res += animal_para_char(m['animais'][pos_animal])
+                # caso estar livre
+                else:
+                    res += '.'
+        res += '|\n'
+
+    # fim
+    res += '+' + '-'*(tamanho_x - 2) + '+'
+
+    return res
+
+# TAD prado - Funções de alto nível
+
+
+def obter_valor_numerico(m, p):
+    return obter_pos_y(p) * obter_tamanho_x(m) + obter_pos_x(p)
+
+
+def obter_movimento(m, p):
+    movs_possiveis = obter_posicoes_adjacentes(p)
+
+    # predador
+    if eh_predador(obter_animal(m, p)):
+        for mp in movs_possiveis:
+            if eh_presa(obter_animal(m, mp)):
+                return mp
+        # retirar obstáculos
+        movs_possiveis = tuple(filter(lambda x: not eh_posicao_obstaculo(m, x), movs_possiveis))
+    # presa
+    else:    
+        # retirar obstáculos/animais
+        movs_possiveis = tuple(filter(lambda x: eh_posicao_livre(m, x), movs_possiveis))   
+
+    return movs_possiveis[0]
+
