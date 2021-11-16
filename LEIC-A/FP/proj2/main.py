@@ -1,4 +1,4 @@
-"""
+"""FP - Segundo Projeto (O Prado)
 """
 
 # TAD posicao - Operação Básicas
@@ -56,8 +56,11 @@ def eh_posicao(arg):
     a um TAD posicao. Caso contrário devolve False.
     (universal --> booleano)
     """
-
-    return isinstance(arg, tuple) and len(arg) == 2 and isinstance(arg[0], int) and isinstance(arg[1], int) \
+            # Propriedades do tuplo
+    return isinstance(arg, tuple) and len(arg) == 2 and \
+            # Tipo dos elementos
+            isinstance(arg[0], int) and isinstance(arg[1], int) \
+            # Propriedades dos elementos
             and arg[0] >= 0 and arg[1] >= 0
 
 
@@ -286,13 +289,18 @@ def eh_animal(arg):
     a um TAD animal. Caso contrário devolve False.
     (universal --> booleano)
     """
-
-    return isinstance(arg, dict) and 'especie' in arg and 'freq_reproducao' in arg and \
-            'freq_alimentacao' in arg and 'idade' in arg and 'fome' in arg and \
+            # Propriedades do dicionário
+    return isinstance(arg, dict) and len(arg) == 5 and \
+            # Chaves do dicionário
+            'especie' in arg and 'freq_reproducao' in arg and 'freq_alimentacao' in arg and \
+            'idade' in arg and 'fome' in arg and \
+            # Tipo dos valores
             isinstance(arg['especie'], str) and isinstance(arg['freq_reproducao'], int) and \
             isinstance(arg['freq_alimentacao'], int) and isinstance(arg['idade'], int) and \
-            isinstance(arg['fome'], int) and arg['freq_reproducao'] >= 0 and \
-            arg['freq_alimentacao'] >= 0 and arg['idade'] >= 0 and arg['fome'] >= 0
+            isinstance(arg['fome'], int) and \
+            # Propriedades dos valores
+            arg['freq_reproducao'] >= 0 and  arg['freq_alimentacao'] >= 0 and \
+            arg['idade'] >= 0 and arg['fome'] >= 0
 
 
 def eh_predador(arg):
@@ -398,3 +406,134 @@ def reproduz_animal(a):
     reset_idade(a)
     return cria_copia_animal(a)
 
+# TAD prado - Operações Básicas
+
+
+def cria_prado(d, r, a, p):
+    """Construtor do TAD prado
+
+    Recebe uma posicao (da montanha do canto inferior direito do prado), um tuplo com zero
+    ou mais posições (de rochedos que não são montanhas dos limites exteriores do prado),
+    um tuplo com um ou mais animais e um tuplo do mesmo tamanho do anterior com as posições
+    correspondentes aos animais. Devolve uma nova variável do tipo prado com os atributos
+    recebidos. Verifica a validade dos argumentos.
+    (posicao x tuplo x tuplo x tuplo --> prado)
+    """
+
+    # Será preciso verificar que os rochedos no r não pertencem aos limites exteriores do prado?
+
+    if not eh_posicao(d) or not isinstance(r, tuple) or not isinstance(a, tuple) or \
+            not isinstance(p, tuple) or len(a) < 1 or len(a) != len(p) or \
+            len([x for x in r if eh_posicao(x)]) != len(r) or \
+            len([i for i in range(a) if eh_animal(a[i]) and eh_posicao(p[i])]) != len(a):
+
+        raise ValueError('cria_prado: argumentos invalidos')
+
+    return {'ult_pos': d, 'rochedos': r, 'animais': a, 'pos_animais': p}
+
+
+def cria_copia_prado(m):
+    return m.copy()
+
+
+def obter_tamanho_x(m):
+    return obter_pos_x(m['ult_pos']) + 1
+
+
+def obter_tamanho_y(m):
+    return obter_pos_y(m['ult_pos']) + 1
+
+
+def obter_numero_predadores(m):
+    return len([x for x in m['animais'] if eh_predador(x)])
+
+
+def obter_numero_presas(m):
+    return len([x for x in m['animais'] if eh_presa(x)])
+
+
+def obter_posicao_animais(m):
+    return ordenar_posicoes(m['pos_animais'])
+
+
+# Função auxiliar
+def obter_indice_pos_tuplo(t, p):
+    for i in range(t):
+        if posicoes_iguais(t[i], p):
+            return i
+
+    return -1
+
+
+def obter_animal(m, p):
+    i = obter_indice_pos_tuplo(m['pos_animais'], p)
+    if i == -1:
+        return None
+    return m['animais'][i]
+
+
+def eliminar_animal(m, p):
+
+    i = obter_indice_pos_tuplo(m['pos_animais'], p)
+    if i == -1:
+        return m
+
+    # eliminar entradas do animal e posicao do animal
+    m['pos_animais'] = m['pos_animais'][:i] + m['pos_animais'][i+1:]
+    m['animais'] = m['animais'][:i] + m['animais'][i+1:]
+
+    return m
+
+
+def mover_animal(m, p1, p2):
+
+    i = obter_indice_pos_tuplo(m['pos_animais'], p)
+    if i == -1:
+        return m
+    m['pos_animais'] = m['pos_animais'][:i] + (p2,) + m['pos_animais'][i+1:]
+
+    return m
+
+
+def inserir_animal(m, a, p):
+    m['animais'] += (a,)
+    m['pos_animais'] += (p,)
+
+    return m
+
+
+def eh_prado(arg):
+            # Propriedades do dicionário
+    return isinstance(arg, dict) and len(arg) == 4 and \
+            # Chaves do dicionário
+            'ult_pos' in arg and 'rochedos' in arg and 'animais' in arg and 'pos_animais' in arg \
+            # Tipo dos valores
+            eh_posicao(arg['ult_pos']) and isinstance(arg['rochedos'], tuple) and \
+            isinstance(arg['animais'], tuple) and isinstance(arg['pos_animais'], tuple) and \
+            # Tamanho dos valores que são tuplos
+            len(arg['animais']) > 0 and len(arg['animais']) == len(arg['pos_animais']) and \
+            # Tipo dos elementos dos valores que são tuplos
+            len([x for x in arg['rochedos'] if eh_posicao(x)]) == len(arg['rochedos']) and \
+            len([i for i in range(arg['animais'] if eh_animal(arg['animais'][i]) and
+                eh_posicao(arg['pos_animais'][i]))]) == len(arg['animais'])
+
+
+def eh_posicao_animal(m, p):
+    return obter_indice_pos_tuplo(m['pos_animais'], p) != -1
+
+
+def eh_posicao_obstaculo(m, p):
+    return obter_indice_pos_tuplo(m['rochedos'], p) != -1
+
+
+def eh_posicao_livre(m, p):
+    return not (eh_posicao_animal(m, p) or eh_posicao_obstaculo(m, p))
+
+
+# CHECK
+def prados_iguais(p1, p2):
+    return eh_prado(p1) and eh_prado(p2) and p1 == p2
+
+
+def prado_para_str(m):
+    pass 
