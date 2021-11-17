@@ -118,7 +118,7 @@ def ordenar_posicoes(t):
     (tuplo --> tuplo)
     """
 
-    return sorted(t, lambda x: (x[1], x[0]))
+    return sorted(t, key=lambda x: (x[1], x[0]))
 
 # TAD animal - Operações Básicas
 
@@ -357,7 +357,7 @@ def eh_animal_faminto(a):
     if eh_presa(a):
         return False
 
-    return obter_fome(a) >= obter_freq_alimentacao(a)
+    return obter_fome(a) == obter_freq_alimentacao(a)
 
 
 def reproduz_animal(a):
@@ -538,7 +538,8 @@ def eliminar_animal(m, p):
     (prado x posicao --> prado)
     """
 
-    if eh_posicao_animal(m, p):
+    i = obter_indice_pos_tuplo(m['pos_animais'], p)
+    if i != -1:
         # eliminar entradas do animal e posicao do animal
         m['pos_animais'] = m['pos_animais'][:i] + m['pos_animais'][i+1:]
         m['animais'] = m['animais'][:i] + m['animais'][i+1:]
@@ -724,6 +725,7 @@ def obter_movimento(m, p):
     (prado x posicao --> posicao)
     """
 
+    # verificar se o animal existe
     if not eh_posicao_animal(m, p):
         return None
 
@@ -731,13 +733,14 @@ def obter_movimento(m, p):
 
     # predador
     if eh_predador(obter_animal(m, p)):
-        # se for possível, comer presa
-        for mp in movs_possiveis:
-            if eh_presa(obter_animal(m, mp)):
-                return mp
+        # selecionar presas
+        temp = movs_possiveis
+        movs_possiveis = tuple(filter(lambda x: eh_presa(obter_animal(m, x)), movs_possiveis))
 
-        # retirar obstáculos
-        movs_possiveis = tuple(filter(lambda x: not eh_posicao_obstaculo(m, x), movs_possiveis))
+        # retirar obstáculos/predadores caso nao existirem presas para comer
+        if movs_possiveis == ():
+            movs_possiveis = temp
+            movs_possiveis = tuple(filter(lambda x: eh_posicao_livre(m, x), movs_possiveis))
     # presa
     else:    
         # retirar obstáculos/animais
@@ -745,5 +748,107 @@ def obter_movimento(m, p):
 
     if movs_possiveis == ():
         return None
-    return movs_possiveis[0]
+    posicao_selecionada = obter_valor_numerico(m, p) % len(movs_possiveis)
+    return movs_possiveis[posicao_selecionada]
+
+# Funções adicionais
+
+
+def geracao(m):
+    """Avança uma geração
+
+    Recebe um prado e modifica-o de acordo com a evolução correspondente a uma
+    geração completa, isto é, cada animal (vivo) realiza o seu turno de ação de
+    acordo com as regras descritas. Devolve o prado.
+    (prado --> prado)
+    """
+
+    # percorrer todos os animais
+    for p in obter_posicao_animais(m):
+        animal = obter_animal(m, p)
+
+        # incrementar atributos
+        aumenta_idade(animal)
+        if eh_predador(animal):
+            aumenta_fome(animal)
+
+        # mover
+        prox_posicao = obter_movimento(m, p)
+        if prox_posicao is not None:
+            # alimentar
+            if obter_animal(m, prox_posicao) is not None:
+                eliminar_animal(m, prox_posicao)
+                reset_fome(animal)
+
+            mover_animal(m, p, prox_posicao)        
+
+            # reproduzir
+            if eh_animal_fertil(animal):
+                inserir_animal(m, reproduz_animal(animal), p)
+
+        # morrer
+        if eh_predador(animal) and eh_animal_faminto(animal):
+            eliminar_animal(m, prox_posicao)
+
+    return m
+
+
+def simula_ecossistema(f, g, v):
+    """Simula o ecossistema de um prado
+
+    Recebe um nome de um ficheiro (string) correspondente à configuração da simulação,
+    um inteiro que representa o número de gerações a simular e um booleano que, no caso
+    de ser True, ativa o modo verboso, caso contrário ativa o modo quiet.
+    O modo quiet apenas mostra a informação e o prado na primeira e última geração.
+    O modo verboso mostra a informação e o prado todas as gerações em que à uma alteração
+    no número de predadores ou presas.
+    O ficheiro de configuração contém, na primeira linha, a representação externa do canto
+    inferior direito do prado, na segunda linha, a representação externa das posições dos rochedos
+    do prado e, nas restantes linhas, um animal diferente do prado caracterizado pelo seu nome,
+    frequência de reprodução, frequência de alimentação e a representação externa da posição que
+    ocupa inicialmente no prado.
+    Devolve o número de predadores e presas no prado no fim da simulação.
+    (str x int x booleano --> tuplo)
+    """
+
+    def escrever_info_prado(prado, predadores, presas, gen):
+        print(f'Predadores: {predadores} vs Presas: {presas} (Gen. {gen})')
+        print(prado_para_str(prado))
+
+    # ler configuração
+    with open(f, 'r') as ficheiro:
+        lines = list(map(lambda x: eval(x), ficheiro.readlines()))
+                
+    # criar prado
+    ult_pos = cria_posicao(lines[0][0], lines[0][1])
+    rochedos = tuple(map(lambda x: cria_posicao(x[0], x[1]), lines[1]))
+    animais = ()
+    pos_animais = ()
+    for l in lines[2:]:
+        animais += (cria_animal(l[0], l[1], l[2]),)
+        pos_animais += (cria_posicao(l[3][0], l[3][1]),)
+    prado = cria_prado(ult_pos, rochedos, animais, pos_animais)
+
+    # Gen 0
+    predadores_antes = obter_numero_predadores(prado)
+    presas_antes = obter_numero_presas(prado)
+    escrever_info_prado(prado, predadores_antes, presas_antes, 0)
+
+    # Gens
+    for gen in range(1, g+1):
+        prado = geracao(prado)
+
+        predadores = obter_numero_predadores(prado)
+        presas = obter_numero_presas(prado)
+        if v and (predadores != predadores_antes or presas != presas_antes):
+            escrever_info_prado(prado, predadores, presas, gen)
+
+        predadores_antes = predadores
+        presas_antes = presas
+
+    # Ultima Gen
+    if not v:
+        escrever_info_prado(prado, predadores_antes, presas_antes, g)
+
+    return (predadores_antes, presas_antes)
 
