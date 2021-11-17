@@ -29,6 +29,20 @@ def prado_tests():
     print(eh_prado({}))
     print(prados_iguais(prado, prado2))
     print(prados_iguais(prado2, prado1))
+    print()
+
+def test_raposa():
+    dim = cria_posicao(6, 4)
+    obs = ()
+    an1 = tuple(cria_animal('raposa', 5, 2) for i in range(2))
+    an2 = (cria_animal('coelho', 5, 0),)
+    pos = (cria_posicao(1, 1), cria_posicao(4, 3), cria_posicao(2, 1))
+    prado = cria_prado(dim, obs, an1 + an2, pos)
+    print(prado_para_str(prado))
+    print(obter_movimento(prado, cria_posicao(1, 1)))
+    geracao(prado)
+    print(prado_para_str(prado))
+    
 
 
 def geracao_tests():
@@ -48,5 +62,8 @@ def simulacao_tests():
     simula_ecossistema('config.txt', 200, False)
     return simula_ecossistema('config.txt', 200, True)
 
+
+
 #prado_tests()
 print(simulacao_tests())
+#test_raposa()

@@ -40,15 +40,15 @@ def cria_posicao(x, y):
 
     Recebe dois inteiros correspondentes às coordenadas da posicao (x, y), e devolve
     uma nova posicao, com essas coordenadas. Verifica a validade dos argumentos.
-    A utilização do tuplo como representação interna é devida à não necessidade de ser
-    uma lista, pois nenhuma das operações/funções são modificadores.
+    A utilização da lista como representação interna é devida à necessidade de ser
+    mutável, e à não necessidade de ser do tipo dicionário (demasiado complexo).
     (int x int --> posicao)
     """
 
     if not isinstance(x, int) or not isinstance(y, int) or x < 0 or y < 0:
         raise ValueError('cria_posicao: argumentos invalidos')
 
-    return (x, y)
+    return [x, y]
 
 
 def cria_copia_posicao(p):
@@ -58,7 +58,7 @@ def cria_copia_posicao(p):
     (posicao --> posicao)
     """
 
-    return p[0:]
+    return p.copy()
 
 
 def obter_pos_x(p):
@@ -89,7 +89,7 @@ def eh_posicao(arg):
     (universal --> booleano)
     """
 
-    return isinstance(arg, tuple) and len(arg) == 2 and \
+    return isinstance(arg, list) and len(arg) == 2 and \
             isinstance(arg[0], int) and isinstance(arg[1], int) \
             and arg[0] >= 0 and arg[1] >= 0
 
@@ -146,11 +146,36 @@ def ordenar_posicoes(t):
     """Ordena um conjunto de posições de acordo com a ordem de leitura do prado
 
     Recebe um tuplo com um conjunto de TADs posicao e devolve um tuplo com as posições
-    recebidas ordenadas de acordo com a ordem de leitura do prado.
+    recebidas ordenadas de acordo com a ordem de leitura do prado. Esta função baseia-se
+    no algoritmo Bubble Sort.
     (tuplo --> tuplo)
     """
 
-    return sorted(t, key=lambda x: (x[1], x[0]))
+    def posicao_anterior(p1, p2):
+        """Determina se uma posicao é anterior a outra
+
+        Recebe duas posições e devolve True se a primeira é anterior à segunda,
+        segundo a ordem de leitura do prado. Caso contrário devolve False.
+        (posicao x posicao --> booleano)
+        """
+
+        if obter_pos_y(p1) == obter_pos_y(p2):
+            return obter_pos_x(p1) < obter_pos_x(p2)
+        return obter_pos_y(p1) < obter_pos_y(p2)
+    
+    # é mais fácil e eficiente transformar em lista para ordenar
+    l = list(t)
+    alteracao = True
+    for i in range(len(t)-1, 0, -1):
+        alteracao = False
+        for j in range(1, i+1):
+            if posicao_anterior(l[j], l[j-1]):
+                l[j], l[j-1] = l[j-1], l[j]
+                alteracao = True
+        if not alteracao:
+            break
+
+    return tuple(l)
 
 # TAD animal - Operações Básicas
 
@@ -171,7 +196,7 @@ def cria_animal(s, r, a):
     """
 
     if not isinstance(s, str) or not isinstance(r, int) or not isinstance(a, int) \
-            or r < 1 or a < 0:
+            or s == '' or r < 1 or a < 0:
 
         raise ValueError('cria_animal: argumentos invalidos')
 
@@ -270,7 +295,8 @@ def aumenta_fome(a):
     (animal --> animal)
     """
 
-    a['fome'] += 1
+    if eh_predador(a):
+        a['fome'] += 1
     return a
 
 
@@ -282,7 +308,8 @@ def reset_fome(a):
     (animal --> animal)
     """
 
-    a['fome'] = 0
+    if eh_predador(a):
+        a['fome'] = 0
     return a
 
 
@@ -298,7 +325,7 @@ def eh_animal(arg):
             'idade' in arg and 'fome' in arg and \
             isinstance(arg['especie'], str) and isinstance(arg['freq_reproducao'], int) and \
             isinstance(arg['freq_alimentacao'], int) and isinstance(arg['idade'], int) and \
-            isinstance(arg['fome'], int) and \
+            isinstance(arg['fome'], int) and arg['especie'] != '' and \
             arg['freq_reproducao'] >= 1 and arg['freq_alimentacao'] >= 0 and \
             arg['idade'] >= 0 and arg['fome'] >= 0
 
@@ -450,7 +477,7 @@ def eh_limite_exterior_prado(ult_pos, p):
 
     x = obter_pos_x(p)
     y = obter_pos_y(p)
-    return x == 0 or y == 0 or x == obter_pos_x(ult_pos) or y == obter_pos_y(ult_pos)
+    return x <= 0 or y <= 0 or x >= obter_pos_x(ult_pos) or y >= obter_pos_y(ult_pos)
 
 
 def cria_prado(d, r, a, p):
@@ -776,7 +803,7 @@ def obter_movimento(m, p):
             movs_possiveis = temp
             movs_possiveis = tuple(filter(lambda x: eh_posicao_livre(m, x), movs_possiveis))
     # presa
-    else:    
+    else:
         # retirar obstáculos/animais
         movs_possiveis = tuple(filter(lambda x: eh_posicao_livre(m, x), movs_possiveis))   
 
@@ -797,14 +824,20 @@ def geracao(m):
     (prado --> prado)
     """
 
+    # manter registo animais que morreram, para não realizar um turno de ação
+    # duplicado de um outro animal que calhe na posição do que morreu
+    animais_mortos = []
     # percorrer todos os animais (por ordem de leitura do prado)
     for p in obter_posicao_animais(m):
+        # verificar se aqui morreu um animal (para não repetir o turno do animal, erradamente)
+        if obter_indice_pos_tuplo(animais_mortos, p) != -1:
+            continue
+
         animal = obter_animal(m, p)
 
         # incrementar atributos
         aumenta_idade(animal)
-        if eh_predador(animal):
-            aumenta_fome(animal)
+        aumenta_fome(animal)
 
         # mover
         prox_posicao = obter_movimento(m, p)
@@ -812,6 +845,7 @@ def geracao(m):
             # alimentar
             if eh_posicao_animal(m, prox_posicao):
                 eliminar_animal(m, prox_posicao)
+                animais_mortos.append(prox_posicao)
                 reset_fome(animal)
 
             mover_animal(m, p, prox_posicao)
@@ -823,6 +857,7 @@ def geracao(m):
         # morrer
         if eh_animal_faminto(animal):
             eliminar_animal(m, prox_posicao if prox_posicao is not None else p)
+            animais_mortos.append(prox_posicao)
 
     return m
 
