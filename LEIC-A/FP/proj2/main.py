@@ -459,8 +459,7 @@ def cria_prado(d, r, a, p):
     Recebe uma posicao (da montanha do canto inferior direito do prado), um tuplo com zero
     ou mais posições (de rochedos que não são montanhas dos limites exteriores do prado),
     um tuplo com um ou mais animais e um tuplo do mesmo tamanho do anterior com as posições
-    correspondentes aos animais. Devolve uma nova variável do tipo prado com os atributos
-    recebidos.
+    correspondentes aos animais. Devolve um novo prado com os atributos recebidos.
     Verifica a validade dos argumentos:
         1. Tipos dos argumentos
         2. Tamanho dos tuplos
@@ -615,7 +614,7 @@ def inserir_animal(m, a, p):
 
 
 def eh_prado(arg):
-    """Determina se uma variavel corresponde ao tipo prado
+    """Determina se corresponde ao tipo prado
 
     Recebe um argumento de qualquer tipo e devolve True se o mesmo corresponde
     a um TAD prado. Caso contrário devolve False.
