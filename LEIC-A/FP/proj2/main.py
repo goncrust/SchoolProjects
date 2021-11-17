@@ -1,4 +1,35 @@
 """FP - Segundo Projeto (O Prado)
+
+Este projeto consiste em escrever um programa que simule o ecossistema de um prado
+em que convivem animais que se movimentam, alimentam, reproduzem e morrem.
+Para isto definiu-se um conjunto de TADs: 
+    posicao - representar e manipular posições (x, y) de um prado arbitrariamente grande.
+    animal  - representar e manipular os animais do simulador, existindo dois tipos:
+              predadores e presas.
+              As presas são caraterizadas pela espécie, idade e frequência de reprodução.
+              Os predadores são caraterizados pelas mesmas propriedades das presas e ainda
+              pela fome e frequência de alimentação. As presas têm estes dois atributos
+              sempre iguais a zero.
+    prado   - representar e manipular uma estrutura retangular com um número definido
+              de posições que estão ocupadas por montanhas (a toda a volta), rochedos,
+              animais ou até mesmo nada (espaço vazio).
+e duas funções adicionais para concretizar a simulação.
+Uma breve descrição do comportamento e regras:
+    A cada geração, cada animal, seguindo a ordem de leitura do prado (esquerda para a direita,
+    seguida de cima para baixo), realiza o seu turno de ação. Neste, a sua idade
+    e fome (em predadores) são incrementadas, e em seguida tenta realizar um movimento,
+    reproduzir-se (se idade >= frequência de reprodução, voltando a sua idade para zero
+    e deixando na posição de onde veio um novo animal igual a ele, com fome e idade igual a zero.
+    Caso não se movimente não pode reproduzir), alimentar-se (em predadores se comer uma presa,
+    voltando a sua fome para zero) ou morrer (em predadores se fome == frequência de alimentação,
+    ou em presa, se comida por um predador).
+    Quanto ao movimento, os animais movem-se para cima, para baixo, para a esquerda ou para a
+    direita. Os predadores, se puderem movimentam-se para cima de uma presa e comem-na, se não,
+    movimenta-se para uma posição livre, tal como as presas. No caso de haver mais que uma opção
+    de movimentação, numeram-se as mesmas começando de 0, no sentido horário a partir da
+    posição 12:00 e a posição selecionada é dada por N (mod p), onde N é o valor numérico que
+    respeita a ordem de leitura (ex: N((0, 0)) = 0, N((2,1)) = 9) e p é o número de opções
+    de movimentação possíveis.
 """
 
 # TAD posicao - Operação Básicas
