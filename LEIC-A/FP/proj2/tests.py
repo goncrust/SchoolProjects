@@ -8,6 +8,7 @@ def prado_tests():
     an2 = (cria_animal('lynx', 20, 15),)
     pos = tuple(cria_posicao(p[0],p[1]) for p in ((5,1),(7,2),(10,1),(6,1)))
     prado = cria_prado(dim, obs, an1+an2, pos)
+    prado1 = cria_copia_prado(prado)
     print(obter_tamanho_x(prado), obter_tamanho_y(prado))
     print(prado_para_str(prado))
     p1 = cria_posicao(7,2)
@@ -18,6 +19,16 @@ def prado_tests():
     print(posicao_para_str(obter_movimento(prado, cria_posicao(5,1))))
     print(posicao_para_str(obter_movimento(prado, cria_posicao(6,1))))
     print(posicao_para_str(obter_movimento(prado, cria_posicao(10,1))))
+
+    print('--------')
+    prado2 = cria_copia_prado(prado)
+    print(prado)
+    print(prado2)
+    print(eh_prado(prado))
+    print(eh_prado(prado2))
+    print(eh_prado({}))
+    print(prados_iguais(prado, prado2))
+    print(prados_iguais(prado2, prado1))
 
 
 def geracao_tests():
@@ -35,6 +46,7 @@ def geracao_tests():
 
 def simulacao_tests():
     simula_ecossistema('config.txt', 200, False)
-    simula_ecossistema('config.txt', 200, True)
+    return simula_ecossistema('config.txt', 200, True)
 
-simulacao_tests()
+#prado_tests()
+print(simulacao_tests())
