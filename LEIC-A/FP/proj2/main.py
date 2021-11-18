@@ -102,7 +102,7 @@ def posicoes_iguais(p1, p2):
     (posicao x posicao --> booleano)
     """
 
-    return eh_posicao(p1) and eh_posicao(p2) and p1 == p2
+    return p1 == p2
 
 
 def posicao_para_str(p):
@@ -787,26 +787,32 @@ def obter_movimento(m, p):
     (prado x posicao --> posicao)
     """
 
+    # verificar que o animal existe 
+    if not eh_posicao_animal(m, p):
+        return p
+
     movs_possiveis = obter_posicoes_adjacentes(p)
 
     # predador
     if eh_predador(obter_animal(m, p)):
         # selecionar presas
         temp = movs_possiveis
-        movs_possiveis = tuple(filter(lambda x: eh_presa(obter_animal(m, x)), movs_possiveis))
+        movs_possiveis = [x for x in movs_possiveis if
+                eh_posicao_animal(m, x) and eh_presa(obter_animal(m, x))]
 
         # retirar obstáculos/predadores caso nao existirem presas para comer
-        if movs_possiveis == ():
+        if not len(movs_possiveis):
             movs_possiveis = temp
-            movs_possiveis = tuple(filter(lambda x: eh_posicao_livre(m, x), movs_possiveis))
+            movs_possiveis = [x for x in movs_possiveis if eh_posicao_livre(m, x)]
     # presa
     else:
         # retirar obstáculos/animais
-        movs_possiveis = tuple(filter(lambda x: eh_posicao_livre(m, x), movs_possiveis))   
+        movs_possiveis = [x for x in movs_possiveis if eh_posicao_livre(m, x)]
 
-    if movs_possiveis == ():
+    nmr_opcoes = len(movs_possiveis)
+    if not nmr_opcoes:
         return p
-    posicao_selecionada = obter_valor_numerico(m, p) % len(movs_possiveis)
+    posicao_selecionada = obter_valor_numerico(m, p) % nmr_opcoes
     return movs_possiveis[posicao_selecionada]
 
 # Funções adicionais

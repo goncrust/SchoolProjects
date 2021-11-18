@@ -74,8 +74,19 @@ def test_test():
     print(prado_para_str(prado))
     print(obter_movimento(prado,[1,1]))
 
+def test_do_bacano():
+    import cProfile
+    import pstats
+    with cProfile.Profile() as pr:
+        simula_ecossistema('test208.txt', 20, True)
+
+        stats = pstats.Stats(pr)
+        stats.sort_stats(pstats.SortKey.TIME)
+        stats.print_stats()
+
 #prado_tests()
-#print(simulacao_tests())
+print(simulacao_tests())
 #test_raposa()
 #time_test()
-test_test()
+#test_test()
+#test_do_bacano()
