@@ -1,4 +1,5 @@
 from main import *
+import time
 
 
 def prado_tests():
@@ -33,10 +34,10 @@ def prado_tests():
 
 def test_raposa():
     dim = cria_posicao(6, 4)
-    obs = ()
+    obs = (cria_posicao(1, 2), cria_posicao(2, 2), cria_posicao(3, 1))
     an1 = tuple(cria_animal('raposa', 5, 2) for i in range(2))
     an2 = (cria_animal('coelho', 5, 0),)
-    pos = (cria_posicao(1, 1), cria_posicao(4, 3), cria_posicao(2, 1))
+    pos = (cria_posicao(2, 1), cria_posicao(4, 3), cria_posicao(1, 3))
     prado = cria_prado(dim, obs, an1 + an2, pos)
     print(prado_para_str(prado))
     print(obter_movimento(prado, cria_posicao(1, 1)))
@@ -63,7 +64,18 @@ def simulacao_tests():
     return simula_ecossistema('config.txt', 200, True)
 
 
+def time_test():
+    start_time = time.time()
+    simula_ecossistema('test_conf.txt', 197, False)
+    print("--- %s seconds ---" % (time.time() - start_time))
+
+def test_test():
+    prado = {'ult_pos':[6,4],'rochedos':([4,2],[4,1],[1,3]),'animais':({'especie':'gato','freq_reproducao':20,'freq_alimentacao':4,'idade':0,'fome':0},{'especie':'pombo','freq_reproducao':10,'freq_alimentacao':0,'idade':0,'fome':0},{'especie':'pombo','freq_reproducao':10,'freq_alimentacao':0,'idade':0,'fome':0},{'especie':'pombo','freq_reproducao':10,'freq_alimentacao':0,'idade':0,'fome':0}),'pos_animais':([2,1],[1,1],[1,2],[5,3])}
+    print(prado_para_str(prado))
+    print(obter_movimento(prado,[1,1]))
 
 #prado_tests()
-print(simulacao_tests())
+#print(simulacao_tests())
 #test_raposa()
+#time_test()
+test_test()

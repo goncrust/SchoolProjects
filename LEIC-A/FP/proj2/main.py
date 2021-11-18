@@ -782,13 +782,10 @@ def obter_movimento(m, p):
 
     Recebe um prado e uma posicao e devolve a posicao seguinte do animal que se encontra
     na posicao recebida, de acordo com as regras de movimento dos animais do prado.
-    Caso o animal não exista ou não existam posições livres para se mover, devolve None.
+    Caso o animal não exista ou não existam posições livres para se mover, devolve a
+    posição de entrada (onde o animal vai permanecer).
     (prado x posicao --> posicao)
     """
-
-    # verificar se o animal existe
-    if not eh_posicao_animal(m, p):
-        return None
 
     movs_possiveis = obter_posicoes_adjacentes(p)
 
@@ -808,7 +805,7 @@ def obter_movimento(m, p):
         movs_possiveis = tuple(filter(lambda x: eh_posicao_livre(m, x), movs_possiveis))   
 
     if movs_possiveis == ():
-        return None
+        return p
     posicao_selecionada = obter_valor_numerico(m, p) % len(movs_possiveis)
     return movs_possiveis[posicao_selecionada]
 
@@ -841,7 +838,8 @@ def geracao(m):
 
         # mover
         prox_posicao = obter_movimento(m, p)
-        if prox_posicao is not None:
+        mover = not posicoes_iguais(prox_posicao, p)
+        if mover:
             # alimentar
             if eh_posicao_animal(m, prox_posicao):
                 eliminar_animal(m, prox_posicao)
@@ -856,7 +854,7 @@ def geracao(m):
 
         # morrer
         if eh_animal_faminto(animal):
-            eliminar_animal(m, prox_posicao if prox_posicao is not None else p)
+            eliminar_animal(m, prox_posicao if mover else p)
             animais_mortos.append(prox_posicao)
 
     return m
