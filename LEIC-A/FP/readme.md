@@ -1,3 +1,3 @@
-## Cadeira de FP
+## Foundations of Programming
 
-1º ano, 1º período
+Year 1, P 1

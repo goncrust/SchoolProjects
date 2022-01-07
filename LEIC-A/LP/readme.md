@@ -1,3 +1,3 @@
-## Cadeira de LP
+## Logic for Programming
 
-1º ano, 2º período
+Year 1, P 2
