@@ -15,6 +15,11 @@ To avoid fraud this repo becomes private while a project for evaluation is ongoi
 | First Project (Buggy Data Base)     | https://github.com/goncrust/SchoolProjects/blob/main/LEIC-A/FP/proj1/main.py |
 | Second Project (O Prado)            | https://github.com/goncrust/SchoolProjects/blob/main/LEIC-A/FP/proj2/main.py |
 
+| LP2 (Logic for Programming) | https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/LP |
+|-----------------------------|----------------------------------------------------------------|
+|                             |                                                                |
+
+
 ### Highschool (AIB)
 
 | First Period      | https://github.com/goncrust/SchoolProjects/tree/main/HighSchool/FirstPeriod                             |
