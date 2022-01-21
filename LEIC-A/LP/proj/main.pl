@@ -1,4 +1,23 @@
-% LP - Solucionador de Puzzles Hashi (Projecto)
+%           LP - Solucionador de Puzzles Hashi (Parte I)
+
+%-------------------------------------------------------------------------------
+% O objetivo deste projecto e' escrever a primeira parte de um programa
+% em PROLOG para resolver puzzles hashi.
+% Um puzzle hashi e' constituido por uma grelha n x m, em que cada posicao
+% da grelha ou esta vazia, ou contem uma ilha, com a indicacao do numero
+% de pontes que essa ilha devera ter no final da solucao.
+% Para obter a solucao, as ilhas devem ser ligadas por pontes, de forma
+% a:
+% - nao haver mais do que duas pontes entre quaisquer duas ilhas,
+% - as pontes so podem ser verticais ou horizontais e nao podem cruzar
+%   ilhas ou outras pontes,
+% - na solucao do puzzle, as pontes permitem a passagem entre quaisquer
+%   duas ilhas.
+% A representacao interna do puzzle e' uma lista de listas, correspondendo
+% cada lista interior a uma linha do puzzle. Uma posicao contendo uma ilha
+% e' representada por um inteiro positivo correspondente ao numero de
+% pontes dessa ilha. As posicoes vazias sao representadas por zero.
+%-------------------------------------------------------------------------------
 
 :- [codigo_comum].
 
@@ -169,7 +188,7 @@ actualiza_vizinhas_entrada(Pos1, Pos2, Posicoes, [Ilha, Vizinhas, P], [Ilha, Viz
 %-------------------------------------------------------------------------------
 % actualiza_vizinhas_apos_pontes(Estado, Pos1, Pos2, Novo_estado)
 % Novo_estado e' o estado que se obtem de Estado apos a actualizacao das ilhas
-% vizinhas de cada uma das suas entradas, com o adiocionar da ponte(Pos1, Pos2).
+% vizinhas de cada uma das suas entradas, com o adicionar da ponte(Pos1, Pos2).
 %-------------------------------------------------------------------------------
 
 actualiza_vizinhas_apos_pontes(Estado, Pos1, Pos2, Novo_estado) :-
@@ -191,8 +210,8 @@ ilhas_terminadas(Estado, Ilhas_term) :-
 
 %-------------------------------------------------------------------------------
 % tira_ilhas_terminadas_entrada(Ilhas_term, Entrada, Nova_entrada)
-% Nova_entrada e' a entrada resultante de remover as ilhas de
-% Ilhas_term da lista de ilhas vizinhas da Entrada.
+% Nova_entrada e' a entrada resultante de remover as ilhas de Ilhas_term da
+% lista de ilhas vizinhas da Entrada.
 %-------------------------------------------------------------------------------
 
 tira_ilhas_terminadas_entrada(Ilhas_term, [Ilha, Vizinhas, Pontes], [Ilha, VizinhasNovo, Pontes]) :-
@@ -264,3 +283,5 @@ junta_pontes(Estado, Num_pontes, ilha(N1, P1), ilha(N2, P2), Novo_estado) :-
     maplist(append_novas_pontes(Novas_pontes, ilha(N1, P1), ilha(N2, P2)), Estado, Novo_estado_temp),
     actualiza_vizinhas_apos_pontes(Novo_estado_temp, P1, P2, Novo_estado_temp_2),
     trata_ilhas_terminadas(Novo_estado_temp_2, Novo_estado).
+
+%-------------------------------------------------------------------------------
