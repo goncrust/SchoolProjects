@@ -19,6 +19,9 @@ To avoid fraud this repo becomes private while a project for evaluation is ongoi
 |---------------------------------------------------|-----------------------------------------------------------------------------|
 | Project (Solucionador de Puzzles Hashi (Parte I)) | https://github.com/goncrust/SchoolProjects/blob/main/LEIC-A/LP/proj/main.pl |
 
+| IAED2 (Introduction to Algorithms and Data Structures) | https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/IAED            |
+|--------------------------------------------------------|-----------------------------------------------------------------------------|
+|                                                        |                                                                             |
 
 ### Highschool (AIB)
 
