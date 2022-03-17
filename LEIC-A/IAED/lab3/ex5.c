@@ -30,8 +30,7 @@ int main() {
 
 
     for (int i = 0; i < frase; i++) {
-        printf(frases[i]);
-        printf("\n");
+        printf("%s\n", frases[i]);
     }
 
     return 0;
