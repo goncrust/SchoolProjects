@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
 #include <string.h>
 
 /* Constants */
@@ -25,6 +23,11 @@ typedef struct {
     int hour;
     int minute;
 } Time;
+
+typedef struct {
+    Date date;
+    Time time;
+} DateTime;
 
 typedef struct {
     char id[AIRPORTID_SIZE];
@@ -81,7 +84,7 @@ void print_date(Date date) {
     if(date.month < 10)
         printf("0%d-", date.month);
     else
-        printf("%d-", date.day);
+        printf("%d-", date.month);
 
     printf("%d", date.year);
 }
@@ -95,6 +98,10 @@ int invalid_date(Date date, Date curr_date) {
     }
 
     return 0;
+}
+
+equal_dates(Date d1, Date d2) {
+    return (d1.day == d2.day && d1.month == d2.month && d1.year == d2.year);
 }
 
 /* Time functions */
@@ -111,6 +118,78 @@ void print_time(Time time) {
         printf("%d", time.minute);
 }
 
+int time_before(Time t1, Time t2) {
+    if (t1.hour < t2.hour) return 1;
+    else if (t1.hour > t2.hour) return 0;
+
+    if (t1.minute < t2.minute) return 1;
+
+    return 0;
+}
+
+/* DateTime functions */
+
+int date_time_before(Date d1, Time t1, Date d2, Time t2) {
+    if (d1.year < d2.year) return 1;
+    else if (d1.year > d2.year) return 0;
+
+    if (d1.month < d2.month) return 1;
+    else if (d1.month > d2.month) return 0;
+
+    if (d1.day < d2.day) return 1;
+    else if (d1.day > d2.day) return 0;
+
+    if (time_before(t1, t2)) return 1;
+
+    return 0;
+}
+
+DateTime calc_arrival(Date date, Time time, Time duration) {
+    int month;
+    DateTime arrival;
+
+    time.minute += duration.minute;
+    if (time.minute > 59) {
+        time.minute -= 60;
+        time.hour++;
+    }
+
+    time.hour += duration.hour;
+    if (time.hour > 23) {
+        time.hour -= 24;
+        date.day++;
+    }
+
+    month = date.month;
+    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 ||
+            month == 10 || month == 12) {
+
+        if (date.day > 31) {
+            date.day = 1;
+            date.month++;
+        }
+    } else if (month == 2) {
+        if (date.day > 28) {
+            date.day = 1;
+            date.month = 3;
+        }
+    } else {
+        if (date.day > 30) {
+            date.day = 1;
+            date.month++;
+        }
+    }
+
+    if (date.month == 13) {
+        date.month = 1;
+        date.year++;
+    }
+
+    arrival.date = date;
+    arrival.time = time;
+    return arrival;
+}
+
 /* Auxiliar functions */
 
 int alpha_before(char w1[], char w2[], int word_size) {
@@ -125,16 +204,30 @@ int alpha_before(char w1[], char w2[], int word_size) {
     return 0;
 }
 
-void print_airport_by_id(char id[], Airport airports[], int airport_count) {
+int airport_flight_count(char id[], Flight flights[], int flight_count) {
+    int i, total = 0;
+    for (i = 0; i < flight_count; i++) {
+        if (strcmp(id, flights[i].departure_id))
+            total++;
+    }
+
+    return total;
+}
+
+void print_airport_by_id(char id[], Airport airports[], int airport_count,
+        Flight flights[], int flight_count) {
+
     int i;
     for (i = 0; i < airport_count; i++) {
         if (strcmp(airports[i].id, id) == 0) {
-            printf("%s %s %s\n", airports[i].id, airports[i].city, airports[i].country); 
+            printf("%s %s %s %d\n", airports[i].id, airports[i].city,
+                    airports[i].country,
+                    airport_flight_count(airports[i].id, flights, flight_count)); 
             return;
         }
     }
 
-    printf("no such airport ID\n");
+    printf("%s: no such airport ID\n", id);
 }
 
 /* Command functions */
@@ -177,7 +270,8 @@ int add_airport(Airport airports[], int airport_count) {
     return 0;
 }
 
-void list_airports(Airport airports[], int airport_count) {
+void list_airports(Airport airports[], int airport_count,
+        Flight flights[], int flight_count) {
     int sort[AIRPORTS_MAX], i, j, aux;
 
     /* Reset sort vector */
@@ -195,12 +289,14 @@ void list_airports(Airport airports[], int airport_count) {
     }
 
     for (i = 0; i < airport_count; i++)
-        printf("%s %s %s\n", airports[sort[i]].id, airports[sort[i]].city,
-                airports[sort[i]].country);
+        printf("%s %s %s %d\n", airports[sort[i]].id, airports[sort[i]].city,
+                airports[sort[i]].country,
+                airport_flight_count(airports[sort[i]].id, flights, flight_count));
 
 }
 
-void list_airports_specified(Airport airports[], int airport_count) {
+void list_airports_specified(Airport airports[], int airport_count,
+        Flight flights[], int flight_count) {
     char id[AIRPORTID_SIZE];
     int i = 0, end = 0;
 
@@ -211,7 +307,8 @@ void list_airports_specified(Airport airports[], int airport_count) {
 
         if (i == 3) {
             id[3] = '\0';
-            print_airport_by_id(id, airports, airport_count);
+            print_airport_by_id(id, airports, airport_count,
+                    flights, flight_count);
             i = 0;
             continue;
         }
@@ -269,7 +366,8 @@ int add_flight(Flight flights[], int flight_count, Airport airports[],
     }
 
     for (i = 0; i < flight_count; i++) {
-        if (strcmp(new_flight.id, flights[i].id) == 0) {
+        if (strcmp(new_flight.id, flights[i].id) == 0 &&
+                equal_dates(new_flight.date, flights[i].date)) {
             printf("flight already exists\n");
             return 1;
         }
@@ -283,8 +381,12 @@ int add_flight(Flight flights[], int flight_count, Airport airports[],
             found_destination = 1;
         }
     }
-    if (!(found_departure && found_destination)) {
-        printf("no such airport ID\n");
+    if (!(found_departure)) {
+        printf("%s: no such airport ID\n", new_flight.departure_id);
+        return 1;
+    }
+    if (!(found_destination)) {
+        printf("%s: no such airport ID\n", new_flight.destination_id);
         return 1;
     }
 
@@ -297,7 +399,8 @@ int add_flight(Flight flights[], int flight_count, Airport airports[],
         return 1;
 
     if (new_flight.duration.hour > 12 || 
-            (new_flight.duration.hour == 12 && new_flight.duration.minute > 0)) {
+            (new_flight.duration.hour == 12 &&
+             new_flight.duration.minute > 0)) {
         printf("invalid duration\n");
         return 1;
     }
@@ -321,6 +424,127 @@ void list_flights(Flight flights[], int flight_count) {
         print_date(flights[i].date);
         printf(" ");
         print_time(flights[i].time);
+        printf("\n");
+    }
+}
+
+void list_departures(Flight flights[], int flight_count,
+        Airport airports[], int airport_count) {
+
+    char id[AIRPORTID_SIZE], new_line;
+    int selected_indexes[FLIGHTS_MAX], selected_indexes_count = 0, i, j,
+        aux, found = 0;
+
+    scanf("%s%c", id, &new_line);
+
+    /* Errors */
+    for (i = 0; i < airport_count; i++) {
+        if (strcmp(airports[i].id, id) == 0) {
+            found = 1;
+            break;
+        }
+    }
+    if (!found) {
+        printf("%s: no such airport ID\n", id);
+        return;
+    }
+
+    /* Select flights with desired departure id */
+    for (i = 0; i < flight_count; i++) {
+        if (strcmp(flights[i].departure_id, id) == 0) {
+            selected_indexes[selected_indexes_count] = i;
+            selected_indexes_count++;
+        }
+    }
+
+    /* Sort by date */
+    for (i = selected_indexes_count-1; i > 0; i--) {
+        for (j = 0; j < i; j++) {
+            if (date_time_before(flights[selected_indexes[j+1]].date,
+                        flights[selected_indexes[j+1]].time,
+                        flights[selected_indexes[j]].date,
+                        flights[selected_indexes[j]].time)) {
+
+                aux = selected_indexes[j];
+                selected_indexes[j] = selected_indexes[j+1];
+                selected_indexes[j+1] = aux;
+            }
+        }
+    }
+
+    /* Print */
+    for (i = 0; i < selected_indexes_count; i++) {
+        printf("%s %s ", flights[selected_indexes[i]].id,
+                flights[selected_indexes[i]].destination_id);
+        print_date(flights[selected_indexes[i]].date);
+        printf(" ");
+        print_time(flights[selected_indexes[i]].time);
+        printf("\n");
+    }
+}
+
+void list_arrivals(Flight flights[], int flight_count,
+        Airport airports[], int airport_count) {
+
+    char id[AIRPORTID_SIZE], new_line;
+    int selected_indexes[FLIGHTS_MAX], selected_indexes_count = 0, i, j,
+        aux, found = 0;
+    DateTime arrival_date_time[FLIGHTS_MAX], auxDT;
+
+    scanf("%s%c", id, &new_line);
+
+    /* Errors */
+    for (i = 0; i < airport_count; i++) {
+        if (strcmp(airports[i].id, id) == 0) {
+            found = 1;
+            break;
+        }
+    }
+    if (!found) {
+        printf("%s: no such airport ID\n", id);
+        return;
+    }
+
+    /* Select flights with desired destination id */
+    for (i = 0; i < flight_count; i++) {
+        if (strcmp(flights[i].destination_id, id) == 0) {
+            selected_indexes[selected_indexes_count] = i;
+            selected_indexes_count++;
+        }
+    }
+
+    for (i = 0; i < selected_indexes_count; i++) {
+        arrival_date_time[i] = calc_arrival(flights[selected_indexes[i]].date,
+                flights[selected_indexes[i]].time,
+                flights[selected_indexes[i]].duration);
+    }
+
+    /* Sort by date */
+    for (i = selected_indexes_count-1; i > 0; i--) {
+        for (j = 0; j < i; j++) {
+            if (date_time_before(arrival_date_time[j+1].date,
+                        arrival_date_time[j+1].time,
+                        arrival_date_time[j].date,
+                        arrival_date_time[j].time)) {
+
+                aux = selected_indexes[j];
+                selected_indexes[j] = selected_indexes[j+1];
+                selected_indexes[j+1] = aux;
+
+                auxDT = arrival_date_time[j];
+                arrival_date_time[j] = arrival_date_time[j+1];
+                arrival_date_time[j+1] = auxDT;
+            }
+        }
+    }
+
+    /* Print */
+    for (i = 0; i < selected_indexes_count; i++) {
+        printf("%s %s ", flights[selected_indexes[i]].id,
+                flights[selected_indexes[i]].departure_id);
+        print_date(arrival_date_time[i].date);
+        printf(" ");
+        print_time(arrival_date_time[i].time);
         printf("\n");
     }
 }
@@ -369,9 +593,11 @@ int main() {
                 break;
             case 'l':
                 if (last_char == ' ')
-                    list_airports_specified(airports, airport_count);
+                    list_airports_specified(airports, airport_count,
+                            flights, flight_count);
                 else if (last_char == '\n')
-                    list_airports(airports, airport_count);
+                    list_airports(airports, airport_count,
+                            flights, flight_count);
                 break;
             case 'v':
                 if (last_char == ' ') {
@@ -385,8 +611,10 @@ int main() {
                 }
                 break;
             case 'p':
+                list_departures(flights, flight_count, airports, airport_count);
                 break;
             case 'c':
+                list_arrivals(flights, flight_count, airports, airport_count);
                 break;
             case 't':
                 date = change_date(date);
