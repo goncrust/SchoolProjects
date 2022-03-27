@@ -78,6 +78,7 @@ typedef struct {
 
 /* Date functions */
 
+/* Returns 1 if date d1 is before date d2, otherwise returns 0 */
 int date_before(Date d1, Date d2) {
     if (d1.year < d2.year) return 1;
     else if (d1.year > d2.year) return 0;
@@ -90,6 +91,9 @@ int date_before(Date d1, Date d2) {
     return 0;
 }
 
+/* Returns 1 if date d1 is more than 1 year ahead of date d2,
+ * otherwise returns 0 
+ */
 int one_year_ahead(Date d1, Date d2) {
 
     if (d1.year - d2.year > 1)
@@ -106,6 +110,7 @@ int one_year_ahead(Date d1, Date d2) {
     return 0;
 }
 
+/* Print given date to stdout, with dd-mm-yyyy format */
 void print_date(Date date) {
     if (date.day < 10)
         printf("0%d-", date.day);
@@ -120,6 +125,10 @@ void print_date(Date date) {
     printf("%d", date.year);
 }
 
+/* Returns 1 if date is invalid, otherwise returns 0.
+ * A given date is invalid if it is before or more than one year ahead
+ * of the current date (curr_date).
+ */
 int invalid_date(Date date, Date curr_date) {
     if(date_before(date, curr_date) ||
             one_year_ahead(date, curr_date)) {
@@ -131,12 +140,14 @@ int invalid_date(Date date, Date curr_date) {
     return 0;
 }
 
+/* Returns 1 if dates d1 and d2 are equal, otherwise returns 0. */
 equal_dates(Date d1, Date d2) {
     return (d1.day == d2.day && d1.month == d2.month && d1.year == d2.year);
 }
 
 /* Time functions */
 
+/* Print given time to stdout, with hh:mm format */
 void print_time(Time time) {
     if (time.hour < 10)
         printf("0%d:", time.hour);
@@ -149,6 +160,7 @@ void print_time(Time time) {
         printf("%d", time.minute);
 }
 
+/* Returns 1 if time t1 is before time t2, otherwise returns 0 */
 int time_before(Time t1, Time t2) {
     if (t1.hour < t2.hour) return 1;
     else if (t1.hour > t2.hour) return 0;
@@ -160,6 +172,9 @@ int time_before(Time t1, Time t2) {
 
 /* DateTime functions */
 
+/* Returns 1 if date d1 at time t1 is before date d2 at time t2,
+ * otherwise returns 0. 
+ */
 int date_time_before(Date d1, Time t1, Date d2, Time t2) {
     if (d1.year < d2.year) return 1;
     else if (d1.year > d2.year) return 0;
@@ -175,6 +190,9 @@ int date_time_before(Date d1, Time t1, Date d2, Time t2) {
     return 0;
 }
 
+/* Given a date, time and duration of a flight, calculates the date and
+ * time of the arrival and returns a structure composed by that values.
+ */
 DateTime calc_arrival(Date date, Time time, Time duration) {
     int month;
     DateTime arrival;
@@ -223,6 +241,7 @@ DateTime calc_arrival(Date date, Time time, Time duration) {
 
 /* Auxiliar functions */
 
+/* Returns 1 if word1 is alphabetically before word2, otherwise returns 0. */
 int alpha_before(char w1[], char w2[], int word_size) {
     int i;
     for (i = 0; i < word_size; i++) {
@@ -235,6 +254,7 @@ int alpha_before(char w1[], char w2[], int word_size) {
     return 0;
 }
 
+/* Returns the number of flights with departure at the airport with given id. */
 int airport_flight_count(char id[], Flight flights[], int flight_count) {
     int i, total = 0;
     for (i = 0; i < flight_count; i++) {
@@ -245,6 +265,7 @@ int airport_flight_count(char id[], Flight flights[], int flight_count) {
     return total;
 }
 
+/* Prints to stdout the external representation of an airport, given it's id. */
 void print_airport_by_id(char id[], Airport airports[], int airport_count,
         Flight flights[], int flight_count) {
 
@@ -261,21 +282,22 @@ void print_airport_by_id(char id[], Airport airports[], int airport_count,
     printf(AIRPORTID_NOTFOUND, id);
 }
 
-int valid_flightid(char id[]) {
+/* Return 1 if the given str is a valid flight code, otherwise returns 0. */
+int valid_flightid(char str[]) {
     int i = 0, error = 0;
-    while (id[i] != '\0') {
+    while (str[i] != '\0') {
         if (i < FLIGHTID_LETTERS) {
-            if (id[i] < 'A' || id[i] > 'Z') {
+            if (str[i] < 'A' || str[i] > 'Z') {
                 error = 1;
                 break;
             }
         } else {
-            if (id[i] == '0' && i == FLIGHTID_LETTERS) {
+            if (str[i] == '0' && i == FLIGHTID_LETTERS) {
                 error = 1;
                 break;
             }
 
-            if (id[i] < '0' || id[i] > '9') {
+            if (str[i] < '0' || str[i] > '9') {
                 error = 1;
                 break;
             }
@@ -290,6 +312,9 @@ int valid_flightid(char id[]) {
     return 1;
 }
 
+/* Given a departure and destination airport ids, returns 1 if they are
+ * registered in the system. Otherwise returns 0.
+ */
 int flight_airport_notfound(Airport airports[], int airport_count,
         char departure_id[], char destination_id[]) {
 
@@ -318,6 +343,7 @@ int flight_airport_notfound(Airport airports[], int airport_count,
 
 /* Command functions */
 
+/* Function for 'a' command (add airport to system) */
 int add_airport(Airport airports[], int airport_count) {
     int i, len;
     char space;
@@ -356,6 +382,7 @@ int add_airport(Airport airports[], int airport_count) {
     return 0;
 }
 
+/* Function for 'l' command (list airports in system) */
 void list_airports(Airport airports[], int airport_count,
         Flight flights[], int flight_count) {
     int sort[AIRPORTS_MAX], i, j, aux;
@@ -381,6 +408,7 @@ void list_airports(Airport airports[], int airport_count,
 
 }
 
+/* Function for 'l' command (list airports specified by the user) */
 void list_airports_specified(Airport airports[], int airport_count,
         Flight flights[], int flight_count) {
     char id[AIRPORTID_SIZE];
@@ -403,6 +431,7 @@ void list_airports_specified(Airport airports[], int airport_count,
     }
 }
 
+/* Function for 'v' command (add flight to system) */
 int add_flight(Flight flights[], int flight_count, Airport airports[],
         int airport_count, Date curr_date) {
 
@@ -467,6 +496,7 @@ int add_flight(Flight flights[], int flight_count, Airport airports[],
     return 0;
 }
 
+/* Function for 'v' command (list flights in system) */
 void list_flights(Flight flights[], int flight_count) {
     int i;
     for (i = 0; i < flight_count; i++) {
@@ -480,6 +510,7 @@ void list_flights(Flight flights[], int flight_count) {
     }
 }
 
+/* Function for 'p' command (list flights in system, with given departure) */
 void list_departures(Flight flights[], int flight_count,
         Airport airports[], int airport_count) {
 
@@ -535,6 +566,7 @@ void list_departures(Flight flights[], int flight_count,
     }
 }
 
+/* Function for 'p' command (list flights in system, with given destination) */
 void list_arrivals(Flight flights[], int flight_count,
         Airport airports[], int airport_count) {
 
@@ -601,6 +633,7 @@ void list_arrivals(Flight flights[], int flight_count,
     }
 }
 
+/* Function for 't' command (advance date) */
 Date change_date(Date curr_date) {
     char dash;
     Date new_date;
@@ -616,15 +649,22 @@ Date change_date(Date curr_date) {
     return new_date;
 }
 
+/* Main function. Reads command and calls corresponding function. */
 int main() {
+
+    /* Airports in the system */
     Airport airports[AIRPORTS_MAX];
     int airport_count = 0;
+
+    /* Flights in the system */
     Flight flights[FLIGHTS_MAX];
     int flight_count = 0;
+
+    /* System date */
     Date date = { INITIAL_DAY, INITIAL_MONTH, INITIAL_YEAR };
 
-    /* running - 0 if program termanted */
-    /* error - used to store the return of functions (0 - success, 1 - error) */
+    /* if running == 0 program termanted */
+    /* error is used to store the return of functions (0-success, 1-error) */
     int running = 1, error;
     
     /* Main Loop */
