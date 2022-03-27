@@ -1,15 +1,46 @@
+/*
+ * File: main.c
+ * Author: goncrust
+ * Description: First IAED project - Flight management system between airports.
+ */
 #include <stdio.h>
 #include <string.h>
 
 /* Constants */
 
+/* Max number of airports and flights */
 #define AIRPORTS_MAX 40
 #define FLIGHTS_MAX 30000
+
+/* Char array sizes */
 #define AIRPORTID_SIZE 4
 #define COUNTRY_SIZE 30
 #define CITY_SIZE 50
 #define FLIGHTID_SIZE 7
 #define FLIGHTID_LETTERS 2
+
+/* Error messages */
+#define DATE_ERROR "invalid date\n"
+#define AIRPORTID_NOTFOUND "%s: no such airport ID\n"
+#define AIRPORTID_ERROR "invalid airport ID\n"
+#define AIRPORTCOUNT_ERROR "too many airports\n"
+#define AIRPORTDUP_ERROR "duplicate airport\n"
+#define FLIGHTID_ERROR "invalid flight code\n"
+#define FLIGHTDUP_ERROR "flight already exists\n"
+#define FLIGHTCOUNT_ERROR "too many flights\n"
+#define FLIGHTDURATION_ERROR "invalid duration\n"
+#define FLIGHTCAP_ERROR "invalid capacity\n"
+
+/* Date and time constants */
+#define INITIAL_DAY 1
+#define INITIAL_MONTH 1
+#define INITIAL_YEAR 2022
+#define FLIGHTDURATION_MAX 12
+
+/* Other */
+#define FLIGHTCAP_MIN 10
+#define FLIGHTCAP_MAX 100
+#define AIRPORTADD_MSG "airport %s\n"
 
 /* Structures */
 
@@ -93,7 +124,7 @@ int invalid_date(Date date, Date curr_date) {
     if(date_before(date, curr_date) ||
             one_year_ahead(date, curr_date)) {
 
-        printf("invalid date\n");
+        printf(DATE_ERROR);
         return 1;
     }
 
@@ -227,7 +258,62 @@ void print_airport_by_id(char id[], Airport airports[], int airport_count,
         }
     }
 
-    printf("%s: no such airport ID\n", id);
+    printf(AIRPORTID_NOTFOUND, id);
+}
+
+int valid_flightid(char id[]) {
+    int i = 0, error = 0;
+    while (id[i] != '\0') {
+        if (i < FLIGHTID_LETTERS) {
+            if (id[i] < 'A' || id[i] > 'Z') {
+                error = 1;
+                break;
+            }
+        } else {
+            if (id[i] == '0' && i == FLIGHTID_LETTERS) {
+                error = 1;
+                break;
+            }
+
+            if (id[i] < '0' || id[i] > '9') {
+                error = 1;
+                break;
+            }
+        }
+        i++;
+    }
+    if (error || i < 3) {
+        printf(FLIGHTID_ERROR);
+        return 0;
+    }
+
+    return 1;
+}
+
+int flight_airport_notfound(Airport airports[], int airport_count,
+        char departure_id[], char destination_id[]) {
+
+    int i, found_departure = 0, found_destination = 0;
+    for (i = 0; i < airport_count; i++) {
+        if (strcmp(departure_id, airports[i].id) == 0) {
+            found_departure = 1;
+        }
+        if(strcmp(destination_id, airports[i].id) == 0) {
+            found_destination = 1;
+        }
+    }
+
+    if (!(found_departure)) {
+        printf(AIRPORTID_NOTFOUND, departure_id);
+        return 1;
+    }
+
+    if (!(found_destination)) {
+        printf(AIRPORTID_NOTFOUND, destination_id);
+        return 1;
+    }
+    
+    return 0;
 }
 
 /* Command functions */
@@ -247,25 +333,25 @@ int add_airport(Airport airports[], int airport_count) {
     /* Errors */
     for (i = 0; i < AIRPORTID_SIZE-1; i++) {
         if (new_airport.id[i] < 'A' || new_airport.id[i] > 'Z') {
-            printf("invalid airport ID\n");
+            printf(AIRPORTID_ERROR);
             return 1;
         }
     }
 
     if (airport_count >= AIRPORTS_MAX) {
-        printf("too many airports\n");
+        printf(AIRPORTCOUNT_ERROR);
         return 1;
     }
 
     for (i = 0; i < airport_count; i++) {
         if (strcmp(new_airport.id, airports[i].id) == 0) {
-            printf("duplicate airport\n");
+            printf(AIRPORTDUP_ERROR);
             return 1;
         }
     }
 
     airports[airport_count] = new_airport;
-    printf("airport %s\n", airports[airport_count].id);
+    printf(AIRPORTADD_MSG, airports[airport_count].id);
 
     return 0;
 }
@@ -320,7 +406,7 @@ void list_airports_specified(Airport airports[], int airport_count,
 int add_flight(Flight flights[], int flight_count, Airport airports[],
         int airport_count, Date curr_date) {
 
-    int i, found_departure = 0, found_destination = 0, error = 0;
+    int i;
     char space, dash, colon, new_line;
     Flight new_flight;
 
@@ -340,73 +426,39 @@ int add_flight(Flight flights[], int flight_count, Airport airports[],
     scanf("%d%c", &new_flight.capacity, &new_line);
 
     /* Errors */
-    i = 0;
-    while (new_flight.id[i] != '\0') {
-        if (i < FLIGHTID_LETTERS) {
-            if (new_flight.id[i] < 'A' || new_flight.id[i] > 'Z') {
-                error = 1;
-                break;
-            }
-        } else {
-            if (new_flight.id[i] == '0' && i == FLIGHTID_LETTERS) {
-                error = 1;
-                break;
-            }
-
-            if (new_flight.id[i] < '0' || new_flight.id[i] > '9') {
-                error = 1;
-                break;
-            }
-        }
-        i++;
-    }
-    if (error || i < 3) {
-        printf("invalid flight code\n");
+    if (!valid_flightid(new_flight.id))
         return 1;
-    }
 
     for (i = 0; i < flight_count; i++) {
         if (strcmp(new_flight.id, flights[i].id) == 0 &&
                 equal_dates(new_flight.date, flights[i].date)) {
-            printf("flight already exists\n");
+            printf(FLIGHTDUP_ERROR);
             return 1;
         }
     }
 
-    for (i = 0; i < airport_count; i++) {
-        if (strcmp(new_flight.departure_id, airports[i].id) == 0) {
-            found_departure = 1;
-        }
-        if(strcmp(new_flight.destination_id, airports[i].id) == 0) {
-            found_destination = 1;
-        }
-    }
-    if (!(found_departure)) {
-        printf("%s: no such airport ID\n", new_flight.departure_id);
+    if (flight_airport_notfound(airports, airport_count,
+                new_flight.departure_id, new_flight.destination_id))
         return 1;
-    }
-    if (!(found_destination)) {
-        printf("%s: no such airport ID\n", new_flight.destination_id);
-        return 1;
-    }
 
     if (flight_count >= FLIGHTS_MAX) {
-        printf("too many flights\n");
+        printf(FLIGHTCOUNT_ERROR);
         return 1;
     }
 
     if (invalid_date(new_flight.date, curr_date))
         return 1;
 
-    if (new_flight.duration.hour > 12 || 
-            (new_flight.duration.hour == 12 &&
+    if (new_flight.duration.hour > FLIGHTDURATION_MAX || 
+            (new_flight.duration.hour == FLIGHTDURATION_MAX &&
              new_flight.duration.minute > 0)) {
-        printf("invalid duration\n");
+        printf(FLIGHTDURATION_ERROR);
         return 1;
     }
 
-    if (new_flight.capacity < 10 || new_flight.capacity > 100) {
-        printf("invalid capacity\n");
+    if (new_flight.capacity < FLIGHTCAP_MIN ||
+            new_flight.capacity > FLIGHTCAP_MAX) {
+        printf(FLIGHTCAP_ERROR);
         return 1;
     }
 
@@ -445,7 +497,7 @@ void list_departures(Flight flights[], int flight_count,
         }
     }
     if (!found) {
-        printf("%s: no such airport ID\n", id);
+        printf(AIRPORTID_NOTFOUND, id);
         return;
     }
 
@@ -501,7 +553,7 @@ void list_arrivals(Flight flights[], int flight_count,
         }
     }
     if (!found) {
-        printf("%s: no such airport ID\n", id);
+        printf(AIRPORTID_NOTFOUND, id);
         return;
     }
 
@@ -569,7 +621,7 @@ int main() {
     int airport_count = 0;
     Flight flights[FLIGHTS_MAX];
     int flight_count = 0;
-    Date date = { 1, 1, 2022 };
+    Date date = { INITIAL_DAY, INITIAL_MONTH, INITIAL_YEAR };
 
     /* running - 0 if program termanted */
     /* error - used to store the return of functions (0 - success, 1 - error) */
