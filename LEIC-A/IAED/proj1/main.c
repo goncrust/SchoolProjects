@@ -76,6 +76,10 @@ typedef struct {
     int capacity;
 } Flight;
 
+/* Enums */
+
+enum months{ Jan=1, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec };
+
 /* Date functions */
 
 /* Returns 1 if date d1 is before date d2, otherwise returns 0 */
@@ -117,7 +121,7 @@ void print_date(Date date) {
     else
         printf("%d-", date.day);
 
-    if(date.month < 10)
+    if (date.month < 10)
         printf("0%d-", date.month);
     else
         printf("%d-", date.month);
@@ -130,7 +134,7 @@ void print_date(Date date) {
  * of the current date (curr_date).
  */
 int invalid_date(Date date, Date curr_date) {
-    if(date_before(date, curr_date) ||
+    if (date_before(date, curr_date) ||
             one_year_ahead(date, curr_date)) {
 
         printf(DATE_ERROR);
@@ -210,17 +214,17 @@ DateTime calc_arrival(Date date, Time time, Time duration) {
     }
 
     month = date.month;
-    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 ||
-            month == 10 || month == 12) {
+    if (month == Jan || month == Mar || month == May || month == Jul
+            || month == Aug || month == Oct || month == Dec) {
 
         if (date.day > 31) {
             date.day = 1;
             date.month++;
         }
-    } else if (month == 2) {
+    } else if (month == Feb) {
         if (date.day > 28) {
             date.day = 1;
-            date.month = 3;
+            date.month = Mar;
         }
     } else {
         if (date.day > 30) {
@@ -346,22 +350,49 @@ int flight_airport_notfound(Airport airports[], int airport_count,
     return 0;
 }
 
+/* Reads airport id from stdin and checks if it's in the system.
+ * Airport id will be stored in id char array.
+ * Auxiliar function for list_departures and list_arrivals.
+ */
+void read_id(char id[], Airport airports[], int airport_count) {
+    int found = 0, i;
+    char new_line;
+
+    scanf("%s%c", id, &new_line);
+
+    /* Errors */
+
+    for (i = 0; i < airport_count; i++) {
+        if (strcmp(airports[i].id, id) == 0) {
+            found = 1;
+            break;
+        }
+    }
+    if (!found) {
+        printf(AIRPORTID_NOTFOUND, id);
+        return;
+    }
+}
+
 /* Command functions */
 
 /* Function for 'a' command (add airport to system) */
 int add_airport(Airport airports[], int airport_count) {
-    int i, len;
-    char space;
+    int i;
+    char space, c;
     Airport new_airport;
 
     scanf("%s%s%c", new_airport.id, new_airport.country, &space);
-    fgets(new_airport.city, CITY_SIZE+1, stdin);
 
-    /* Replace \n with \0 */
-    len = strlen(new_airport.city);
-    new_airport.city[len-1] = '\0';
+    i = 0;
+    while ((c = getchar()) != '\n') {
+        new_airport.city[i] = c;
+        i++;
+    }
+    new_airport.city[i] = '\0';
 
     /* Errors */
+
     for (i = 0; i < AIRPORTID_SIZE-1; i++) {
         if (new_airport.id[i] < 'A' || new_airport.id[i] > 'Z') {
             printf(AIRPORTID_ERROR);
@@ -390,9 +421,10 @@ int add_airport(Airport airports[], int airport_count) {
 /* Function for 'l' command (list airports in system) */
 void list_airports(Airport airports[], int airport_count,
         Flight flights[], int flight_count) {
+
     int sort[AIRPORTS_MAX], i, j, aux;
 
-    /* Reset sort vector */
+    /* Initialize sort vector */
     for (i = 0; i < airport_count; i++) sort[i] = i;
 
     for (i = airport_count-1; i > 0; i--) {
@@ -460,6 +492,7 @@ int add_flight(Flight flights[], int flight_count, Airport airports[],
     scanf("%d%c", &new_flight.capacity, &new_line);
 
     /* Errors */
+
     if (!valid_flightid(new_flight.id))
         return 1;
 
@@ -519,23 +552,10 @@ void list_flights(Flight flights[], int flight_count) {
 void list_departures(Flight flights[], int flight_count,
         Airport airports[], int airport_count) {
 
-    char id[AIRPORTID_SIZE], new_line;
-    int selected_indexes[FLIGHTS_MAX], selected_indexes_count = 0, i, j,
-        aux, found = 0;
+    char id[AIRPORTID_SIZE];
+    int selected_indexes[FLIGHTS_MAX], selected_indexes_count = 0, i, j, aux;
 
-    scanf("%s%c", id, &new_line);
-
-    /* Errors */
-    for (i = 0; i < airport_count; i++) {
-        if (strcmp(airports[i].id, id) == 0) {
-            found = 1;
-            break;
-        }
-    }
-    if (!found) {
-        printf(AIRPORTID_NOTFOUND, id);
-        return;
-    }
+    read_id(id, airports, airport_count);
 
     /* Select flights with desired departure id */
     for (i = 0; i < flight_count; i++) {
@@ -575,24 +595,11 @@ void list_departures(Flight flights[], int flight_count,
 void list_arrivals(Flight flights[], int flight_count,
         Airport airports[], int airport_count) {
 
-    char id[AIRPORTID_SIZE], new_line;
-    int selected_indexes[FLIGHTS_MAX], selected_indexes_count = 0, i, j,
-        aux, found = 0;
+    char id[AIRPORTID_SIZE];
+    int selected_indexes[FLIGHTS_MAX], selected_indexes_count = 0, i, j, aux;
     DateTime arrival_date_time[FLIGHTS_MAX], auxDT;
 
-    scanf("%s%c", id, &new_line);
-
-    /* Errors */
-    for (i = 0; i < airport_count; i++) {
-        if (strcmp(airports[i].id, id) == 0) {
-            found = 1;
-            break;
-        }
-    }
-    if (!found) {
-        printf(AIRPORTID_NOTFOUND, id);
-        return;
-    }
+    read_id(id, airports, airport_count);
 
     /* Select flights with desired destination id */
     for (i = 0; i < flight_count; i++) {
@@ -640,11 +647,11 @@ void list_arrivals(Flight flights[], int flight_count,
 
 /* Function for 't' command (advance date) */
 Date change_date(Date curr_date) {
-    char dash;
+    char dash, new_line;
     Date new_date;
 
     scanf("%d%c%d%c%d%c", &new_date.day, &dash, &new_date.month, &dash,
-            &new_date.year, &dash);
+            &new_date.year, &new_line);
 
     if (invalid_date(new_date, curr_date))
         return curr_date;
