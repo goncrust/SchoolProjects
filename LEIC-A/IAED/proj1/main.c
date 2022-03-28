@@ -14,8 +14,8 @@
 
 /* Char array sizes */
 #define AIRPORTID_SIZE 4
-#define COUNTRY_SIZE 30
-#define CITY_SIZE 50
+#define COUNTRY_SIZE 31
+#define CITY_SIZE 51
 #define FLIGHTID_SIZE 7
 #define FLIGHTID_LETTERS 2
 
@@ -141,7 +141,7 @@ int invalid_date(Date date, Date curr_date) {
 }
 
 /* Returns 1 if dates d1 and d2 are equal, otherwise returns 0. */
-equal_dates(Date d1, Date d2) {
+int equal_dates(Date d1, Date d2) {
     return (d1.day == d2.day && d1.month == d2.month && d1.year == d2.year);
 }
 
@@ -258,14 +258,14 @@ int alpha_before(char w1[], char w2[], int word_size) {
 int airport_flight_count(char id[], Flight flights[], int flight_count) {
     int i, total = 0;
     for (i = 0; i < flight_count; i++) {
-        if (strcmp(id, flights[i].departure_id))
+        if (strcmp(id, flights[i].departure_id) == 0)
             total++;
     }
 
     return total;
 }
 
-/* Prints to stdout the external representation of an airport, given it's id. */
+/* Prints to stdout the external representation of an airport, given its id. */
 void print_airport_by_id(char id[], Airport airports[], int airport_count,
         Flight flights[], int flight_count) {
 
@@ -274,7 +274,7 @@ void print_airport_by_id(char id[], Airport airports[], int airport_count,
         if (strcmp(airports[i].id, id) == 0) {
             printf("%s %s %s %d\n", airports[i].id, airports[i].city,
                     airports[i].country,
-                    airport_flight_count(airports[i].id, flights, flight_count)); 
+                    airport_flight_count(id, flights, flight_count)); 
             return;
         }
     }
@@ -303,6 +303,11 @@ int valid_flightid(char str[]) {
             }
         }
         i++;
+
+        if (i >= FLIGHTID_SIZE) {
+            error = 1;
+            break;
+        }
     }
     if (error || i < 3) {
         printf(FLIGHTID_ERROR);
@@ -350,7 +355,7 @@ int add_airport(Airport airports[], int airport_count) {
     Airport new_airport;
 
     scanf("%s%s%c", new_airport.id, new_airport.country, &space);
-    fgets(new_airport.city, CITY_SIZE, stdin);
+    fgets(new_airport.city, CITY_SIZE+1, stdin);
 
     /* Replace \n with \0 */
     len = strlen(new_airport.city);
