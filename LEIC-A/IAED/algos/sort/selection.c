@@ -1,3 +1,5 @@
+/* O(n^2) */
+
 void selection_sort(int a[], int l, int r) {
     int i, j, min, aux;
     for (i = l; i < r; i++) {

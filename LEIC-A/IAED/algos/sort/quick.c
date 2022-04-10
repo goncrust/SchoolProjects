@@ -1,3 +1,7 @@
+/* worst case: O(n^2)
+ * average case: O(nlogn)
+ */
+
 int partition(int a[], int l, int r) {
     int i = l-1;
     int j = r;
@@ -9,10 +13,11 @@ int partition(int a[], int l, int r) {
             if (j == l)
                 break;
         }
-        if(i < j)
+        if(i < j) {
             aux = a[i];
             a[i] = a[j];
             a[j] = aux;
+        }
     }
     aux = a[i];
     a[i] = a[r];

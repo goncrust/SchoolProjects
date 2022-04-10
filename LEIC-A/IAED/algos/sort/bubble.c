@@ -1,3 +1,5 @@
+/* O(n^2) */
+
 void bubble_sort(int a[], int l, int r) {
     int i, j, aux, done;
 
