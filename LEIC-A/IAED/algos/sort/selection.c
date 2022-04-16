@@ -11,7 +11,7 @@ void selection_sort(int a[], int l, int r) {
         }
 
         aux = a[i];
-        a[i] = a[j];
-        a[j] = aux;
+        a[i] = a[min];
+        a[min] = aux;
     }
 }
