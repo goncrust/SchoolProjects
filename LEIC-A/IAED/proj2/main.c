@@ -343,6 +343,23 @@ int valid_flightid(char str[]) {
     return 1;
 }
 
+/* Return 1 if the given str is a invalid reservation id, otherwise returns 0.*/
+int invalid_reservation_id(char id[]) {
+    int i;
+    for (i = 0; i < INSTRUCTIONSIZE_MAX; i++) {
+        if (id[i] == '\0')
+            break;
+
+        if (!((id[i] >= 'A' && id[i] <= 'Z') || (id[i] >= '0' && id[i] <= '9')))
+            return 1;
+    }
+
+    return 0;
+}
+
+/* Returns 1 if the given flight at the given date is not registered.
+ * Otherwise returns 0.
+ */
 int flight_notfound(Flight flights[], int flight_count, char id[], Date date) {
     int i;
     for (i = 0; i < flight_count; i++) {
@@ -354,6 +371,9 @@ int flight_notfound(Flight flights[], int flight_count, char id[], Date date) {
     return 1;
 }
 
+/* Returns 1 if the given flight id is not registered in the system.
+ * Otherwise returns 0.
+ */
 int flight_notfound_any_date(Flight flights[], int flight_count, char id[]) {
     int i;
     for (i = 0; i < flight_count; i++) {
@@ -363,6 +383,20 @@ int flight_notfound_any_date(Flight flights[], int flight_count, char id[]) {
 
     return 1;
 }
+
+/* Returns 1 if the given reservation id is not registered in the system.
+ * Otherwise returns 0.
+ */
+int reservation_notfound(Reservation head, char *id) {
+    Reservation r;
+    for (r = head; r != NULL; r = r->next) {
+        if (strcmp(r->id, id) == 0)
+            return 0;
+    }
+
+    return 1;
+}
+
 /* Given a departure and destination airport ids, returns 1 if they are
  * registered in the system. Otherwise returns 0.
  */
@@ -413,6 +447,111 @@ void read_id(char id[], Airport airports[], int airport_count) {
     if (!found) {
         printf(AIRPORTID_NOTFOUND, id);
         return;
+    }
+}
+
+/* Free memory of reservations */
+void free_reservations(Reservation head) {
+    Reservation next;
+    while (head != NULL) {
+        next = head->next;
+        free(head->id);
+        free(head);
+        head = next;
+    }
+}
+
+/* Insert new reservation at the end of the reservations linked list */
+Reservation insert_reservation(Reservation head, Reservation new) {
+    Reservation r;
+
+    /* No reservations in the system */
+    if (head == NULL)
+        return new;
+
+    for (r = head; r->next != NULL; r = r->next);
+    r->next = new;
+
+    return head;
+}
+
+/* Delete all reservations tied to a given flight id */
+Reservation delete_reservation_by_flight(Reservation head, char id[]) {
+    Reservation r, prev = NULL;
+
+    r = head;
+    while (r != NULL) {
+        if (strcmp(id, r->flight_id) == 0) {
+            if (r == head) {
+                head = r->next;
+                r = head;
+            } else {
+                prev->next = r->next;
+                free(r->id);
+                free(r);
+                r = prev->next;
+            }
+        } else {
+            prev = r;
+            r = r->next;
+        }
+    }
+
+    return head;
+}
+
+/* Returns the capacity (max passengers) of a given flight */
+int get_flight_capacity(Flight flights[], int flight_count, char id[]) {
+    int i;
+    for (i = 0; i < flight_count; i++) {
+        if (strcmp(flights[i].id, id) == 0)
+            return flights[i].capacity;
+    }
+
+    return 0;
+}
+
+/* Returns the number of reservated passengers to a flight */
+int reservated_passengers(Reservation head, char flight_id[], Date date) {
+    Reservation r;
+    int sum = 0;
+    for (r = head; r != NULL; r = r->next) {
+        if (strcmp(r->flight_id, flight_id) == 0 &&
+                equal_dates(r->date, date)) {
+            sum += r->passenger_count; 
+        }
+    }
+
+    return sum;
+}
+
+/* Sorts an array of indexes according to the given reservation ids
+ * (lexicographically) 
+ */
+void sort_lexicographically(char **ids, int *sort, int count) {
+    int i, j, min, aux;
+    for (i = 0; i < count-1; i++) {
+        min = i; 
+        for (j = i+1; j < count; j++) {
+            if (strcmp(ids[sort[j]], ids[sort[i]]) < 0)
+                min = j;
+        }
+
+        aux = sort[min];
+        sort[min] = sort[i];
+        sort[i] = aux;
+    }
+}
+
+/* Prints to stdout the external representation of the given reservations,
+ * in the order represented in the given array of indexes (previously sorted)
+ */
+void print_sorted_reservations(char **ids, int *passenger_counts, int *sort,
+        int count) {
+
+    int i;
+    for (i = 0; i < count; i++) {
+        printf("%s %d\n", ids[sort[i]], passenger_counts[sort[i]]);
     }
 }
 
@@ -699,99 +838,7 @@ Date change_date(Date curr_date) {
     return new_date;
 }
 
-int invalid_reservation_id(char id[]) {
-    int i;
-    for (i = 0; i < INSTRUCTIONSIZE_MAX; i++) {
-        if (id[i] == '\0')
-            break;
-
-        if (!((id[i] >= 'A' && id[i] <= 'Z') || (id[i] >= '0' && id[i] <= '9')))
-            return 1;
-    }
-
-    return 0;
-}
-
-int reservation_notfound(Reservation head, char *id) {
-    Reservation r;
-    for (r = head; r != NULL; r = r->next) {
-        if (strcmp(r->id, id) == 0)
-            return 0;
-    }
-
-    return 1;
-}
-
-int get_flight_capacity(Flight flights[], int flight_count, char id[]) {
-    int i;
-    for (i = 0; i < flight_count; i++) {
-        if (strcmp(flights[i].id, id) == 0)
-            return flights[i].capacity;
-    }
-
-    return 0;
-}
-
-int reservated_passengers(Reservation head, char flight_id[], Date date) {
-    Reservation r;
-    int sum = 0;
-    for (r = head; r != NULL; r = r->next) {
-        if (strcmp(r->flight_id, flight_id) == 0 &&
-                equal_dates(r->date, date)) {
-            sum += r->passenger_count; 
-        }
-    }
-
-    return sum;
-}
-
-Reservation insert_reservation(Reservation head, Reservation new) {
-    Reservation r;
-
-    /* No reservations in the system */
-    if (head == NULL)
-        return new;
-
-    for (r = head; r->next != NULL; r = r->next);
-    r->next = new;
-
-    return head;
-}
-
-void sort_lexicographically(char **ids, int *sort, int count) {
-    int i, j, min, aux;
-    for (i = 0; i < count-1; i++) {
-        min = i; 
-        for (j = i+1; j < count; j++) {
-            if (strcmp(ids[sort[j]], ids[sort[i]]) < 0)
-                min = j;
-        }
-
-        aux = sort[min];
-        sort[min] = sort[i];
-        sort[i] = aux;
-    }
-}
-
-void print_sorted_reservations(char **ids, int *passenger_counts, int *sort,
-        int count) {
-
-    int i;
-    for (i = 0; i < count; i++) {
-        printf("%s %d\n", ids[sort[i]], passenger_counts[sort[i]]);
-    }
-}
-
-void free_reservations(Reservation head) {
-    Reservation next;
-    while (head != NULL) {
-        next = head->next;
-        free(head->id);
-        free(head);
-        head = next;
-    }
-}
-
+/* Auxiliar function for 'r' command (list reservations) */
 void list_reservations(Reservation head, Flight flights[], int flight_count,
         char flight_id[], Date date) {
 
@@ -841,6 +888,7 @@ void list_reservations(Reservation head, Flight flights[], int flight_count,
     free(sort);
 }
 
+/* Auxiliar function for 'r' command (add new reservation) */
 Reservation add_reservation(Reservation head, char id[], char flight_id[],
         Date date, int passenger_count, Flight flights[], int flight_count,
         Date curr_date) {
@@ -923,6 +971,7 @@ Reservation add_reservation(Reservation head, char id[], char flight_id[],
     return insert_reservation(head, new_reservation);
 }
 
+/* Function for 'r' command (add reservation or list reservations of a flight)*/
 Reservation reservation(Reservation reservation_head, Flight flights[],
         int flight_count, Date curr_date) {
 
@@ -950,6 +999,7 @@ Reservation reservation(Reservation reservation_head, Flight flights[],
             date, passenger_count, flights, flight_count, curr_date);
 }
 
+/* Auxiliar function for 'e' command (delete reservation) */
 Reservation delete_reservation(Reservation head, char id[]) {
     Reservation r, prev;
 
@@ -969,30 +1019,7 @@ Reservation delete_reservation(Reservation head, char id[]) {
     return head;
 }
 
-Reservation delete_reservation_by_flight(Reservation head, char id[]) {
-    Reservation r, prev = NULL;
-
-    r = head;
-    while (r != NULL) {
-        if (strcmp(id, r->flight_id) == 0) {
-            if (r == head) {
-                head = r->next;
-                r = head;
-            } else {
-                prev->next = r->next;
-                free(r->id);
-                free(r);
-                r = prev->next;
-            }
-        } else {
-            prev = r;
-            r = r->next;
-        }
-    }
-
-    return head;
-}
-
+/* Auxiliar function for 'e' command (delete flight) */
 DeleteFRAux delete_flight(Reservation reservation_head,
         Flight flights[], int flight_count, char id[]) {
 
@@ -1025,6 +1052,7 @@ DeleteFRAux delete_flight(Reservation reservation_head,
     return dfraux;
 }
 
+/* Function for 'e' command (delete flights or reservation) */
 DeleteFRAux delete_fr(Reservation reservation_head,
         Flight flights[], int flight_count) {
 
@@ -1051,7 +1079,6 @@ DeleteFRAux delete_fr(Reservation reservation_head,
 
     return dfraux;
 }
-
 
 /* Main function. Reads command and calls corresponding function. */
 int main() {
