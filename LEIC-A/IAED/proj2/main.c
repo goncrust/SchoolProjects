@@ -34,7 +34,7 @@
 #define RESERVATION_ERROR "invalid reservation code\n"
 #define FLIGHTID_NOTFOUND "%s: flight does not exist\n"
 #define RESERVATIONDUP_ERROR "%s: flight reservation already used\n"
-#define PASSENGERNUM_ERROR "invalid passager number\n"
+#define PASSENGERNUM_ERROR "invalid passenger number\n"
 #define FLIGHTCAP_EXCEEDED "too many reservations\n"
 #define ID_NOTFOUND "not found\n"
 #define NOMEMORY_ERROR "No memory\n"
@@ -529,17 +529,15 @@ int reservated_passengers(Reservation head, char flight_id[], Date date) {
  * (lexicographically) 
  */
 void sort_lexicographically(char **ids, int *sort, int count) {
-    int i, j, min, aux;
-    for (i = 0; i < count-1; i++) {
-        min = i; 
-        for (j = i+1; j < count; j++) {
-            if (strcmp(ids[sort[j]], ids[sort[i]]) < 0)
-                min = j;
+    int i, j, aux;
+    for (i = count-1; i > 0; i--) {
+        for (j = 0; j < i; j++) {
+            if (strcmp(ids[sort[j+1]], ids[sort[j]]) < 0) {
+                aux = sort[j];
+                sort[j] = sort[j+1];
+                sort[j+1] = aux;
+            }
         }
-
-        aux = sort[min];
-        sort[min] = sort[i];
-        sort[i] = aux;
     }
 }
 
@@ -901,6 +899,7 @@ Reservation add_reservation(Reservation head, char id[], char flight_id[],
         free_reservations(head);
         exit(0);
     }
+    new_reservation->next = NULL;
 
     /* ID */
 
@@ -912,7 +911,8 @@ Reservation add_reservation(Reservation head, char id[], char flight_id[],
         free_reservations(head);
         exit(0);
     }
-    strncpy(new_reservation->id, id, len+1);
+    strcpy(new_reservation->id, id);
+    new_reservation->id[len] = '\0';
 
     if (invalid_reservation_id(new_reservation->id) || len < 10) {
         free(new_reservation->id);
@@ -929,7 +929,9 @@ Reservation add_reservation(Reservation head, char id[], char flight_id[],
         printf(FLIGHTID_NOTFOUND, flight_id);
         return head;
     }
-    strncpy(new_reservation->flight_id, flight_id, strlen(flight_id)+1);
+    len = strlen(flight_id);
+    strcpy(new_reservation->flight_id, flight_id);
+    new_reservation->flight_id[len] = '\0';
 
     /* Reservation id already exists */
     if (!reservation_notfound(head, new_reservation->id)) {
