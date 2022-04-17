@@ -962,6 +962,7 @@ Reservation delete_reservation(Reservation head, char id[]) {
 
             free(r->id);
             free(r);
+            break;
         }
     }
 
@@ -969,17 +970,23 @@ Reservation delete_reservation(Reservation head, char id[]) {
 }
 
 Reservation delete_reservation_by_flight(Reservation head, char id[]) {
-    Reservation r, prev;
+    Reservation r, prev = NULL;
 
-    for (r = head, prev = NULL; r != NULL; prev = r, r = r->next) {
+    r = head;
+    while (r != NULL) {
         if (strcmp(id, r->flight_id) == 0) {
-            if (r == head)
+            if (r == head) {
                 head = r->next;
-            else
+                r = head;
+            } else {
                 prev->next = r->next;
-
-            free(r->id);
-            free(r);
+                free(r->id);
+                free(r);
+                r = prev->next;
+            }
+        } else {
+            prev = r;
+            r = r->next;
         }
     }
 
