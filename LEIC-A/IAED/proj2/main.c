@@ -732,11 +732,12 @@ int get_flight_capacity(Flight flights[], int flight_count, char id[]) {
     return 0;
 }
 
-int reservated_passengers(Reservation head, char flight_id[]) {
+int reservated_passengers(Reservation head, char flight_id[], Date date) {
     Reservation r;
     int sum = 0;
     for (r = head; r != NULL; r = r->next) {
-        if (strcmp(r->flight_id, flight_id) == 0) {
+        if (strcmp(r->flight_id, flight_id) == 0 &&
+                equal_dates(r->date, date)) {
             sum += r->passenger_count; 
         }
     }
@@ -791,10 +792,17 @@ void free_reservations(Reservation head) {
     }
 }
 
-void list_reservations(Reservation head, char flight_id[], Date date) {
+void list_reservations(Reservation head, Flight flights[], int flight_count,
+        char flight_id[], Date date) {
+
     Reservation r;
     int count = 0, i = 0, *passenger_counts, *sort;
     char **ids;
+
+    if (flight_notfound(flights, flight_count, flight_id, date)) {
+        printf(FLIGHTID_NOTFOUND, flight_id);
+        return;
+    }
 
     for (r = head; r != NULL; r = r->next) {
         if (equal_dates(r->date, date) &&
@@ -885,7 +893,7 @@ Reservation add_reservation(Reservation head, char id[], char flight_id[],
 
     /* Flight capacity exceeded */
     if (get_flight_capacity(flights, flight_count, flight_id) <
-            passenger_count + reservated_passengers(head, flight_id)) {
+            passenger_count + reservated_passengers(head, flight_id, date)) {
         free(new_reservation->id);
         free(new_reservation);
         printf(FLIGHTCAP_EXCEEDED);
@@ -929,7 +937,8 @@ Reservation reservation(Reservation reservation_head, Flight flights[],
 
     /* List reservations */
     if (last == '\n') {
-        list_reservations(reservation_head, flight_id, date);
+        list_reservations(reservation_head, flights, flight_count,
+                flight_id, date);
         return reservation_head;
     }
 
@@ -981,13 +990,14 @@ DeleteFRAux delete_flight(Reservation reservation_head,
         Flight flights[], int flight_count, char id[]) {
 
     DeleteFRAux dfraux;
-    int i, found;
+    int i, found, deleted_flights;
 
     dfraux.deleted_flights = 0;
 
     do {
         found = 0;
-        for (i = 0; i < flight_count-1-dfraux.deleted_flights; i++) {
+        deleted_flights = dfraux.deleted_flights;
+        for (i = 0; i < flight_count-1-deleted_flights; i++) {
             if (!found)
                 if (strcmp(flights[i].id, id) == 0) {
                     dfraux.deleted_flights++;
