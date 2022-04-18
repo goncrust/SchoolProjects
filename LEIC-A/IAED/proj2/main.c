@@ -19,7 +19,6 @@
 #define CITY_SIZE 51
 #define FLIGHTID_SIZE 7
 #define FLIGHTID_LETTERS 2
-
 /* Error messages */
 #define DATE_ERROR "invalid date\n"
 #define AIRPORTID_NOTFOUND "%s: no such airport ID\n"
@@ -34,7 +33,7 @@
 #define RESERVATION_ERROR "invalid reservation code\n"
 #define FLIGHTID_NOTFOUND "%s: flight does not exist\n"
 #define RESERVATIONDUP_ERROR "%s: flight reservation already used\n"
-#define PASSENGERNUM_ERROR "invalid passenger number\n"
+#define PASSENGERNUM_ERROR "invalid passager number\n"
 #define FLIGHTCAP_EXCEEDED "too many reservations\n"
 #define ID_NOTFOUND "not found\n"
 #define NOMEMORY_ERROR "No memory\n"
@@ -92,6 +91,7 @@ typedef struct Reservation {
     char flight_id[FLIGHTID_SIZE];
     Date date;
     int passenger_count;
+    struct Reservation *next;
 } *Reservation;
 
 typedef struct {
@@ -122,7 +122,7 @@ int hash_reservation_id(char *id) {
     return h;
 }
 
-void init_reservations() {
+void init_reservations_hashtable() {
     int i;
     heads_r = (ReservationNode*) malloc(M*sizeof(ReservationNode));
     for (i = 0; i < M; i++)
@@ -131,9 +131,9 @@ void init_reservations() {
 
 /* Linked List Functions (reservations) */
 
-Reservation search_linked_list_r(ReservationNode rn, char *id) {
-    ReservationNode node;
-    for (node = rn; rn != NULL; rn = rn->next) {
+Reservation search_linked_list_r(ReservationNode head, char *id) {
+    ReservationNode rn;
+    for (rn = head; rn != NULL; rn = rn->next) {
         if (strcmp(rn->reservation->id, id) == 0) {
             return rn->reservation;
         }
@@ -144,6 +144,7 @@ Reservation search_linked_list_r(ReservationNode rn, char *id) {
 
 ReservationNode insert_linked_list_r(ReservationNode head, Reservation new) {
     ReservationNode rn, new_node;
+    new_node = (ReservationNode) malloc(sizeof(struct ReservationNode));
     new_node->next = NULL;
     new_node->reservation = new;
 
@@ -167,8 +168,6 @@ ReservationNode delete_linked_list_r(ReservationNode head, char *id) {
             else
                 prev->next = rn->next;
 
-            free(rn->reservation->id);
-            free(rn->reservation);
             free(rn);
             break;
         }
@@ -177,21 +176,33 @@ ReservationNode delete_linked_list_r(ReservationNode head, char *id) {
     return head;
 }
 
-Reservation get_reservation(char *id) {
+Reservation get_reservation_hashtable(char *id) {
     int h = hash_reservation_id(id);
     return search_linked_list_r(heads_r[h], id);
 }
 
-void insert_reservation(Reservation reservation) {
+void insert_reservation_hashtable(Reservation reservation) {
     int h = hash_reservation_id(reservation->id);
     heads_r[h] = insert_linked_list_r(heads_r[h], reservation);
 }
 
-void delete_reservation(char *id) {
+void delete_reservation_hashtable(char *id) {
     int h = hash_reservation_id(id);
     heads_r[h] = delete_linked_list_r(heads_r[h], id);
 }
 
+void free_reservations_hashtable() {
+    int i;
+    for (i = 0; i < M; i++) {
+        if (heads_r[i] != NULL) {
+            while (heads_r[i] != NULL) {
+                heads_r[i] = heads_r[i]->next;
+                free(heads_r[i]);
+            }
+        }
+    }
+    free(heads_r);
+}
 
 /* Date functions */
 
@@ -478,14 +489,8 @@ int flight_notfound_any_date(Flight flights[], int flight_count, char id[]) {
 /* Returns 1 if the given reservation id is not registered in the system.
  * Otherwise returns 0.
  */
-int reservation_notfound(Reservation head, char *id) {
-    Reservation r;
-    for (r = head; r != NULL; r = r->next) {
-        if (strcmp(r->id, id) == 0)
-            return 0;
-    }
-
-    return 1;
+int reservation_notfound(char *id) {
+    return get_reservation_hashtable(id) == NULL;
 }
 
 /* Given a departure and destination airport ids, returns 1 if they are
@@ -550,6 +555,7 @@ void free_reservations(Reservation head) {
         free(head);
         head = next;
     }
+    free_reservations_hashtable();
 }
 
 /* Insert new reservation at the end of the reservations linked list */
@@ -573,6 +579,7 @@ Reservation delete_reservation_by_flight(Reservation head, char id[]) {
     r = head;
     while (r != NULL) {
         if (strcmp(id, r->flight_id) == 0) {
+            delete_reservation_hashtable(r->id);
             if (r == head) {
                 head = r->next;
                 r = head;
@@ -1025,7 +1032,7 @@ Reservation add_reservation(Reservation head, char id[], char flight_id[],
     new_reservation->flight_id[len] = '\0';
 
     /* Reservation id already exists */
-    if (!reservation_notfound(head, new_reservation->id)) {
+    if (!reservation_notfound(new_reservation->id)) {
         printf(RESERVATIONDUP_ERROR, new_reservation->id);
         free(new_reservation->id);
         free(new_reservation);
@@ -1061,6 +1068,7 @@ Reservation add_reservation(Reservation head, char id[], char flight_id[],
     }
     new_reservation->passenger_count = passenger_count;
 
+    insert_reservation_hashtable(new_reservation);
     return insert_reservation(head, new_reservation);
 }
 
@@ -1096,6 +1104,7 @@ Reservation reservation(Reservation reservation_head, Flight flights[],
 Reservation delete_reservation(Reservation head, char id[]) {
     Reservation r, prev;
 
+    delete_reservation_hashtable(id);
     for (r = head, prev = NULL; r != NULL; prev = r, r = r->next) {
         if (strcmp(id, r->id) == 0) {
             if (r == head)
@@ -1156,7 +1165,7 @@ DeleteFRAux delete_fr(Reservation reservation_head,
 
     if (flight_notfound_any_date(flights, flight_count, id)) {
 
-        if (reservation_notfound(reservation_head, id)) {
+        if (reservation_notfound(id)) {
             printf(ID_NOTFOUND);
             dfraux.error = 1;
         } else {
@@ -1195,6 +1204,7 @@ int main() {
     /* error is used to store the return of functions (0-success, 1-error) */
     int running = 1, error;
     
+    init_reservations_hashtable();
     /* Main Loop */
     while (running) {
 
