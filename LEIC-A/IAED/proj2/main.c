@@ -50,6 +50,9 @@
 #define AIRPORTADD_MSG "airport %s\n"
 #define INSTRUCTIONSIZE_MAX 65535
 
+/* Hashtable (reservations) */
+#define M 21487
+
 /* Structures */
 
 typedef struct {
@@ -89,7 +92,6 @@ typedef struct Reservation {
     char flight_id[FLIGHTID_SIZE];
     Date date;
     int passenger_count;
-    struct Reservation *next;
 } *Reservation;
 
 typedef struct {
@@ -98,9 +100,98 @@ typedef struct {
     int error;
 } DeleteFRAux;
 
+typedef struct ReservationNode {
+    Reservation reservation;
+    struct ReservationNode *next; 
+} *ReservationNode;
+
 /* Enums */
 
 enum months{ Jan=1, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec };
+
+/* Hashtable (reservations) Function */
+
+static ReservationNode *heads_r;
+
+int hash_reservation_id(char *id) {
+    int h, a = 31415, b = 27183;
+
+    for (h = 0; *id != '\0'; id++, a = a*b % (M-1))
+        h = (a*h + *id) % M;
+
+    return h;
+}
+
+void init_reservations() {
+    int i;
+    heads_r = (ReservationNode*) malloc(M*sizeof(ReservationNode));
+    for (i = 0; i < M; i++)
+        heads_r[i] = NULL;
+}
+
+/* Linked List Functions (reservations) */
+
+Reservation search_linked_list_r(ReservationNode rn, char *id) {
+    ReservationNode node;
+    for (node = rn; rn != NULL; rn = rn->next) {
+        if (strcmp(rn->reservation->id, id) == 0) {
+            return rn->reservation;
+        }
+    }
+
+    return NULL;
+}
+
+ReservationNode insert_linked_list_r(ReservationNode head, Reservation new) {
+    ReservationNode rn, new_node;
+    new_node->next = NULL;
+    new_node->reservation = new;
+
+    /* No reservations in ReservationNode */
+    if (head == NULL)
+        return new_node;
+
+    for (rn = head; rn->next != NULL; rn = rn->next);
+    rn->next = new_node;
+
+    return head;
+}
+
+ReservationNode delete_linked_list_r(ReservationNode head, char *id) {
+    ReservationNode rn, prev;
+
+    for (rn = head, prev = NULL; rn != NULL; prev = rn, rn = rn->next) {
+        if (strcmp(id, rn->reservation->id) == 0) {
+            if (rn == head)
+                head = rn->next;
+            else
+                prev->next = rn->next;
+
+            free(rn->reservation->id);
+            free(rn->reservation);
+            free(rn);
+            break;
+        }
+    }
+
+    return head;
+}
+
+Reservation get_reservation(char *id) {
+    int h = hash_reservation_id(id);
+    return search_linked_list_r(heads_r[h], id);
+}
+
+void insert_reservation(Reservation reservation) {
+    int h = hash_reservation_id(reservation->id);
+    heads_r[h] = insert_linked_list_r(heads_r[h], reservation);
+}
+
+void delete_reservation(char *id) {
+    int h = hash_reservation_id(id);
+    heads_r[h] = delete_linked_list_r(heads_r[h], id);
+}
+
 
 /* Date functions */
 
