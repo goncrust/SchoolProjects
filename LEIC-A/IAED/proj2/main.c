@@ -33,7 +33,7 @@
 #define RESERVATION_ERROR "invalid reservation code\n"
 #define FLIGHTID_NOTFOUND "%s: flight does not exist\n"
 #define RESERVATIONDUP_ERROR "%s: flight reservation already used\n"
-#define PASSENGERNUM_ERROR "invalid passager number\n"
+#define PASSENGERNUM_ERROR "invalid passenger number\n"
 #define FLIGHTCAP_EXCEEDED "too many reservations\n"
 #define ID_NOTFOUND "not found\n"
 #define NOMEMORY_ERROR "No memory\n"
@@ -109,7 +109,10 @@ typedef struct ReservationNode {
 
 enum months{ Jan=1, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec };
 
-/* Hashtable (reservations) Function */
+/* Hashtable Functions (for reservations)
+ * This hashtable is only used for looking up if a reservation is in the system
+ * since it provides a constant-time O(1) lookup on average.
+ */
 
 static ReservationNode *heads_r;
 
@@ -1126,18 +1129,19 @@ DeleteFRAux delete_flight(Reservation reservation_head,
         Flight flights[], int flight_count, char id[]) {
 
     DeleteFRAux dfraux;
-    int i, found, deleted_flights;
+    int i, found, deleted_flights, start = 0;
 
     dfraux.deleted_flights = 0;
 
     do {
         found = 0;
         deleted_flights = dfraux.deleted_flights;
-        for (i = 0; i < flight_count-1-deleted_flights; i++) {
+        for (i = start; i < flight_count-1-deleted_flights; i++) {
             if (!found)
                 if (strcmp(flights[i].id, id) == 0) {
                     dfraux.deleted_flights++;
                     found = 1;
+                    start = i;
                 }
 
             if (found) {
