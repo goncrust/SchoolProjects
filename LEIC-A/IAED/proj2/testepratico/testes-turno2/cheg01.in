@@ -1,0 +1,12 @@
+a LIS   Portugal        Lisbon Lisboa
+a OPO  Portugal        Porto
+a FAR   Portugal        Faro
+v TP12 OPO LIS 23-03-2022 10:10 00:50 78
+v TP321 LIS FAR 24-03-2022 11:11 01:00 50
+v TP123 OPO FAR 24-03-2022 12:11 02:00 50
+c LIS
+c FAR
+t 24-03-2022
+c LIS
+c FAR
+q

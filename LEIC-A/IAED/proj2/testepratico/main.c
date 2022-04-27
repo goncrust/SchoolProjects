@@ -17,8 +17,8 @@
 #define AIRPORTID_SIZE 4
 #define COUNTRY_SIZE 31
 #define CITY_SIZE 51
-#define FLIGHTID_SIZE 7
-#define FLIGHTID_LETTERS 2
+#define FLIGHTID_SIZE 9
+#define FLIGHTID_LETTERS 4
 
 /* Error messages */
 #define DATE_ERROR "invalid date\n"
@@ -416,20 +416,36 @@ void print_airport_by_id(char id[], Airport airports[], int airport_count,
 
 /* Return 1 if the given str is a valid flight code, otherwise returns 0. */
 int valid_flightid(char str[]) {
-    int i = 0, error = 0;
+    int i = 0, error = 0, in_letters = 1, nums = 0;
     while (str[i] != '\0') {
-        if (i < FLIGHTID_LETTERS) {
-            if (str[i] < 'A' || str[i] > 'Z') {
+        if (i < FLIGHTID_LETTERS && in_letters) {
+            if (!((str[i] >= 'A' && str[i] <= 'Z') ||
+                        (str[i] >= 'a' && str[i] <= 'z'))) {
+                if (str[i] >= '0' || str[i] <= '9') {
+                    in_letters = 0;
+                    continue;
+                }
                 error = 1;
                 break;
             }
         } else {
-            if (str[i] == '0' && i == FLIGHTID_LETTERS) {
+            if (i < 2) {
+                error = 1;
+                break;
+            }
+
+            if (str[i] == '0' && nums == 0) {
                 error = 1;
                 break;
             }
 
             if (str[i] < '0' || str[i] > '9') {
+                error = 1;
+                break;
+            }
+            nums++;
+
+            if (nums > 4) {
                 error = 1;
                 break;
             }
@@ -441,7 +457,7 @@ int valid_flightid(char str[]) {
             break;
         }
     }
-    if (error || i < 3) {
+    if (error || i < 3 || nums == 0) {
         printf(FLIGHTID_ERROR);
         return 0;
     }
@@ -576,13 +592,33 @@ Reservation insert_reservation(Reservation head, Reservation new) {
     return head;
 }
 
+Date calc_arrival_date_flight_id(Flight flights[], int flight_count,
+        char flight_id[], Date date) {
+
+    int i;
+    Date result_date;
+    for (i = 0; i < flight_count; i++) {
+        if (strcmp(flight_id, flights[i].id) == 0 &&
+                equal_dates(date, flights[i].date)) {
+            result_date = calc_arrival(date, flights[i].time,flights[i].duration).date;
+            return result_date;
+        }
+    }
+
+    return date;
+}
+
 /* Delete all reservations tied to a given flight id */
-Reservation delete_reservation_by_flight(Reservation head, char id[]) {
+Reservation delete_reservation_by_flight(Reservation head, char id[],
+        Date curr_date, Flight flights[], int flight_count) {
     Reservation r, prev = NULL;
+    Date arrival_temp;
 
     r = head;
     while (r != NULL) {
-        if (strcmp(id, r->flight_id) == 0) {
+        arrival_temp = calc_arrival_date_flight_id(flights,
+                flight_count, r->flight_id, r->date);
+        if (strcmp(id, r->flight_id) == 0 && date_before(arrival_temp, curr_date)) {
             delete_reservation_hashtable(r->id);
             if (r == head) {
                 head = r->next;
@@ -870,7 +906,7 @@ void list_departures(Flight flights[], int flight_count,
 
 /* Function for 'p' command (list flights in system, with given destination) */
 void list_arrivals(Flight flights[], int flight_count,
-        Airport airports[], int airport_count) {
+        Airport airports[], int airport_count, Date curr_date) {
 
     char id[AIRPORTID_SIZE];
     int selected_indexes[FLIGHTS_MAX], selected_indexes_count = 0, i, j, aux;
@@ -913,6 +949,9 @@ void list_arrivals(Flight flights[], int flight_count,
 
     /* Print */
     for (i = 0; i < selected_indexes_count; i++) {
+        if (date_before(arrival_date_time[i].date, curr_date))
+            continue;
+
         printf("%s %s ", flights[selected_indexes[i]].id,
                 flights[selected_indexes[i]].departure_id);
         print_date(arrival_date_time[i].date);
@@ -1127,10 +1166,11 @@ Reservation delete_reservation(Reservation head, char id[]) {
 
 /* Auxiliar function for 'e' command (delete flight) */
 DeleteFRAux delete_flight(Reservation reservation_head,
-        Flight flights[], int flight_count, char id[]) {
+        Flight flights[], int flight_count, char id[], Date curr_date) {
 
     DeleteFRAux dfraux;
     int i, found, deleted_flights, start = 0;
+    DateTime arrival_temp;
 
     dfraux.deleted_flights = 0;
 
@@ -1138,12 +1178,16 @@ DeleteFRAux delete_flight(Reservation reservation_head,
         found = 0;
         deleted_flights = dfraux.deleted_flights;
         for (i = start; i < flight_count-1-deleted_flights; i++) {
-            if (!found)
-                if (strcmp(flights[i].id, id) == 0) {
+            if (!found) {
+                arrival_temp = calc_arrival(flights[i].date, flights[i].time,
+                        flights[i].duration);
+                if (strcmp(flights[i].id, id) == 0 &&
+                        date_before(arrival_temp.date, curr_date)) {
                     dfraux.deleted_flights++;
                     found = 1;
                     start = i;
                 }
+            }
 
             if (found) {
                 flights[i] = flights[i+1];
@@ -1155,13 +1199,17 @@ DeleteFRAux delete_flight(Reservation reservation_head,
         dfraux.deleted_flights++;
     }
 
-    dfraux.head = delete_reservation_by_flight(reservation_head, id);
+    if (dfraux.deleted_flights == 0)
+        return dfraux;
+
+    dfraux.head = delete_reservation_by_flight(reservation_head, id, curr_date,
+            flights, flight_count);
     return dfraux;
 }
 
 /* Function for 'e' command (delete flights or reservation) */
 DeleteFRAux delete_fr(Reservation reservation_head,
-        Flight flights[], int flight_count) {
+        Flight flights[], int flight_count, Date curr_date) {
 
     char id[INSTRUCTIONSIZE_MAX], new_line;
     DeleteFRAux dfraux;
@@ -1180,8 +1228,14 @@ DeleteFRAux delete_fr(Reservation reservation_head,
         }
 
     } else {
-        dfraux = delete_flight(reservation_head, flights, flight_count, id);
-        dfraux.error = 0;
+        dfraux = delete_flight(reservation_head, flights, flight_count, id,
+                curr_date);
+        if (dfraux.deleted_flights == 0) {
+            printf(ID_NOTFOUND);
+            dfraux.error =  1;
+        }
+        else
+            dfraux.error = 0;
     }
 
     return dfraux;
@@ -1250,7 +1304,7 @@ int main() {
                 list_departures(flights, flight_count, airports, airport_count);
                 break;
             case 'c':
-                list_arrivals(flights, flight_count, airports, airport_count);
+                list_arrivals(flights, flight_count, airports, airport_count, date);
                 break;
             case 't':
                 date = change_date(date);
@@ -1261,7 +1315,7 @@ int main() {
                 break;
             case 'e':
                 dfraux = delete_fr(reservation_head,
-                        flights, flight_count);
+                        flights, flight_count, date);
 
                 if (!dfraux.error) {
                     flight_count -= dfraux.deleted_flights;
