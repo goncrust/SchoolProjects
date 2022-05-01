@@ -1,6 +1,7 @@
 /* worst case: O(n^2)
  * average case: O(nlogn)
  */
+/* not stable */
 
 int partition(int a[], int l, int r) {
     int i = l-1;
@@ -29,6 +30,6 @@ void quick_sort(int a[], int l, int r) {
     int i;
     if (r <= l) return;
     i = partition(a, l, r);
-    quick_sort(a, l, r-1);
+    quick_sort(a, l, i-1);
     quick_sort(a, i+1, r);
 }

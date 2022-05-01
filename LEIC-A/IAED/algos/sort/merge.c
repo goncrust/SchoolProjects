@@ -1,4 +1,5 @@
 /* O(nlogn) */
+/* stable */
 
 #define MAX 10000
 

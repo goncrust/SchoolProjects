@@ -1,4 +1,5 @@
 /* O(n^2) */
+/* not stable */
 
 void selection_sort(int a[], int l, int r) {
     int i, j, min, aux;

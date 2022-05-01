@@ -1,4 +1,5 @@
 /* O(nlogn) */
+/* not stable */
 
 int parent(int i) {
     return ((i+1)/2)-1;
