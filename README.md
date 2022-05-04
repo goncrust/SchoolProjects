@@ -22,6 +22,7 @@ To avoid fraud this repo becomes private while a project for evaluation is ongoi
 | IAED2 (Introduction to Algorithms and Data Structures) | https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/IAED              |
 |--------------------------------------------------------|-------------------------------------------------------------------------------|
 | First Project (Flight Management System)               | https://github.com/goncrust/SchoolProjects/blob/main/LEIC-A/IAED/proj1/main.c |
+| Second Project (Flight Management System - Part II)    | https://github.com/goncrust/SchoolProjects/blob/main/LEIC-A/IAED/proj2/main.c |
 
 ### Highschool (AIB)
 
