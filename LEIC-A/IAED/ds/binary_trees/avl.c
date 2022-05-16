@@ -1,6 +1,5 @@
 /* avoid worst case O(n), but overhead constructing */
 /* search, remove and insert: O(logN) */
-/* not finished */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,6 +28,100 @@ Node new(int value, Node left, Node right) {
     return new_node;
 }
 
+int height(Node node) {
+    if (node == NULL)
+        return 0;
+
+    return node->height;
+}
+
+int balance(Node node) {
+    if (node == NULL)
+        return 0;
+
+    return height(node->left) - height(node->right);
+}
+
+Node rotL(Node node) {
+    int height_l, height_r, height_x_l, height_x_r;
+
+    Node x = node->right;
+    node->right = x->left;
+    x->left = node;
+
+    height_l = height(node->left);
+    height_r = height(node->right);
+    node->height = height_l > height_r ? height_l + 1 : height_r + 1;
+
+    height_x_l = height(x->left);
+    height_x_r = height(x->right);
+    x->height = height_x_l = height_x_l > height_x_r ? height_x_l +1 : height_x_r + 1;
+
+    return x;
+}
+
+Node rotR(Node node) {
+    int height_l, height_r, height_x_l, height_x_r;
+
+    Node x = node->left;
+    node->left = x->right;
+    x->right = node;
+
+    height_l = height(node->left);
+    height_r = height(node->right);
+    node->height = height_l > height_r ? height_l + 1 : height_r + 1;
+
+    height_x_l = height(x->left);
+    height_x_r = height(x->right);
+    x->height = height_x_l = height_x_l > height_x_r ? height_x_l +1 : height_x_r + 1;
+
+    return x;
+}
+
+Node rotLR(Node node) {
+    if (node == NULL)
+        return node;
+
+    node->left = rotL(node->left);
+
+    return rotR(node);
+}
+
+Node rotRL(Node node) {
+    if (node == NULL)
+        return node;
+
+    node->right = rotR(node->right);
+    
+    return rotL(node);
+}
+
+Node AVLbalance(Node node) {
+    int balance_factor, height_l, height_r;
+
+    if (node == NULL)
+        return node;
+
+    balance_factor = balance(node);
+
+    if (balance_factor > 1) {
+        if (balance(node->left) >= 0)
+            node = rotR(node);
+        else
+            node = rotLR(node);
+    } else if (balance_factor < -1) {
+        if (balance(node->right) <= 0)
+            node = rotL(node);
+        else
+            node = rotRL(node);
+    } else {
+        height_l = height(node->left);
+        height_r = height(node->right);
+        node->height = height_l > height_r ? height_l + 1 : height_r + 1;
+    }
+    return node;
+}
+
 Node search_aux(int value, Node node) {
     if (node == NULL)
         return NULL;
@@ -51,6 +144,8 @@ Node insert_aux(int value, Node node) {
         node->left = insert_aux(value, node->left);
     else
         node->right = insert_aux(value, node->right);
+
+    node = AVLbalance(node);
     
     return node;
 }
@@ -103,6 +198,8 @@ Node remove_aux(int value, Node node) {
         }
     }
 
+    node = AVLbalance(node);
+
     return node;
 }
 
@@ -119,13 +216,6 @@ int count(Node node) {
 
 int tree_count() {
     return count(head);
-}
-
-int height(Node node) {
-    if (node == NULL)
-        return 0;
-
-    return node->height;
 }
 
 int tree_height() {
@@ -163,16 +253,3 @@ void traverse_postorder(Node node) {
     visit(node);
 }
 
-Node rotL(Node node) {
-    Node x = node->right;
-    node->right = x->left;
-    x->left = node;
-    return x;
-}
-
-Node rotR(Node node) {
-    Node x = node->left;
-    node->left = x->right;
-    x->right = node;
-    return x;
-}
