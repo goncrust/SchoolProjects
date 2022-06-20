@@ -1,4 +1,4 @@
-## Foundations of Programming
+## Introduction to Computer Architecture
 
 Year 1, P 4
 
