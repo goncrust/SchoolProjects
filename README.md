@@ -1,6 +1,6 @@
 # SchoolProjects
 
-Code written in school
+Code written in [**high school**](#highschool-aib)/[**university**](#leic-a-computer-science-and-engineering--instituto-superior-técnico---alameda)
 
 ## Info
 
