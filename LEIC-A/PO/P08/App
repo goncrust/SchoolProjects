@@ -1,0 +1,42 @@
+import java.io.ObjectInputStream;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+
+import java.io.ObjectOutputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+
+import java.io.IOException;
+
+public class App {
+
+	public static void main(String[] args) {
+		CatRegistry cr = new CatRegistry();
+		Cat c1 = new Cat("Sweet", 1);
+		Cat c2 = new Cat("Sushi", 3);
+		
+		cr.put(c1);
+		cr.put(c2);
+		
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("cr.dat")));
+			oos.writeObject(cr);	
+			oos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream("cr.dat")));
+			CatRegistry old_cr = (CatRegistry) ois.readObject();
+			ois.close();
+			Cat old_c1 = old_cr.get("Sweet");
+			Cat old_c2 = old_cr.get("Sushi");
+
+			System.out.println(old_c1);
+			System.out.println(old_c2);
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+}
