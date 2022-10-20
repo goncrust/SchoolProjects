@@ -1,0 +1,12 @@
+Light status: Blinking
+[Blinking] --(off)-> [Blinking]
+[Blinking] --(panic)-> [Panic]
+[Panic] --(on)-> [Red]
+[Red] --(tick)-> [Green]
+[Green] --(tick)-> [Yellow]
+[Yellow] --(tick)-> [Red]
+[Red] --(tick)-> [Green]
+[Green] --(panic)-> [Panic]
+[Panic] --(off)-> [Panic]
+[Panic] --(on)-> [Red]
+[Red] --(off)-> [Blinking]
