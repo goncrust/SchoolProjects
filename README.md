@@ -26,8 +26,14 @@ To avoid fraud this repo becomes private while a project for evaluation is ongoi
 
 | IAC2 (Introduction to Computer Architecture)           | https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/IAC                       |
 |--------------------------------------------------------|---------------------------------------------------------------------------------------|
-| First Project (Meteor Storm - Intermediate Version)    | https://github.com/goncrust/MeteorStorm/tree/0e2e5b975d51e9851734d9f96344f8084cfae59b |
-| Second Project (Meteor Storm - Final Version)          | https://github.com/goncrust/MeteorStorm                                               |
+| Project (Meteor Storm - Intermediate Version)          | https://github.com/goncrust/MeteorStorm/tree/0e2e5b975d51e9851734d9f96344f8084cfae59b |
+| Project (Meteor Storm - Final Version)                 | https://github.com/goncrust/MeteorStorm                                               |
+
+| PO (Object-Oriented Programming)                       | https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/PO                        |
+|--------------------------------------------------------|---------------------------------------------------------------------------------------|
+| Project (prr - UML)                                    | https://github.com/goncrust/prr/tree/main/uml                                         |
+| Project (prr - Intermediate Version)                   | https://github.com/goncrust/prr/tree/6bf75ebcbc66fd4f1a250785885f4192518e1ec8         |
+| Project (prr - Final Version)                          | https://github.com/goncrust/prr                                                       |
 
 ### Highschool (AIB)
 
