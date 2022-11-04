@@ -1,0 +1,65 @@
+MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: Número do terminal: Operações de terminal: Operação inválida: O terminal '096001' não existe.
+GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: BASIC|069001|cli001|IDLE|0|0
+BASIC|969002|cli002|IDLE|0|0
+BASIC|969003|cli003|IDLE|0|0
+GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: Opção inválida!
+GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: Número do terminal: OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+8 - Enviar comunicação de texto
+9 - Iniciar comunicação
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: Número do terminal: Operações de terminal: Operação inválida: O terminal '69001' não existe.
+GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: 

@@ -1,0 +1,126 @@
+MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: Número do terminal: OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+8 - Enviar comunicação de texto
+9 - Iniciar comunicação
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: Número do terminal: Tipo de comunicação a iniciar (VOICE, VIDEO): O terminal de destino ('969011') está em silêncio.
+OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+8 - Enviar comunicação de texto
+9 - Iniciar comunicação
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: Número do terminal: OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+8 - Enviar comunicação de texto
+9 - Iniciar comunicação
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+8 - Enviar comunicação de texto
+9 - Iniciar comunicação
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: GESTÃO DE CLIENTES
+1 - Visualizar cliente
+2 - Visualizar todos os clientes
+3 - Registar cliente
+4 - Activar notificações
+5 - Desactivar notificações
+6 - Mostrar saldo de cliente
+0 - Sair
+Escolha uma opção: Identificador do cliente: CLIENT|cli001|Manuel Pinheiro|103443|NORMAL|YES|4|0|0
+GESTÃO DE CLIENTES
+1 - Visualizar cliente
+2 - Visualizar todos os clientes
+3 - Registar cliente
+4 - Activar notificações
+5 - Desactivar notificações
+6 - Mostrar saldo de cliente
+0 - Sair
+Escolha uma opção: Identificador do cliente: CLIENT|cli002|Pedro Pinheiro|103447|NORMAL|YES|2|0|0
+O2I|969011
+GESTÃO DE CLIENTES
+1 - Visualizar cliente
+2 - Visualizar todos os clientes
+3 - Registar cliente
+4 - Activar notificações
+5 - Desactivar notificações
+6 - Mostrar saldo de cliente
+0 - Sair
+Escolha uma opção: MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: 

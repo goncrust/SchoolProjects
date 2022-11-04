@@ -1,0 +1,65 @@
+MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: GESTÃO DE CLIENTES
+1 - Visualizar cliente
+2 - Visualizar todos os clientes
+3 - Registar cliente
+4 - Activar notificações
+5 - Desactivar notificações
+6 - Mostrar saldo de cliente
+0 - Sair
+Escolha uma opção: Identificador do cliente: GESTÃO DE CLIENTES
+1 - Visualizar cliente
+2 - Visualizar todos os clientes
+3 - Registar cliente
+4 - Activar notificações
+5 - Desactivar notificações
+6 - Mostrar saldo de cliente
+0 - Sair
+Escolha uma opção: CLIENT|abc001|Manuel Pinheiro|103443|NORMAL|YES|0|0|0
+CLIENT|cli002|Pedro Pinheiro|103447|NORMAL|NO|0|0|0
+CLIENT|cli003|Pedro Oliveira|103449|NORMAL|YES|0|0|0
+CLIENT|cli201|Ludgero Oliveira|103440|NORMAL|YES|0|0|0
+GESTÃO DE CLIENTES
+1 - Visualizar cliente
+2 - Visualizar todos os clientes
+3 - Registar cliente
+4 - Activar notificações
+5 - Desactivar notificações
+6 - Mostrar saldo de cliente
+0 - Sair
+Escolha uma opção: Identificador do cliente: GESTÃO DE CLIENTES
+1 - Visualizar cliente
+2 - Visualizar todos os clientes
+3 - Registar cliente
+4 - Activar notificações
+5 - Desactivar notificações
+6 - Mostrar saldo de cliente
+0 - Sair
+Escolha uma opção: CLIENT|abc001|Manuel Pinheiro|103443|NORMAL|YES|0|0|0
+CLIENT|cli002|Pedro Pinheiro|103447|NORMAL|YES|0|0|0
+CLIENT|cli003|Pedro Oliveira|103449|NORMAL|YES|0|0|0
+CLIENT|cli201|Ludgero Oliveira|103440|NORMAL|YES|0|0|0
+GESTÃO DE CLIENTES
+1 - Visualizar cliente
+2 - Visualizar todos os clientes
+3 - Registar cliente
+4 - Activar notificações
+5 - Desactivar notificações
+6 - Mostrar saldo de cliente
+0 - Sair
+Escolha uma opção: MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: 

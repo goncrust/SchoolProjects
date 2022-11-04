@@ -1,0 +1,39 @@
+MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: Número do terminal: Tipo de terminal (BASIC ou FANCY): Identificador do cliente: GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: Número do terminal: Tipo de terminal (BASIC ou FANCY): Identificador do cliente: Registar terminal: Operação inválida: O terminal '100009' já existe.
+GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: BASIC|100009|cli002|IDLE|0|0
+GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: 

@@ -1,0 +1,120 @@
+MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: Número do terminal: OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+8 - Enviar comunicação de texto
+9 - Iniciar comunicação
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: Número do terminal: Tipo de comunicação a iniciar (VOICE, VIDEO): OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+10 - Terminar comunicação activa
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: BASIC|969001|cli001|BUSY|0|0
+BASIC|969003|cli001|OFF|0|0
+BASIC|969006|cli002|IDLE|0|0
+BASIC|969007|cli003|IDLE|0|0
+BASIC|969008|cli003|SILENCE|0|0
+FANCY|969011|cli001|BUSY|0|0
+FANCY|969013|cli001|SILENCE|0|0
+FANCY|969014|cli002|IDLE|0|0
+FANCY|969015|cli003|IDLE|0|0
+GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: Número do terminal: OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+10 - Terminar comunicação activa
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: Duração da comunicação (em minutos): Custo da comunicação: 20 unidades.
+OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+8 - Enviar comunicação de texto
+9 - Iniciar comunicação
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: Não existe nenhuma comunicação em curso.
+OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+8 - Enviar comunicação de texto
+9 - Iniciar comunicação
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: BASIC|969001|cli001|IDLE|0|20
+BASIC|969003|cli001|OFF|0|0
+BASIC|969006|cli002|IDLE|0|0
+BASIC|969007|cli003|IDLE|0|0
+BASIC|969008|cli003|SILENCE|0|0
+FANCY|969011|cli001|IDLE|0|0
+FANCY|969013|cli001|SILENCE|0|0
+FANCY|969014|cli002|IDLE|0|0
+FANCY|969015|cli003|IDLE|0|0
+GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: 

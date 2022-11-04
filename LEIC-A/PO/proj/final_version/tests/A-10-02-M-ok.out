@@ -1,0 +1,39 @@
+MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: CONSULTAS
+1 - Mostrar todas as comunicações
+2 - Mostrar comunicações feitas por um cliente
+3 - Mostrar comunicações recebidas por um cliente
+4 - Mostrar clientes sem dívidas
+5 - Mostrar clientes com dívidas
+6 - Mostrar terminais sem actividade
+7 - Mostrar terminais com saldo positivo
+0 - Sair
+Escolha uma opção: BASIC|969001|cli002|IDLE|0|0
+BASIC|969002|cli003|IDLE|0|0
+BASIC|969003|abc001|IDLE|0|0
+BASIC|969004|cli201|IDLE|0|0
+CONSULTAS
+1 - Mostrar todas as comunicações
+2 - Mostrar comunicações feitas por um cliente
+3 - Mostrar comunicações recebidas por um cliente
+4 - Mostrar clientes sem dívidas
+5 - Mostrar clientes com dívidas
+6 - Mostrar terminais sem actividade
+7 - Mostrar terminais com saldo positivo
+0 - Sair
+Escolha uma opção: MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: 
