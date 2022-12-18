@@ -40,6 +40,11 @@ To avoid fraud this repo becomes private while a project for evaluation is ongoi
 | First Project  | [ladrilhos](https://github.com/Rua-Gouveia-Alliance/ladrilhos)                                          |
 | Second Project | _Future_                                                                                                |
 
+| SO      | [Operating Systems](https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/SO)                     |
+|---------|---------------------------------------------------------------------------------------------------------|
+| Project | [TecnicoFS - Intermidiate Version (Ex. 1,2,3)](https://github.com/Rua-Gouveia-Alliance/TecnicoFS)       | // <!-- needs to change later -->
+| Project | _Future_                                                                                                |
+
 ### Highschool (AIB)
 
 | First Period      | https://github.com/goncrust/SchoolProjects/tree/main/HighSchool/FirstPeriod                             |
