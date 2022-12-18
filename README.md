@@ -6,8 +6,8 @@ Code written in [**high school**](#highschool-aib)/[**university**](#leic-a-comp
 
 1. [Info](#Info)
 1. [Direct Links](#direct-links)
-  1. [LEIC-A](#leic-a-computer-science-and-engineering--instituto-superior-técnico---alameda)
-  1. [Highschool](#highschool-aib)
+    1. [LEIC-A](#leic-a-computer-science-and-engineering--instituto-superior-técnico---alameda)
+    1. [Highschool](#highschool-aib)
 
 ## Info
 
