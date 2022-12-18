@@ -2,6 +2,13 @@
 
 Code written in [**high school**](#highschool-aib)/[**university**](#leic-a-computer-science-and-engineering--instituto-superior-técnico---alameda)
 
+# Index
+
+1. [Info](#Info)
+1. [Direct Links](#direct-links)
+  1. [LEIC-A](#leic-a-computer-science-and-engineering--instituto-superior-técnico---alameda)
+  1. [Highschool](#highschool-aib)
+
 ## Info
 
 To avoid fraud this repo becomes private while a project for evaluation is ongoing.
