@@ -46,6 +46,6 @@ To avoid fraud this repo becomes private while a project for evaluation is ongoi
 |-------------------|---------------------------------------------------------------------------------------------------------|
 | Quadratic Formula | https://github.com/goncrust/SchoolProjects/blob/main/HighSchool/formularesolvente/formula_resolvente.py |
 
-| Second Period | https://github.com/goncrust/SchoolProjects/tree/main/HighSchool/SecondPeriod |
-|---------------|------------------------------------------------------------------------------|
-| Project (ATM) | https://github.com/goncrust/SchoolProjects/blob/main/HighSchool/MB/mb.c      |
+| Second Period | https://github.com/goncrust/SchoolProjects/tree/main/HighSchool/SecondPeriod   |
+|---------------|--------------------------------------------------------------------------------|
+| Project       | [ATM](https://github.com/goncrust/SchoolProjects/blob/main/HighSchool/MB/mb.c) |
