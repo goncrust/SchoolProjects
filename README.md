@@ -35,6 +35,11 @@ To avoid fraud this repo becomes private while a project for evaluation is ongoi
 | Project (prr - Intermediate Version)                   | https://github.com/goncrust/prr/tree/6bf75ebcbc66fd4f1a250785885f4192518e1ec8         |
 | Project (prr - Final Version)                          | https://github.com/goncrust/prr                                                       |
 
+| ASA (Analysis and Synthesis of Algorithms)             | https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/ASA                       |
+|--------------------------------------------------------|---------------------------------------------------------------------------------------|
+| First Project (ladrilhos)                              | https://github.com/Rua-Gouveia-Alliance/ladrilhos                                     |
+| Second Project                                         | _Future_                                                                              |
+
 ### Highschool (AIB)
 
 | First Period      | https://github.com/goncrust/SchoolProjects/tree/main/HighSchool/FirstPeriod                             |
