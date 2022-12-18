@@ -24,10 +24,10 @@ To avoid fraud this repo becomes private while a project for evaluation is ongoi
 | First Project  | [Flight Management System](https://github.com/goncrust/SchoolProjects/blob/main/LEIC-A/IAED/proj1/main.c)             |
 | Second Project | [Flight Management System - Part II](https://github.com/goncrust/SchoolProjects/blob/main/LEIC-A/IAED/proj2/main.c)   |
 
-| IAC2 (Introduction to Computer Architecture)           | https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/IAC                       |
-|--------------------------------------------------------|---------------------------------------------------------------------------------------|
-| Project (Meteor Storm - Intermediate Version)          | https://github.com/goncrust/MeteorStorm/tree/0e2e5b975d51e9851734d9f96344f8084cfae59b |
-| Project (Meteor Storm - Final Version)                 | https://github.com/goncrust/MeteorStorm                                               |
+| IAC2    | [Introduction to Computer Architecture](https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/IAC)                     |
+|---------|------------------------------------------------------------------------------------------------------------------------------|
+| Project | [Meteor Storm - Intermediate Version](https://github.com/goncrust/MeteorStorm/tree/0e2e5b975d51e9851734d9f96344f8084cfae59b) |
+| Project | [Meteor Storm - Final Version](https://github.com/goncrust/MeteorStorm)                                                      |
 
 | PO (Object-Oriented Programming)                       | https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/PO                        |
 |--------------------------------------------------------|---------------------------------------------------------------------------------------|
