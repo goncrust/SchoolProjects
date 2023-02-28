@@ -1,0 +1,115 @@
+\documentclass{article}
+\usepackage{amsmath}
+
+\title{Resumos de PE}
+\author{Gonçalo Rua}
+
+\begin{document}
+
+\maketitle
+
+\section{Noções de Probabilidade}
+
+\subsection*{Definições}
+
+\begin{itemize}
+
+    \item Uma experiência diz-se \textbf{aleatória} se:
+
+          \begin{itemize}
+              \item todos os possíveis resultados são conhecidos à partida
+              \item o resulto concreto de uma experiência não é conhecido à partida
+          \end{itemize}
+
+    \item \textbf{Espaço Amostral} $(\Omega)$ - conjunto de todos os possíveis resultados de uma experiência aleatória
+
+    \item \textbf{Acontecimento} - dada uma experiência aleatória $E$ com espaço de resultados $\Omega$, acontecimento (ou evento) é um subconjunto de $\Omega$
+
+    \item \textbf{$\underline{A}$} - dada $E$, com espaço $\Omega$, $\underline{A}$ é o conjunto de todos os acontecimentos possíveis de $\Omega$
+
+\end{itemize}
+
+\subsection*{Interpretação de Laplace}
+
+(ex) Na experiência $E_1$, a probabilidade do acontecimento $A = \{\textnormal{sair face par}\}$ é dada por $P(A) = \frac{3}{6} = 0.5$.
+
+\subsection*{Interpretação frequencista}
+
+A probabilidade de uma acontecimento $A$ é o limite da frequência relativa da ocorrência de $A$ numa longa sucessão de experiências realizadas sob as mesmas condições.
+
+$$ \textnormal{(ex) }P(A) = \lim_{n\to\infty}f_n(A)=\frac{1}{2} $$
+
+\subsection*{Interpretação subjetivista}
+
+A probabilidade de $A$ é uma medidade pessoal (entre 0 e 1) do grau de crença sobre a ocorrência de $A$.
+
+\subsection*{Axiomática}
+
+\begin{itemize}
+    \item Axioma 1: $P(A) \geq 0$, $\forall A \in \underline{A}$ (acontecimentos possíveis de $\Omega$)
+    \item Axioma 2: $P(\Omega) = 1$
+    \item Axioma 3: Para qualquer sequência de acontecimentos disjuntos 2 a 2 $A_1, \dots, A_n$ tem-se $P(\cup_{i=1}^n A_i) = \sum_{i=1}^n P(A_i)$, $n = 2, 3, \dots$
+\end{itemize}
+
+\textbf{Espaço de probabilidade} - $(\Omega, A, P)$
+
+\textbf{Espaço mensurável de acontecimentos} - $(\Omega, \underline{A})$
+
+\subsection*{Teoremas decorrentes}
+
+\begin{itemize}
+    \item $P(\bar{A}) = 1 - P(A)$
+    \item $P(\emptyset) = 0$
+    \item $A \subset B \implies P(A) \leq P(B)$ e $P(B - A) = P(B) - P(A)$
+    \item $P(A) \leq 1$
+    \item $P(B - A) = P(B) - P(A \cap B)$
+    \item $P(A \cup B) = P(A) + P(B) - P(A \cap B)$
+\end{itemize}
+
+\subsection*{Probabilidade condicional ($P(A)$ se $B$ aconteceu)}
+
+$$ P(A|B) = \frac{P(A \cap B)}{P(B)} $$
+
+\subsubsection*{Axiomática}
+
+\begin{itemize}
+    \item Axioma 1: $P(A|B) \geq 0$, $\forall$ acontecimento A
+    \item Axioma 2: $P(\Omega|B) = 1$
+    \item Axioma 3: Para acontecimentos disjuntos $A_1, \dots, A_n$, $P(\cup_{i=1}^n A_i|B) = \sum_{i=1}^n P(A_i|B)$, $n = 1, 2, \dots$
+\end{itemize}
+
+\subsubsection*{Teoremas decorrentes}
+
+\begin{itemize}
+    \item $P(\bar{A}|B) = 1 - P(A|B)$
+    \item $P(\emptyset|B) = 0$
+    \item $P(A|B) \leq 1$
+    \item $A_1 \subset A_2 \implies P(A_1|B)$, $P(A_2-A_1|B) = P(A_2|B) - P(A_1|B)$
+    \item $P(A_2 - A_1|B) = P(A_2|B) - P(A_2 \cap A_1|B)$
+    \item $P(A_1 \cup A_2|B) = P(A_1|B) + P(A_2|B) - P(A_1 \cap A_2|B)$
+\end{itemize}
+
+\subsubsection*{Teorema da probabilidade composta}
+
+$$ P(\cap_{i=1}^n A_i) = P(A_1)P(A_2|A_1)\dots P(A_n|A_1 \cap A_2 \cap \dots \cap A_{n-1}) $$
+
+\subsubsection*{Teorema da probabilidade total}
+
+\emph{Partição} do espaço de resultados $\Omega$:
+
+\begin{itemize}
+    \item $A_i \cap A_j = \emptyset$, $\forall i \neq j = 1, \dots, n$
+    \item $\cup_{i=1}^n A_i = \Omega$
+\end{itemize}
+
+Se $B$ um acontecimento de um espaço de resultados $\Omega$ e $A_1, \dots, A_n$ uma partição de $\Omega$:
+$$ P(B) = \sum_{i=1}^n P(A_i)P(B|A_i) $$
+
+\subsubsection*{Teorema de Bayes}
+
+Se $B$ um acontecimento de um espaço de resultados $\Omega$, $P(B) > 0$ e $A_1, \dots, A_n$ uma partição de $\Omega$, $\forall i = 1, \dots, n$:
+$$ P(A_i|B) = \frac{P(A_i \cap B)}{P(B)} = \frac{P(A_i)P(B|A_i)}{\sum_{j=1}^{n} P(A_j)P(B|A_j)} $$
+
+\subsubsection*{Acontecimentos independentes}
+
+\end{document}

@@ -7,3 +7,8 @@ LEIC-A/IAED/proj2/proj2
 LEIC-A/IAED/proj2/testepratico/proj2
 compiled/
 *.class
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz
