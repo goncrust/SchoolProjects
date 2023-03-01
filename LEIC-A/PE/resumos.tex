@@ -1,4 +1,5 @@
 \documentclass{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
 \usepackage{amsmath}
 
 \title{Resumos de PE}
@@ -10,40 +11,36 @@
 
 \section{Noções de Probabilidade}
 
-\subsection*{Definições}
+\subsection{Definições}
+
+Uma experiência diz-se \emph{aleatória} se:
 
 \begin{itemize}
-
-    \item Uma experiência diz-se \textbf{aleatória} se:
-
-          \begin{itemize}
-              \item todos os possíveis resultados são conhecidos à partida
-              \item o resulto concreto de uma experiência não é conhecido à partida
-          \end{itemize}
-
-    \item \textbf{Espaço Amostral} $(\Omega)$ - conjunto de todos os possíveis resultados de uma experiência aleatória
-
-    \item \textbf{Acontecimento} - dada uma experiência aleatória $E$ com espaço de resultados $\Omega$, acontecimento (ou evento) é um subconjunto de $\Omega$
-
-    \item \textbf{$\underline{A}$} - dada $E$, com espaço $\Omega$, $\underline{A}$ é o conjunto de todos os acontecimentos possíveis de $\Omega$
-
+    \item todos os possíveis resultados são conhecidos à partida
+    \item o resulto concreto de uma experiência não é conhecido à partida
 \end{itemize}
 
-\subsection*{Interpretação de Laplace}
+\noindent \textbf{Espaço Amostral} $(\Omega)$ - conjunto de todos os possíveis resultados de uma experiência aleatória \\
+
+\noindent \textbf{Acontecimento} - dada uma experiência aleatória $E$ com espaço de resultados $\Omega$, acontecimento (ou evento) é um subconjunto de $\Omega$ \\
+
+\noindent \textbf{$\underline{A}$} - dada $E$, com espaço $\Omega$, $\underline{A}$ é o conjunto de todos os acontecimentos possíveis de $\Omega$
+
+\subsection{Interpretação de Laplace}
 
 (ex) Na experiência $E_1$, a probabilidade do acontecimento $A = \{\textnormal{sair face par}\}$ é dada por $P(A) = \frac{3}{6} = 0.5$.
 
-\subsection*{Interpretação frequencista}
+\subsection{Interpretação frequencista}
 
 A probabilidade de uma acontecimento $A$ é o limite da frequência relativa da ocorrência de $A$ numa longa sucessão de experiências realizadas sob as mesmas condições.
 
 $$ \textnormal{(ex) }P(A) = \lim_{n\to\infty}f_n(A)=\frac{1}{2} $$
 
-\subsection*{Interpretação subjetivista}
+\subsection{Interpretação subjetivista}
 
 A probabilidade de $A$ é uma medidade pessoal (entre 0 e 1) do grau de crença sobre a ocorrência de $A$.
 
-\subsection*{Axiomática}
+\subsection{Axiomática}
 
 \begin{itemize}
     \item Axioma 1: $P(A) \geq 0$, $\forall A \in \underline{A}$ (acontecimentos possíveis de $\Omega$)
@@ -55,7 +52,7 @@ A probabilidade de $A$ é uma medidade pessoal (entre 0 e 1) do grau de crença 
 
 \textbf{Espaço mensurável de acontecimentos} - $(\Omega, \underline{A})$
 
-\subsection*{Teoremas decorrentes}
+\subsection{Teoremas decorrentes}
 
 \begin{itemize}
     \item $P(\bar{A}) = 1 - P(A)$
@@ -66,7 +63,7 @@ A probabilidade de $A$ é uma medidade pessoal (entre 0 e 1) do grau de crença 
     \item $P(A \cup B) = P(A) + P(B) - P(A \cap B)$
 \end{itemize}
 
-\subsection*{Probabilidade condicional ($P(A)$ se $B$ aconteceu)}
+\subsection{Probabilidade condicional ($P(A)$ se $B$ aconteceu)}
 
 $$ P(A|B) = \frac{P(A \cap B)}{P(B)} $$
 
@@ -102,7 +99,7 @@ $$ P(\cap_{i=1}^n A_i) = P(A_1)P(A_2|A_1)\dots P(A_n|A_1 \cap A_2 \cap \dots \ca
     \item $\cup_{i=1}^n A_i = \Omega$
 \end{itemize}
 
-Se $B$ um acontecimento de um espaço de resultados $\Omega$ e $A_1, \dots, A_n$ uma partição de $\Omega$:
+\noindent Se $B$ um acontecimento de um espaço de resultados $\Omega$ e $A_1, \dots, A_n$ uma partição de $\Omega$:
 $$ P(B) = \sum_{i=1}^n P(A_i)P(B|A_i) $$
 
 \subsubsection*{Teorema de Bayes}
@@ -111,5 +108,20 @@ Se $B$ um acontecimento de um espaço de resultados $\Omega$, $P(B) > 0$ e $A_1,
 $$ P(A_i|B) = \frac{P(A_i \cap B)}{P(B)} = \frac{P(A_i)P(B|A_i)}{\sum_{j=1}^{n} P(A_j)P(B|A_j)} $$
 
 \subsubsection*{Acontecimentos independentes}
+
+Dois acontecimentos $A$ e $B$, de um mesmo espaço de resultados $\Omega$ são independentes se:
+$$ P(A \cap B) = P(A) \times P(B) $$
+
+\noindent Propriedades
+
+\begin{itemize}
+    \item Todo o acontecimento é independente de $\emptyset$ e $\Omega$
+    \item Se $A$ e $B$ independentes, $P(A|B) = P(A)$, se $P(B) > 0$ e $P(B|A) = P(B)$, se $P(A) > 0$
+    \item Se $A$ e $B$ independentes, $\bar{A}$ e $B$, $A$ e $\bar{B}$ e $\bar{A}$ e $\bar{B}$ também são
+    \item $A$ e $B$ são condicionalmente independentes a $C$ se $P(A \cap B|C) = P(A|C)P(B|C)$
+    \item $A$, $B$ e $C$ são completamente independentes se $P(A \cap B) = P(A)P(B)$, $P(A \cap C) = P(A)P(C)$, $P(B \cap C) = P(B)P(C)$ e $P(A \cap B \cap C) = P(A)P(B)P(C)$
+\end{itemize}
+
+\section{Variáveis aleatórias}
 
 \end{document}
