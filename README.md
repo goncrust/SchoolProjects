@@ -45,12 +45,12 @@ To avoid fraud this repo becomes private while a project for evaluation is ongoi
 | ASA            | [Analysis and Synthesis of Algorithms](https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/ASA) |
 |----------------|---------------------------------------------------------------------------------------------------------|
 | First Project  | [ladrilhos](https://github.com/Rua-Gouveia-Alliance/ladrilhos)                                          |
-| Second Project | _Future_                                                                                                |
+| Second Project | [Caracolandia](https://github.com/Rua-Gouveia-Alliance/Cracolandia)                                     |
 
-| SO      | [Operating Systems](https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/SO)                     |
-|---------|---------------------------------------------------------------------------------------------------------|
-| Project | [TecnicoFS - Intermediate Version (Ex. 1,2,3)](https://github.com/Rua-Gouveia-Alliance/TecnicoFS)       | // <!-- needs to change later -->
-| Project | _Future_                                                                                                |
+| SO      | [Operating Systems](https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/SO)                                                         |
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| Project | [TecnicoFS - Intermediate Version (Ex. 1)](https://github.com/Rua-Gouveia-Alliance/TecnicoFS/tree/2b83b199ffcba2193a4005fa6bc87400501f3a80) |
+| Project | [TecnicoFS - Final Version (Ex. 2)] https://github.com/Rua-Gouveia-Alliance/TecnicoFS                                                       |
 
 ### Highschool (AIB)
 
