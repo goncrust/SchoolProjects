@@ -50,7 +50,7 @@ To avoid fraud this repo becomes private while a project for evaluation is ongoi
 | SO      | [Operating Systems](https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/SO)                                                         |
 |---------|---------------------------------------------------------------------------------------------------------------------------------------------|
 | Project | [TecnicoFS - Intermediate Version (Ex. 1)](https://github.com/Rua-Gouveia-Alliance/TecnicoFS/tree/2b83b199ffcba2193a4005fa6bc87400501f3a80) |
-| Project | [TecnicoFS - Final Version (Ex. 2)] https://github.com/Rua-Gouveia-Alliance/TecnicoFS                                                       |
+| Project | [TecnicoFS - Final Version (Ex. 2)](https://github.com/Rua-Gouveia-Alliance/TecnicoFS)                                                      |
 
 ### Highschool (AIB)
 
