@@ -1,0 +1,52 @@
+
+\documentclass{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
+\title{Resumos de TC}
+\author{Gonçalo Rua}
+\date{2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Conceitos Básicos}
+
+\subsection{Definições}
+
+\begin{itemize}
+    \item Alfabeto ($\Sigma$) - conjunto finito não-vazio (de símbolos)
+    \item Palavra - sequência finita de elementos de $\Sigma$
+    \item $\Sigma^*$ - conjunto de todas as palavras com símbolos de $\Sigma$
+    \item Palavra vazia ($\epsilon$) - pertence a $\Sigma^*$ para todo o alfabeto $\Sigma$
+    \item Linguagem ($L$) - qualquer conjunto $L \subset \Sigma^*$
+\end{itemize}
+
+\subsubsection{Nota}
+
+Num alfabeto $\Sigma$ com $n$ elementos, o número de palavras de tamanho $k$ é $n^k$.
+
+\subsection{Operações sobre palavras}
+
+Sendo $\omega$ a palavra 1101 e $\sigma$ a palavra 010:
+
+\begin{itemize}
+    \item Reversão ($\omega^R$) - 1011
+    \item Concatenação ($\omega.\sigma$) - 1101010 ($\omega.\epsilon = \epsilon.\omega = \omega$)
+    \item $\omega^n = \begin{cases} \epsilon$, $&$ se $n = 0 \\ \omega.\omega^n-1$, $&$ c.c. $\end{cases}$
+    \item Comprimento da palavra $\omega$ ($|\omega|$) - 4
+    \item $n$-ésimo símbolo da palavra $\omega$ ($\omega_n$)
+\end{itemize}
+
+\subsection{Operações sobre linguagens}
+
+\begin{itemize}
+    \item Linguagem complementar de $L$ ($\bar{L}$) - $\Sigma^*\backslash L$
+    \item Conjunto de toas as linguages sobre $\Sigma$ ($\mathcal{L}^\Sigma$)
+    \item Concatenação ($L_1.L_2$) - $\{uv : u \in L_1, v \in L_2\}$, assumindo que $L_1,L_2 \in \mathcal{L}^\Sigma$
+    \item Fecho de Kleene da linguagem $L$ ($L^*$) - $\{u_1.u_2.\dots.u_n : n \in \mathbb{N}_0, u_1, u_2,\dots,u_n \in L\}$
+\end{itemize}
+
+\end{document}
