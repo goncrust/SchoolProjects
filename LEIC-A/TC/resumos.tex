@@ -1,6 +1,7 @@
 
 \documentclass{article}
 \usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{gensymb}
 \usepackage{amsfonts}
 \usepackage{amsmath}
 
@@ -48,5 +49,75 @@ Sendo $\omega$ a palavra 1101 e $\sigma$ a palavra 010:
     \item Concatenação ($L_1.L_2$) - $\{uv : u \in L_1, v \in L_2\}$, assumindo que $L_1,L_2 \in \mathcal{L}^\Sigma$
     \item Fecho de Kleene da linguagem $L$ ($L^*$) - $\{u_1.u_2.\dots.u_n : n \in \mathbb{N}_0, u_1, u_2,\dots,u_n \in L\}$
 \end{itemize}
+
+\section{Autómatos}
+
+\subsection{Autómatos Finitos Determinísticos (AFD)}
+
+Um AFD é um conjunto ($\Sigma, \mathbf{Q}, q_{in}, F, \delta$):
+
+\begin{itemize}
+    \item $\Sigma$ - alfabeto
+    \item $\mathbf{Q}$ - conjunto finito não vazio de estados
+    \item $q_{in} \in \mathbf{Q}$ - estado inicial
+    \item $F \subset \mathbf{Q}$ - conjunto de estados finais
+    \item $\delta : \mathbf{Q} \times \Sigma \to \mathbf{Q}$ - função de transição
+\end{itemize}
+
+\noindent Cada AFD define uma linguagem sobre o seu alfabeto $\Sigma$.
+
+\subsubsection{Autómatos totais}
+
+Um autómato é \emph{total} se a função de transição em cada estado estiver definida para todas as letras.
+Caso não seja total podemos convertê-lo em total:
+\begin{enumerate}
+    \item adicionar um estado não final $q'$
+    \item estender a função de transição tal que $\delta(q,a) = q'$ para todo o par $(q,a) \in \mathbf{Q} \times \Sigma$ que a função de transição não fosse definida
+    \item definir $\delta(q', a) = q'$, para todo o $a \in \Sigma$
+\end{enumerate}
+
+\subsubsection{Função de transição estendida}
+
+$$\delta^*(q,w) = \begin{cases}
+        q,                        & \text{se } w = \epsilon \\
+        \delta^*(\delta(q,a),w'), & \text{se } w = a.w'
+    \end{cases}$$
+
+\subsubsection{Linguagem reconhecida e linguagem regular}
+
+Uma palavra $w \in \Sigma^*$ é aceite por um AFD se $\delta^*(q_{in}, w) \in F$.
+
+\noindent O conjunto de palavras aceites por um AFD chama-se \emph{linguagem reconhecida} por esse AFD:
+$$L(D) = \{w \in \Sigma^* : \delta^*(q_{in}, w) \in F \}$$
+
+\noindent Uma linguagem $L$ diz-se \emph{regular} se existe um AFD $D$ tal que $L(D) = L$. Denota-se por $\mathcal{REG}^\Sigma$ o conjunto de todas as linguagens regulares com alfabeto $\Sigma$.
+
+\subsubsection{Propriedades de fecho}
+
+TODO
+
+\subsection{Autómato Finito Não Determinístico (AFND)}
+
+Um AFND é um conjunto $(\Sigma, \mathbf{Q}, q_{in}, F, \delta)$:
+
+\begin{itemize}
+    \item $\Sigma$ - alfabeto
+    \item $\mathbf{Q}$ - conjunto finito de estados
+    \item $q_{in} \in \mathbf{Q}$ - estado inicial
+    \item $F \subset \mathbf{Q}$ - conjunto de estados finais
+    \item $\delta : Q \times \Sigma \to \wp(Q)$ - função de transição
+\end{itemize}
+
+\subsubsection{Conjunto das partes (de $S$)}
+
+$\wp(S)$ representa o conjunto dos subconjuntos do conjunto $S$.
+
+$$ \text{(ex) } \wp(\{0,1\}) = \{\emptyset, \{0\}, \{1\}, \{0,1\}\} $$
+
+\noindent O tamanho do conjunto $\wp(S)$ é $2^n$, sendo $n$ o tamanho do conjunto $S$.
+
+\subsubsection{AFND com trasições-$\epsilon$}
+
+Um $\text{AFND}^\epsilon$ é um AFND em que a sua função de transição tem domínio $Q \times (\Sigma \times \{\epsilon\})$.
 
 \end{document}
