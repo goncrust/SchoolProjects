@@ -1,6 +1,6 @@
-
 \documentclass{article}
 \usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{textcomp}
 \usepackage{gensymb}
 \usepackage{amsfonts}
 \usepackage{amsmath}
@@ -85,9 +85,9 @@ $$\delta^*(q,w) = \begin{cases}
 
 \subsubsection{Linguagem reconhecida e linguagem regular}
 
-Uma palavra $w \in \Sigma^*$ é aceite por um AFD se $\delta^*(q_{in}, w) \in F$.
+Uma palavra $w \in \Sigma^*$ é aceite por um AFD/AFND se $\delta^*(q_{in}, w) \in F$.
 
-\noindent O conjunto de palavras aceites por um AFD chama-se \emph{linguagem reconhecida} por esse AFD:
+\noindent O conjunto de palavras aceites por um AFD/AFND chama-se \emph{linguagem reconhecida} por esse AFD/AFND:
 $$L(D) = \{w \in \Sigma^* : \delta^*(q_{in}, w) \in F \}$$
 
 \noindent Uma linguagem $L$ diz-se \emph{regular} se existe um AFD $D$ tal que $L(D) = L$. Denota-se por $\mathcal{REG}^\Sigma$ o conjunto de todas as linguagens regulares com alfabeto $\Sigma$.
@@ -119,5 +119,44 @@ $$ \text{(ex) } \wp(\{0,1\}) = \{\emptyset, \{0\}, \{1\}, \{0,1\}\} $$
 \subsubsection{AFND com trasições-$\epsilon$}
 
 Um $\text{AFND}^\epsilon$ é um AFND em que a sua função de transição tem domínio $Q \times (\Sigma \times \{\epsilon\})$.
+
+\subsubsection{Fecho-$\epsilon$}
+
+O fecho-$\epsilon$ do estado $q \in \mathbf{Q}$ é o conjunto $q^\epsilon \subset \mathbf{Q}$ tal que:
+
+\begin{itemize}
+    \item $q \in q^\epsilon$
+    \item $q' \in q^\epsilon \implies \delta(q', \epsilon) \subset q^\epsilon$
+\end{itemize}
+
+\subsubsection{Função de transição estendida}
+
+$$ \delta^*(q, w) = \begin{cases}
+        q^\epsilon                                                              & \text{se } w = \epsilon \\
+        \cup_{q' \in q^\epsilon}(\cup_{q'' \in \delta(q', a)}\delta^*(q'', w')) & \text{se } w = a.w'
+    \end{cases} $$
+
+\subsection{Conversão de AFNDs em AFDs}
+
+Todas as linguagens reconhecidas por AFNDs são regulares (existe um AFD que as reconhece).
+
+\subsubsection{Remoção de transições-$\epsilon$}
+
+Dado um AFND $A = (\Sigma, \mathbf{Q}, q_in, F, \delta)$, temos que o AFND $A' = (\Sigma, \mathbf(Q), q_in, F', \delta')$ é-lhe equivalente se:
+
+\begin{enumerate}
+    \item Se podermos alcançar um estado final através de um movimento-$\epsilon$, podemos considerar esse estado como sendo final: $$ F' = \{q \in Q : q^\epsilon \cap F \neq \emptyset\} $$
+    \item Para cada estado $q \in \mathbf{Q}$ vamos ver que estados conseguimos alcançar usando apenas a letra $a \in \Sigma$. O conjunto de estados que conseguimos alcançar só com $a$ corresponde ao resultado de aplicar $a$ a todos os estados em $q^\epsilon$ e depois tirar o fecho-$\epsilon$ do resultado: $$ \delta' : \mathbf{Q} \times \Sigma \to \wp(\mathbf{Q}) \text{ é tal que } \delta'(q,a) = \bigcup_{q' \in q^\epsilon}(\bigcup_{q'' \in \delta(q', a)}q''^\epsilon) \text{ para cada } q \in \mathbf{Q} \text{ e } a \in Sigma $$
+\end{enumerate}
+
+\subsubsection{Passar de AFND para AFD}
+
+Depois de removermos as transições-$\epsilon$ podemos passar o AFND para AFD. \\
+Dado um AFND $A = (\Sigma, \mathbf{Q}, q_in, F, \delta)$, temos que o AFD $D = (\Sigma, \wp(\mathbf{Q}), q_in, F', \delta')$ é-lhe equivalente se:
+
+\begin{enumerate}
+    \item $F' = \{\mathbf{C} \subset \mathbf{Q} : \mathbf{C} \cap F \neq \emptyset\}$
+    \item $\delta' : \wp(\mathbf{Q}) \times \Sigma \to \wp(\mathbf{Q}) \text{ é tal que } \delta'(\mathbf{C}, a) = \bigcup_{q \in \mathbf{C}}\delta(q,a) \text{ para cada } \mathbf{C} \subset \mathbf{Q} \text{ e } a \in \Sigma$
+\end{enumerate}
 
 \end{document}
