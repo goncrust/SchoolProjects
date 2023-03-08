@@ -85,18 +85,14 @@ $$\delta^*(q,w) = \begin{cases}
 
 \subsubsection{Linguagem reconhecida e linguagem regular}
 
-Uma palavra $w \in \Sigma^*$ é aceite por um AFD/AFND se $\delta^*(q_{in}, w) \in F$.
+Uma palavra $w \in \Sigma^*$ é aceite por um autómato se $\delta^*(q_{in}, w) \in F$.
 
-\noindent O conjunto de palavras aceites por um AFD/AFND chama-se \emph{linguagem reconhecida} por esse AFD/AFND:
+\noindent O conjunto de palavras aceites por um autómato chama-se \emph{linguagem reconhecida} por esse autómato:
 $$L(D) = \{w \in \Sigma^* : \delta^*(q_{in}, w) \in F \}$$
 
 \noindent Uma linguagem $L$ diz-se \emph{regular} se existe um AFD $D$ tal que $L(D) = L$. Denota-se por $\mathcal{REG}^\Sigma$ o conjunto de todas as linguagens regulares com alfabeto $\Sigma$.
 
-\subsubsection{Propriedades de fecho}
-
-TODO
-
-\subsection{Autómato Finito Não Determinístico (AFND)}
+\subsection{Autómatos Finitos Não Determinísticos (AFND)}
 
 Um AFND é um conjunto $(\Sigma, \mathbf{Q}, q_{in}, F, \delta)$:
 
@@ -118,7 +114,7 @@ $$ \text{(ex) } \wp(\{0,1\}) = \{\emptyset, \{0\}, \{1\}, \{0,1\}\} $$
 
 \subsubsection{AFND com trasições-$\epsilon$}
 
-Um $\text{AFND}^\epsilon$ é um AFND em que a sua função de transição tem domínio $Q \times (\Sigma \times \{\epsilon\})$.
+Um $\text{AFND}^\epsilon$ é um AFND em que a sua função de transição tem domínio $Q \times (\Sigma \cup \{\epsilon\})$.
 
 \subsubsection{Fecho-$\epsilon$}
 
@@ -158,5 +154,41 @@ Dado um AFND $A = (\Sigma, \mathbf{Q}, q_in, F, \delta)$, temos que o AFD $D = (
     \item $F' = \{\mathbf{C} \subset \mathbf{Q} : \mathbf{C} \cap F \neq \emptyset\}$
     \item $\delta' : \wp(\mathbf{Q}) \times \Sigma \to \wp(\mathbf{Q}) \text{ é tal que } \delta'(\mathbf{C}, a) = \bigcup_{q \in \mathbf{C}}\delta(q,a) \text{ para cada } \mathbf{C} \subset \mathbf{Q} \text{ e } a \in \Sigma$
 \end{enumerate}
+
+\subsection{Lema de Pumping (ou da bombagem)}
+
+Se $L \subset \Sigma^*$ é uma linguagem regular, então existe $k \in \mathbb{N}$ tal que, se $w \in L$ é uma palavra com $|w| \geq k$ então $w = w_1w_2w_3$ em que $w_1,w_2,w_3 \in \Sigma^*$ são tais que:
+
+\begin{itemize}
+    \item $w_2 \neq \epsilon$
+    \item $|w_1.w_2| \leq k$
+    \item $w_1.w_2^t.w_3 \in L$ para cada $t \in \mathbb{N}_0$
+\end{itemize}
+
+\subsection{Autómatos de Pilha (AP)}
+
+Um AP é um tuplo $P = (\Sigma, \Gamma, \mathbf{Q}, q_in, F, \delta)$:
+
+\begin{itemize}
+    \item $\Sigma$ - alfabeto
+    \item $\Gamma$ - alfabeto auxiliar
+    \item $\mathbf{Q}$ - conjunto finito não vazio de estados
+    \item $q_in \in \mathbf{Q}$ - estado inicial
+    \item $F \subset \mathbf{Q}$ - conjunto de estados finais
+    \item $\delta : \mathbf{Q} \times (\Sigma \cup \{\epsilon\}) \times (\Gamma \cup \{\epsilon\}) \to \wp(\mathbf{Q} \times (\Gamma \cup \{\epsilon\}))$
+\end{itemize}
+
+\noindent Simplificando, um AP é um AFND ao qual se adiciona uma \emph{stack}, em que cada transição podemos adicionar e remover um símbolo do alfabeto auxiliar $\Gamma$ (incluindo símbolos vazios). \\
+Linguagens reconhecidas por APs denominam-se \emph{linguagens independentes do contexto} ($\mathcal{IND}^\Sigma$).
+
+\subsubsection{Lema de Pumping para Linguagens Independentes do Contexto}
+
+Se $L \subset \Sigma^*$ é uma linguagem independente do contexto, então existe $k \in \mathbb{N}$ tal que, se $w \in L$ é uma palavra com $|w| \geq k$ então $w = w_1w_2w_3w_4w_5$ em que $w_1,w_2,w_3 \in \Sigma^*$ são tais que:
+
+\begin{itemize}
+    \item $w_2w_4 \neq \epsilon$, ou seja $w_2 \neq \epsilon \vee w_4 \neq \epsilon$
+    \item $|w_2.w_3.w_4| \leq k$
+    \item $w_1w_2^iw_3w_4^iw_5 \in L$ para qualquer $i \in \mathbb{N}_0$
+\end{itemize}
 
 \end{document}
