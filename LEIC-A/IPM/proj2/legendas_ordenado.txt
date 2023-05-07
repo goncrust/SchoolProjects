@@ -1,0 +1,85 @@
+0% Milk,38
+0% Yoghurt,53
+-----------------------
+Anjou,20
+Apple Juice,28
+Asparagus,58
+Aubergine,59
+Avocado,5
+Banana,6
+Beef Tomato,76
+Bell Pepper,68
+Bio Cream,45
+Bio Fat Milk,37
+Bio Milk,42
+Bio Skim Milk,41
+Bio Soy Milk,50
+Bio Soyghurt,48
+-----------------------
+Cabbage,60
+Cantaloupe,11
+Carrots,61
+Cherry Juice,34
+Cherry Yoghurt,52
+Conference,21
+Cucumber,62
+Fat Milk,39
+Fresh Juice,33
+Galia Melon,12
+Garlic,63
+Ginger,64
+Golden,0
+Granny Smith,1
+Kaiser,22
+Kiwi,7
+-----------------------
+Leek,65
+Lemon,8
+Lime,9
+Mandarin Juice,36
+Mango Juice,31
+Mango Yoghurt,55
+Mango,10
+Melon,13
+Mild Pepper,71
+Mushroom,66
+Nectarine,15
+Oat Milk,44
+Oatghurt,43
+Orange Juice,29
+Orange,16
+-----------------------
+Papaya,17
+Passion Fruit,18
+Peach Juice,32
+Peach,19
+Pear Juice,30
+Pear Yoghurt,56
+Pineapple,23
+Pink Lady,2
+Piri Piri,70
+Plum,24
+Pomegranate,25
+Red Beet,75
+Red Delicious,3
+Red Grapefruit,26
+Red Potato,73
+Rocoto Pepper,69
+Royal Gala,4
+-----------------------
+Satsumas,27
+Smoothie,35
+Sour Cream,46
+Sour Milk,47
+Soy Milk,51
+Soyghurt,49
+Standard Milk,40
+Sweet Potato,74
+Tomato,77
+Vanilla Yoghurt,57
+Vine Tomato,78
+Watermelon,14
+White Potato,72
+Yellow Onion,67
+Yoghurt,54
+Zucchini,79

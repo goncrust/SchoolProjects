@@ -1,0 +1,80 @@
+Golden,0
+Granny Smith,1
+Pink Lady,2
+Red Delicious,3
+Royal Gala,4
+Avocado,5
+Banana,6
+Kiwi,7
+Lemon,8
+Lime,9
+Mango,10
+Cantaloupe,11
+Galia Melon,12
+Melon,13
+Watermelon,14
+Nectarine,15
+Orange,16
+Papaya,17
+Passion Fruit,18
+Peach,19
+Anjou,20
+Conference,21
+Kaiser,22
+Pineapple,23
+Plum,24
+Pomegranate,25
+Red Grapefruit,26
+Satsumas,27
+Apple Juice,28
+Orange Juice,29
+Pear Juice,30
+Mango Juice,31
+Peach Juice,32
+Fresh Juice,33
+Cherry Juice,34
+Smoothie,35
+Mandarin Juice,36
+Bio Fat Milk,37
+0% Milk,38
+Fat Milk,39
+Standard Milk,40
+Bio Skim Milk,41
+Bio Milk,42
+Oatghurt,43
+Oat Milk,44
+Bio Cream,45
+Sour Cream,46
+Sour Milk,47
+Bio Soyghurt,48
+Soyghurt,49
+Bio Soy Milk,50
+Soy Milk,51
+Cherry Yoghurt,52
+0% Yoghurt,53
+Yoghurt,54
+Mango Yoghurt,55
+Pear Yoghurt,56
+Vanilla Yoghurt,57
+Asparagus,58
+Aubergine,59
+Cabbage,60
+Carrots,61
+Cucumber,62
+Garlic,63
+Ginger,64
+Leek,65
+Mushroom,66
+Yellow Onion,67
+Bell Pepper,68
+Rocoto Pepper,69
+Piri Piri,70
+Mild Pepper,71
+White Potato,72
+Red Potato,73
+Sweet Potato,74
+Red Beet,75
+Beef Tomato,76
+Tomato,77
+Vine Tomato,78
+Zucchini,79

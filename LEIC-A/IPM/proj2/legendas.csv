@@ -1,0 +1,81 @@
+name,id,type
+Golden,0,Apple
+Granny Smith,1,Apple
+Pink Lady,2,Apple
+Red Delicious,3,Apple
+Royal Gala,4,Apple
+Avocado,5,Avocado
+Banana,6,Banana
+Kiwi,7,Kiwi
+Lemon,8,Lemon
+Lime,9,Lime
+Mango,10,Mango
+Cantaloupe,11,Melon
+Galia Melon,12,Melon
+Melon,13,Melon
+Watermelon,14,Melon
+Nectarine,15,Nectarine
+Orange,16,Orange
+Papaya,17,Papaya
+Passion Fruit,18,Passion Fruit
+Peach,19,Peach
+Anjou,20,Pear
+Conference,21,Pear
+Kaiser,22,Pear
+Pineapple,23,Pineapple
+Plum,24,Plum
+Pomegranate,25,Pomegranate
+Red Grapefruit,26,Red Grapefruit
+Satsumas,27,Satsumas
+Apple Juice,28,Juice
+Orange Juice,29,Juice
+Pear Juice,30,Juice
+Mango Juice,31,Juice
+Peach Juice,32,Juice
+Fresh Juice,33,Juice
+Cherry Juice,34,Juice
+Smoothie,35,Juice
+Mandarin Juice,36,Juice
+Bio Fat Milk,37,Milk
+0% Milk,38,Milk
+Fat Milk,39,Milk
+Standard Milk,40,Milk
+Bio Skim Milk,41,Milk
+Bio Milk,42,Milk
+Oatghurt,43,Oatghurt
+Oat Milk,44,Oat Milk
+Bio Cream,45,Sour Cream
+Sour Cream,46,Sour Cream
+Sour Milk,47,Sour Milk
+Bio Soyghurt,48,Soyghurt
+Soyghurt,49,Soyghurt
+Bio Soy Milk,50,Soy Milk
+Soy Milk,51,Soy Milk
+Cherry Yoghurt,52,Yoghurt
+0% Yoghurt,53,Yoghurt
+Yoghurt,54,Yoghurt
+Mango Yoghurt,55,Yoghurt
+Pear Yoghurt,56,Yoghurt
+Vanilla Yoghurt,57,Yoghurt
+Asparagus,58,Asparagus
+Aubergine,59,Aubergine
+Cabbage,60,Cabbage
+Carrots,61,Carrots
+Cucumber,62,Cucumber
+Garlic,63,Garlic
+Ginger,64,Ginger
+Leek,65,Leek
+Mushroom,66,Mushroom
+Yellow Onion,67,Onion
+Bell Pepper,68,Pepper
+Rocoto Pepper,69,Pepper
+Piri Piri,70,Pepper
+Mild Pepper,71,Pepper
+White Potato,72,Potato
+Red Potato,73,Potato
+Sweet Potato,74,Potato
+Red Beet,75,Red Beet
+Beef Tomato,76,Tomato
+Tomato,77,Tomato
+Vine Tomato,78,Tomato
+Zucchini,79,Zucchini
