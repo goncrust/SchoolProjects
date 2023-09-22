@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block head %}
+  <title>E3 - Projeto de BD</title>
+{% endblock %}
+
+{% block title%}
+  <h1>Empresa de Comércio Online</h1>
+{% endblock %}
+
+{% block body %}
+  <div class="dashboard-top">
+    {% for el in elements %}
+      {% if el.isTop %}
+        <a href="{{ el.url }}" class="top-element">
+          <div class="link-button">{{ el.title }}</div>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <div class="dashboard-bottom">
+    {% for el in elements %}
+      {% if not el.isTop %}
+        <a href="{{ el.url }}">
+          <div class="link-button">{{ el.title }}</div>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endblock %}

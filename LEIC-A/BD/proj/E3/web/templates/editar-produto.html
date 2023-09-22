@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Gerir Produtos</title>
+{% endblock %}
+
+{% block title %}
+    <h1>Gerir Produtos</h1>
+{% endblock %}
+
+{% block body %}
+    <div class="add-form">
+        <h2>Editar Produto</h2>
+        <form action="/gerir-produtos/{{ product.sku }}/edit" method="POST">
+            <label for="name">Nome</label>
+            <br>
+            <input id="name" type="text" name="name" value="{{ product.name }}" required>
+            <br>
+            <label for="description">Descrição (Opcional)</label>
+            <br>
+            <input id="description" type="text" name="description" value="{{ product.description }}">
+            <br>
+            <label>EAN (Opcional)</label>
+            <br>
+            <input id="ean" type="number" name="ean" value="{{ product.ean }}">
+            <br>
+            <label for="price">Preço</label>
+            <br>
+            <input id="price" type="number" name="price" value="{{ product.price }}" required>
+            <br>
+            <input id="submit" type="submit" value="Confirmar">
+        </form>
+    </div>
+{% endblock %}

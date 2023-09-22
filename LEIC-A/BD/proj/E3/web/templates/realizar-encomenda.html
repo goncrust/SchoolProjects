@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Realizar Encomenda</title>
+{% endblock %}
+
+{% block title %}
+    <h1>Realizar Encomenda</h1>
+{% endblock %}
+
+{% block body %}
+    <form action="/realizar-encomenda" method="POST">
+        {% if products %}
+            {% for product in products %}
+                <label for="{{ product.id }}">{{ product.name }}</label>
+                <input type="number" id="{{ product.id }}" name="{{ product.id }}" min="0" value="0">
+                <br>
+            {% endfor %}
+            <label for="cust_no">ID do Cliente</label>
+            <br>
+            <input type="text" id="cust_no" name="cust_no" required>
+            <br>
+            <input type="submit" value="Encomendar">
+        {% else %}
+            <h2>Não existem produtos para encomendar.</h2>
+        {% endif %}
+    </form>    
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script src="{{url_for('static', filename='page.js')}}"></script>
+    <title>Gerir Produtos</title>
+{% endblock %}
+
+{% block title %}
+    <h1>Gerir Produtos</h1>
+{% endblock %}
+
+{% block body %}
+    <div class="management-grid">
+        <div class="elements">
+            {% if not products %}
+                <h2>Não existem produtos.</h2>
+            {% else %}
+                {% for i in range(pcount) %}
+                    <div class="page" id="{{ i }}" {% if not loop.first %} style="display: none;" {% endif %}>
+                        {% for j in range(i*psize, i*psize + psize) if j < products|length %}
+                            <div class="product-edit-delete" id="{{ products[j].id }}">
+                                <div class="product-name">Produto nº {{ products[j].id }}, {{ products[j].name }}</div>
+                                <form class="edit-btn" action="/gerir-produtos/{{ products[j].id }}/edit" method="GET">
+                                    <input id="edit-{{ products[j].id }}" type="submit" value="Editar">
+                                </form>
+                                <form class="del-btn" action="/gerir-produtos/{{ products[j].id }}/delete" method="POST">
+                                    <input id="delete-{{ products[j].id }}" type="submit" value="Apagar" onclick="return confirm('Esta ação vai remover permanentemente o produto {{ products[j].id }} e todas as suas dependências, deseja prosseguir?');">
+                                </form>
+                            </div>
+                        {% endfor %}
+                        {% if not loop.first %}
+                            <button class="nav-btn" onclick="return previousPage(this)">
+                                Anterior
+                            </button>
+                        {% endif %}
+                        {% if not loop.last %}
+                            <button class="nav-btn" onclick="return nextPage(this)">
+                                Seguinte
+                            </button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% for product in products %}
+            {% endfor %}
+        </div>
+        <div class="add-form">
+            <h2>Novo Produto</h2>
+            <form action="/gerir-produtos/add" method="POST">
+                <label for="sku">SKU</label>
+                <br>
+                <input id="sku" type="text" name="sku" required>
+                <br>
+                <label for="name">Nome</label>
+                <br>
+                <input id="name" type="text" name="name" required>
+                <br>
+                <label for="description">Descrição (Opcional)</label>
+                <br>
+                <input id="description" type="text" name="description">
+                <br>
+                <label>EAN (Opcional)</label>
+                <br>
+                <input id="ean" type="number" name="ean">
+                <br>
+                <label for="price">Preço</label>
+                <br>
+                <input id="price" type="number" min="0" name="price" required>
+                <br>
+                <input id="submit" type="submit" value="Adicionar">
+            </form>
+        </div>
+    </div>
+{% endblock %}

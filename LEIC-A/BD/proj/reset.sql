@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS
+    "EAN Product",
+    "Order",
+    contains,
+    Customer,
+    Delivery,
+    Department,
+    Employee,
+    Office,
+    process,
+    Product,
+    Sale,
+    Supplier,
+    "supply-contract",
+    Warehouse,
+    Workplace,
+    works;

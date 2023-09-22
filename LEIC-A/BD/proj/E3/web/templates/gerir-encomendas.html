@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script src="{{url_for('static', filename='page.js')}}"></script>
+    <title>Gerir Encomendas</title>
+{% endblock %}
+
+{% block title %}
+    <h1>Gerir Encomendas</h1>
+{% endblock %}
+
+{% block body %}
+    <div class="management-grid">
+        <div class="elements">
+            {% if not sales %}
+                <h2>Não existem vendas.</h2>
+            {% else %}
+                <h2>Vendas</h2>
+                {% for i in range(spcount) %}
+                    <div class="page" id="sales-{{ i }}" {% if not loop.first %} style="display: none;" {% endif %}>
+                        {% for j in range(i*spsize, i*spsize + spsize) if j < sales|length %}
+                            <div class="sale">
+                                Encomenda nº {{ sales[j].id }}, paga pelo cliente nº {{ sales[j].customer }}
+                            </div>
+                        {% endfor %}
+                        {% if not loop.first %}
+                            <button class="nav-btn" onclick="return previousPage(this, 'sales-')">
+                                Anterior
+                            </button>
+                        {% endif %}
+                        {% if not loop.last %}
+                            <button class="nav-btn" onclick="return nextPage(this, 'sales-')">
+                                Seguinte
+                            </button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% if not orders %}
+                <h2>Não existem encomendas por pagar.</h2>
+            {% else %}
+                <h2>Encomendas</h2>
+                {% for i in range(opcount) %}
+                    <div class="page" id="orders-{{ i }}" {% if not loop.first %} style="display: none;" {% endif %}>
+                        {% for j in range(i*opsize, i*opsize + opsize) if j < orders|length %}
+                            <div class="order">
+                                Encomenda nº {{ orders[j].id }}{% for product in orders[j].products %}, {{product.name}} (Qty: {{product.qty}}){% endfor %}
+                            </div>
+                        {% endfor %}
+                        {% if not loop.first %}
+                            <button class="nav-btn" onclick="return previousPage(this, 'orders-')">
+                                Anterior
+                            </button>
+                        {% endif %}
+                        {% if not loop.last %}
+                            <button class="nav-btn" onclick="return nextPage(this, 'orders-')">
+                                Seguinte
+                            </button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <form action="/gerir-encomendas/pay" method="POST">
+            <h2>Pagar Encomenda</h2>
+            <label for="cust_no">Nº do Cliente</label>
+            <br>
+            <input type="number" id="cust_no" name="cust_no" required>
+            <br>
+            <label for="order_no">Nº da Encomenda</label>
+            <br>
+            <input type="number" id="order_no" name="order_no" required>
+            <br>
+            <input type="submit" value="Submeter">
+        </form>    
+    </div>
+{% endblock %}
