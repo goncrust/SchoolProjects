@@ -63,7 +63,7 @@ To avoid fraud this repo becomes private while a project for evaluation is ongoi
 | BD      | [Operating Systems](https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/BD)                                                         |
 |---------|---------------------------------------------------------------------------------------------------------------------------------------------|
 | Project | [PE-proj - First Version](https://github.com/goncrust/BD-proj/tree/c350d40ea665a8bedb99503f91a3f0ca89c5364f)                                |
-| Project | [PE-proj - Second Version](https://github.com/goncrust/BD-proj/commit/c69399048098810ce8a0f30ecfaabe2a57b93da4)                             |
+| Project | [PE-proj - Second Version](https://github.com/goncrust/BD-proj/tree/c69399048098810ce8a0f30ecfaabe2a57b93da4)                               |
 | Project | [PE-proj - Third Version](https://github.com/goncrust/BD-proj)                                                                              |
 
 ### Highschool (AIB)
