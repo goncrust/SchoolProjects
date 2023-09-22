@@ -52,6 +52,20 @@ To avoid fraud this repo becomes private while a project for evaluation is ongoi
 | Project | [TecnicoFS - Intermediate Version (Ex. 1)](https://github.com/Rua-Gouveia-Alliance/TecnicoFS/tree/2b83b199ffcba2193a4005fa6bc87400501f3a80) |
 | Project | [TecnicoFS - Final Version (Ex. 2)](https://github.com/Rua-Gouveia-Alliance/TecnicoFS)                                                      |
 
+| PE      | [Operating Systems](https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/PE)                                                         |
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| Project | [PE-proj](https://github.com/goncrust/PE-proj)                                                                                              |
+
+| IA      | [Operating Systems](https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/IA)                                                         |
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| Project | [Bimaru](https://github.com/Rua-Gouveia-Alliance/Bimaru)                                                                                    |
+
+| BD      | [Operating Systems](https://github.com/goncrust/SchoolProjects/tree/main/LEIC-A/BD)                                                         |
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| Project | [PE-proj - First Version](https://github.com/goncrust/BD-proj/tree/c350d40ea665a8bedb99503f91a3f0ca89c5364f)                                |
+| Project | [PE-proj - Second Version](https://github.com/goncrust/BD-proj/commit/c69399048098810ce8a0f30ecfaabe2a57b93da4)                             |
+| Project | [PE-proj - Third Version](https://github.com/goncrust/BD-proj)                                                                              |
+
 ### Highschool (AIB)
 
 | First Period      | https://github.com/goncrust/SchoolProjects/tree/main/HighSchool/FirstPeriod                             |
