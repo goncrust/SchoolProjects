@@ -871,3 +871,182 @@ Caso um participante proponha "abort" e outro "commit", qualquer uma das decisõ
 - Para apenas parte do grupo ter recebido "OK", podem ter ocorrido duas situações:
     - P falhou enquanto enviava as mensagens, mas para ter respondido "OK" já tinha toda a transação executada e tudo guardado num log de forma persistente, pelo que é possível restaurar o estado quando recuperar e atualizar-se para saber a decisão tomada pelo coordenador
     - A mensagem perdeu-se a caminho de alguns participantes, mas como P está pronto para dar "commit", caso o consenso decida "commit", não há problema, e caso decida "abort", a transação vai apenas ser abortada desnecessariamente, desperdiçando recursos
+    
+# Segurança e Criptografia
+
+## Mecanismos Básicos de Comunicação Segura
+### Chaves simétricas
+- uma chave secreta $K_S$ conhecida por A e B
+- um texto m (plaintext)
+- uma função de cifra que produz um texto cifrado (ciphertext) a partir de m e $K_S$, designada $K_S(m)$
+    - a chave em si não cifra a mensagem, é utilizada por um algoritmo
+- uma função para decifrar o text cifrado que usa a mesma chave: $m = K_S(K_S(m))$
+
+Podemos criar assim um canal seguro entre A e B, desde que estes conheçam previamente a chave. Como é que a distribuição da chave é feita?
+- por, exemplo pode ser trocada fisicamente ou então derivada de uma palavra chave combinada previamente
+
+Dois problemas:
+- como podemos ter a certeza de que estamos de facto a ler o que foi enviado pela outra entidade?
+- um intruso T pode simplesmente escutar o que A envia para B e reenviar exatamente a mesma mensagem a B
+
+Fatores que influenciam a segurança da chave:
+- algoritmo de cifra
+- tamanho da chave (nº de bits)
+- poder computacional do adversário
+
+### Chaves assimétricas
+- a chave pública $K_+$ é partilhada com as outras entidades
+- a chave privada $K_-$ é mantida secreta
+- $K_+(K_-(m)) = m$
+- $K_-(K_+(m)) = m$
+- não é possível obter uma chave a partir da outra
+
+A criptografia assimétrica é muito mais lenta do que a simétrica (100 a 1000 vezes mais). Por isso, é comum usar esta criptografia para negociar uma chave simétrica durante a criação de canal seguro, que será usada na encriptação de toda a comunicação (método conhecido como "**chave mista**"). Exemplo:
+1. A cria uma chave simétrica $K_S$ e crifa-a com $K_{B+}$
+2. Apenas B consegue obter $K_S$ já que é o único que possui $K_{B-}$
+
+- Vulnerável a Men-in-the-middle attack
+- Um algoritmo de criptografia assimétrica é o RSA
+
+### Funções de Hash Criptográficas
+De forma a conseguirmos ter a garantia que estamos a ler o que foi enviado pelo remetente, podemos utilizar uma função de hash e enviar o hash do texto ("digest") juntamente com o mesmo. Para aumentar a segurança do hash, criptografamos a hash com a chave privada.
+
+### Nonce
+Objetivo é prevenir que um atacante simplesmente repita mensagens cifradas ("replay attack")
+- É calculado baseado numa das seguintes técnicas (ou na sua combinação):
+    - timestamps (segurança depende da segurança do relógio da máquina)
+    - número de sequência monotonicamente crescentes (segurança depende da capacidade de duas máquinas memorizarem o último número usado)
+- Podem ser usados para garantir que estamos a falar com a entidade certa:
+    - encriptamos o nonce com uma chave
+    - esperamos que a outra entidade devolva uma versão modificada (determinista) do nonce enviado (por exemplo, nonce + 1)
+    - como apenas a outra entidade detém a chave de forma a decifrar o que enviamos, apenas esta consegue ler o nonce enviado e modificá-lo como combinado
+
+## Mecanismos Avançados de Comunicação Segura
+### Assinaturas Digitais com Chave Simétrica
+Apenas pode ser usado entre duas entidades que partilham um segredo, tipicamente designado por Message Authentication Code (MAC)
+- A cria uma versão estendida do texto (m|$K_S$), concatenando ao texto m o segredo $K_S$
+- A usa uma função de hash criptográfica para gerar o digest da versão estendida $S_m$ = $H(m|K_S)$
+- A envia ambos a B
+- B verifica se $S_m$ = H(m|$K_S$)
+
+### Assinaturas Digitais com Chave Assimétrica
+- A usa uma função de hash criptográfica para gerar o digest da mensagem H(m)
+- A usa a sua chave privada $K_{A-}$ para cifrar H(m)
+- $K_{A-}$(H(m)) serve como assinatura de m
+- qualquer entidade pode usar a chave pública $K_{A+}$ para validar a assinatura
+
+### Infra-estruturas de chaves públicas e certificados
+Chaves assimétricas são suscetíveis ao Men-in-the-middle attack
+
+Há duas formas de evitar estre problema:
+- se soubermos de antemão a chave pública de B, enviamos-lhe a chave simétrica cifrada com a sua chave pública (assim um intruso não consegue obter a nossa chave e fazer-se passar por B)
+- se existir um certificado digital que confirma que a chave que recebemos é de facto a de B, B pode enviar-nos o certificado
+    - as autoridades que emitem estes certificados chamam-se Certification Authorities (CA)
+    - assume-se que a chave pública das CA's é previamente conhecida (normalmente os browser trazem os certificados associados às CA's pré-instalados)
+    - um certificado digital consiste num documento que associa uma entidade a uma chave pública e que está assinado pela CA
+    - após verificarmos que o certificado recebido está assinado pela CA, ainda precisamos de garantir que entidade com a qual estamos a contactar é de facto legítima antes de negociarmos uma chave simétrica para usar durante a sessão. para tal podemos usar a estratégia do nonce:
+        - ciframos um nonce com a chave pública retirada do certificado
+        - esperamos receber uma versão modificada do mesmo
+    - por vezes existe a necessidade de invalidar um certo certitificado. seria caro, se não impossível, rastrear e apagar todas as cópias locais do certificado. por isso os certificados têm uma validade, a receção de certificados expirados deve ser rejeitada
+
+### Troca segura de e-mails
+PGP (Pretty Good Privacy):
+- cada utilizador possui um par de chaves simétricas
+- divulga a sua chave pública de forma a que outros possam ter acesso e confiança de que lhe pertence
+- para garantir que um e-mail não é alterado
+    - gera uma assinatura criptográfica do conteúdo e assina-a com a sua chave privada
+    - o destinatário pode obter o digest original e confrontá-lo com o que é gerado pelo conteúdo que recebeu
+- para garantir que apenas o destinatário lê o e-mail
+    - cria uma chave simétrica para cifrar o conteúdo do e-mail
+    - cifra essa chave com a chave pública do destinatário
+    - envia o conteúdo cifrado juntamente com a chave simétrica cifrada
+    - como o destinatário é o único que possui a sua chave privada, apenas este consegue obter a chave simétrica para decifrar o conteúdo do e-mail
+
+### Canais seguros (SSL/TLS)
+A um browser e B um servidor WWW
+
+Protocolo SSL de forma simplificada:
+- A envia um pedido a B solicitando a sua chave pública, juntamente com um nonce, que será usado para tornar a ligação única
+- B devolve um certificado com a sua chave pública, juntamente com outro nonce
+- A verifica a validade do certificado, abortando a ligação caso falhe
+- A utiliza o nonce recebido para gerar um segredo ("master secret") que irá partilhar com B
+- A cifra o seguredo com a chave pública de B e envia-lho
+- B fica a conhecer também o "master secret"
+- A e B criam de forma determinista um conjunto de chaves simétricas que usam para concretizar o canal seguro
+    - estas chaves são geradas a partir do "master secret" e dos nonces trocados
+    - são criadas quatro chaves
+        - $K_C$ -> chave usada para cifrar os dados enviados do cliente para o servidor
+        - $M_C$ -> chave para assinar, com um MAC, os dados enviados do cliente para o servidor
+        - $K_S$ -> chave usada para cifrar os dados enviados do servidor para o cliente
+        - $M_S$ -> chave para assinar, com um MAC, os dados enviados do servidor para o cliente
+- os dados trocados no canal são agrupados em blocos designados por "records"
+- cada record é marcado com um campo que designa o seu tipo
+    - existe um tipo de record específico para fechar a ligação
+- cada record é assinado pelo emissor com um MAC
+    - para gerar o MAC de um record, o emissor usa a sua chave M, o tipo do block e um número de sequência
+    - MAC = Hash(record||M||type||sequence_number)
+    - impedindo assim que um record seja alterado ou reordenado dentro de uma sequência sem que isso seja detetado
+- os records são ainda cifrados antes de serem enviados, para assegurar a confidencialidade
+
+## Autenticação
+### Autenticação com Chaves Simétricas
+- o cliente e o servidor partilham um segredo (tipicamente a palavra-passe do cliente) a partir da qual é possível derivar uma chave simétrica $K_A$
+- para estabelecer um canal, o cliente A envia para o servidor B o tuplo \<A, nonce\>
+- o servidor gera uma chave simétrica única K que será usada para estabelecer a comunicação segura e envia-a ao ciente num tuplo cifrado com a chave simétrica partilhada $K_A$ (\<nonce, K\>)
+- apenas A pode extrair K, já que $K_A$ vem da sua password
+- quando A usar K, prova a sua identidade
+
+### Autenticação com Chaves Assimétricas
+- o cliente A estabelece um canal seguro com o servidor B usando um protocolo baseado em chaves assimétricas, semelhante ao SSL/TLS descrito de forma breve anteriormente
+- o cliente usa o canal seguro para enviar as suas credenciais
+    - palavra-passe
+    - possivelmente outros mecanismos de autenticação adicionais, tais como códigos recebidos por e-mail ou SMS
+
+### Autenticação em Múltiplos Serviços
+Por vezes queremos usar vários serviços dentro de uma organização (Webmail IST, Fénix, Moodle), sem ter de partilhar a palavra-passe com cada servidor, pois isto apresenta desvantagens: além de obrigar o cliente a manter várias palavras-passe, é pouco prático e repetitivo
+
+Uma solução é recorrer a um servidor central de autenticação, no qual tanto os clientes como os servidores confiam:
+- o servidor auxilia o ciente no estabelecimento de um canal seguro entre este e os servidores, sem necessitar de reptir o processo de autenticação
+- o cliente passa a apenas ter que partilhar segredos com o servidor de autenticação
+- os serviços também apenas partilham segresdos com este servidor
+- pode ser feito com chaves simétricas ou assimétricas
+
+#### Protocolo de Needham-Schroeder
+1. A -> S : A,B,$N_A$
+    - em que N_A é um nonce
+    - A pede a S uma chave para comunicar com B
+2. S -> A : $\{ N_A, B, K_{AB}, \{ K_{AB}, A \}_{K_B}\}_{K_A}$
+    - S devolve uma mensagem cifrada com a chave de A $K_A$ (obtida através do segredo partilhado: palavra-passe) com os seguintes elementos:
+        - a chave gerada para A comunicar com B, $K_{AB}$
+        - o nonce $N_A$ para demonstrar que a mensagem foi enviada em resposta ao pedido de A
+        - um "ticket" cifrado com a chave de B $K_B$: $\{ K_{AB}, A \}_{K_B}$, que será entregue por A a B na primeira comunicação, servindo de prova a B que A está autenticado e se trata de facto de A
+    - como a mensagem vem cifrada com a chave de A $K_A$, este confia que foi mesmo S que a enviou, j+a que apenas este sabe o seu segredo (além de si próprio)
+3. A -> B : $\{ K_{AB}, A \}_{K_B}$
+    - A envia o ticket a B
+4. B -> A : $\{ N_B \}_{K_{AB}}$
+    - B decifra o ticket e usa a nova chave $K_{AB}$ para cifrar um novo nonce, $N_B$
+5. A -> B : $\{ N_B - 1 \}_{K_{AB}}$
+    - A demonstra a B ue foi de facto ele quem enviou o ticket ao devolver uma versão modificada de $N_B$
+
+O passo 3 pode ser replayed por um atacante. Uma versão mais robuta do algoritmo obrigaria A a enviar um nonce ou um timestamp, $\{ K_{AB}, A, t \}_{K_B}$. Assim, B pode verificar se t é recente (esta é a solução adotada no Kerberos).
+
+#### Sistema de Autenticação Kerberos
+Sistema de autenticação baseado no protocolo de Needham-Schroeder que se tornou um "internet standard"
+
+Permite efetuar o que se designa por "**single sign-on**":
+- o utilizador apenas utiliza as suas credenciais para estabelecer um canal seguro com o servidor de autenticação
+- daí para a frente usa esse canal seguro para obter chaves simétricas para aceder a outros serviços
+
+#### Single sign-on com Chaves Assimétricas
+Pode-se aplicar o mesmo princípio utilizado no Needham-Schroeder/Kerberos em sistemas com chaves assimétricas. Algo bastante usado hoje em dia por exemplo quando fazemos login num serviço usando a conta Google.
+
+O funcionamento resume-se ao seguinte:
+1. o cliente A cria um canal seguro com o servidor B (usando SSL por exemplo)
+2. o servidor B permite que a verficação da identidade de A seja feita por um fornecedor de identidades (FI) externo em que ambos confiam
+3. B envia a A um token cifrado com a chave pública de FI $FI_+$, que contém informação sobre o cliente de forma a que o FI consiga concluir o processo de autenticação
+4. A contacta o FI usando a sua palavra-passe (apenas partilhada com FI), entregando-lhe o token
+5. o FI confirma a identidade de A e que posui uma relação de confiança com o serviço B
+6. o FI gera um token de acesso cifrado com a chave pública de B $K_{B+}$ que o cliente A pode fornecer a B como prova de que foi autenticado pelo FI
+7. A entrega o token a B e conclui assim o processo de autenticação
+
+Nota: os tokens trocados entre B e FI são cifrados com as respectivas chaves públicas para que o cliente não os consiga alterar
